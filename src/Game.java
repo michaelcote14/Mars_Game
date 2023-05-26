@@ -12,7 +12,7 @@ public class Game extends Canvas implements Runnable {
     private Camera camera;
     private ImageSheet iSheet;
 
-    private BufferedImage level = null;
+    private BufferedImage levelImage = null;
     private BufferedImage imageSheet = null;
     private BufferedImage floor = null;
 
@@ -20,68 +20,27 @@ public class Game extends Canvas implements Runnable {
         new Window(WIDTH, HEIGHT, "Wizard Game", this);
         gameStart();
 
+        // All of these statements below need to be handled carefully, as the timing of them is important
         oHandler = new ObjectHandler();
         camera = new Camera(0, 0); // makes the camera start at 0,0
         hud = new HUD();
-        spawner = new Spawner(oHandler, hud, camera);
 
         this.addKeyListener(new KeyHandler(oHandler));
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
-        level = imageLoader.loadImage("/wizard_level.png");
+        levelImage = imageLoader.loadImage("/wizard_level.png");
         imageSheet = imageLoader.loadImage("/image_sheet.png");
 
         iSheet = new ImageSheet(imageSheet);
+
+        spawner = new Spawner(oHandler, hud, camera, iSheet, levelImage);
 
         floor = iSheet.grabImage(4, 2, 32, 32);
 
         this.addMouseListener(new mouseHandler(oHandler, camera, iSheet, this));
 
-        loadLevel(level);
+        loadLevel(levelImage);
 
-
-    }
-    private void gameStart(){
-        gameRunning = true;
-        thread = new Thread(this);
-        thread.start();
-    }
-    private void gameStop(){
-        gameRunning = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    public void run() {
-        this.requestFocus(); // this means that we don't have to click on the screen to use the keyboard
-        // this is just the most popular game loop, you don't have to understand it
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0; // how many times we want to tick per second
-        double ns = 1000000000 / amountOfTicks; // how many nanoseconds we have to get to reach 60 ticks per second
-        double delta = 0; // how many nanoseconds have gone by
-        long timer = System.currentTimeMillis();
-        int frames = 0; // how many frames we are getting per second
-        while (gameRunning) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns; // how many nanoseconds have gone by divided by how many nanoseconds we need to get to 60 ticks per second
-            lastTime = now;
-            while (delta >= 1) {
-                tick();
-                delta--;
-            }
-            if (gameRunning) {
-                render();
-            }
-            frames++;
-            if (System.currentTimeMillis() - timer > 1000) {
-                timer += 1000;
-//                System.out.println("FPS: " + frames); // prints out how many frames we are getting per second
-                frames = 0;
-            }
-        }
-        gameStop();
     }
     public void tick() {
         // this gets updated 60 times per second, and is for updating
@@ -92,10 +51,16 @@ public class Game extends Canvas implements Runnable {
                 camera.tick(oHandler.object.get(i));
             }
         }
+        if(hud.health <= 0) {
+            gameStop();
+        }
 
         oHandler.tick();
         hud.tick();
-        spawner.tick();
+
+        if(spawner != null) {
+            spawner.tick();
+        }
 
     }
     public void render() {
@@ -129,13 +94,13 @@ public class Game extends Canvas implements Runnable {
         bufferStrat.show();
     }
     // loading the level
-    private void loadLevel(BufferedImage image) {
-        int w = image.getWidth();
-        int h = image.getHeight();
+    private void loadLevel(BufferedImage levelImage) {
+        int w = levelImage.getWidth();
+        int h = levelImage.getHeight();
 
         for(int xx = 0; xx < w; xx++) {
             for(int yy = 0; yy < h; yy++) {
-                int pixel = image.getRGB(xx, yy);
+                int pixel = levelImage.getRGB(xx, yy);
                 int red = (pixel >> 16) & 0xff; // shifting the bits over to get the red value
                 int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
                 int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
@@ -163,7 +128,51 @@ public class Game extends Canvas implements Runnable {
         else return var;
     }
 
+    private void gameStart(){
+        gameRunning = true;
+        thread = new Thread(this);
+        thread.start();
+    }
+    private void gameStop(){
+        gameRunning = false;
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run() {
+        this.requestFocus(); // this means that we don't have to click on the screen to use the keyboard
+        // this is just the most popular game loop, you don't have to understand it
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 60.0; // how many times we want to tick per second
+        double ns = 1000000000 / amountOfTicks; // how many nanoseconds we have to get to reach 60 ticks per second
+        double delta = 0; // how many nanoseconds have gone by
+        long timer = System.currentTimeMillis();
+        int frames = 0; // how many frames we are getting per second
+        while (gameRunning) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns; // how many nanoseconds have gone by divided by how many nanoseconds we need to get to 60 ticks per second
+            lastTime = now;
+            while (delta >= 1) {
+                tick();
+                delta--;
+            }
+            if (gameRunning) {
+                render();
+            }
+            frames++;
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                frames = 0;
+            }
+        }
+        gameStop();
+    }
+
     public static void main(String[] args) {
         new Game();
     }
+
 }

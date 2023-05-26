@@ -2,18 +2,29 @@ import java.awt.*;
 
 public class HUD {
     public static int health = 100;
-    public static int ammo = 100;
+    public static int ammo = 1000;
     private int greenHealthColorValue = 255;
 
-    private int score = 0;
+    public static int score = 0;
     private int level = 1;
+    public boolean isNewLevel = true;
 
     public void tick() {
         health = Game.clamp(health, 0, 100);
         Game.clamp(greenHealthColorValue, 0, 255);
         greenHealthColorValue = health*2;
-    }
 
+        // Make the level increase every 10 points
+        if(score > 5) {
+            level = 2;
+        }
+
+//        // Make death happen when health is 0
+//        if(health <= 0) {
+//            g.setColor(Color.white);
+//            g.drawString("Game Over", 100, 100);
+//        }
+    }
     public void render(Graphics g) {
         // Health Bar Background
         g.setColor(Color.gray);
@@ -31,7 +42,13 @@ public class HUD {
         // ammo bar
         g.setColor(Color.white);
         g.drawString("Ammo: " + ammo, 5, 70);
+
+        if(health <= 0) {
+            g.setColor(Color.red);
+            g.drawString("Game Over", Game.WIDTH/2, Game.HEIGHT/2);
+        }
     }
+
     public void setScore(int score) {
         this.score = score;
     }
@@ -42,6 +59,6 @@ public class HUD {
         this.level = level;
     }
     public int getLevel() {
-        return level;
+        return this.level;
     }
 }

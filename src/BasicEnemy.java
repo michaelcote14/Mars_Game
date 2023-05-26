@@ -53,8 +53,10 @@ public class BasicEnemy extends GameObject{
                 }
             }
         }
-        if(hp <= 0) oHandler.removeObject(this);
-
+        if(hp <= 0) {
+            oHandler.removeObject(this);
+            HUD.score += 1;
+        }
 
         if(choose == 0) {
             velX = (rand.nextInt(4 - -4) + -4);
