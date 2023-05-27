@@ -6,6 +6,7 @@ public class HUD {
     private int greenHealthColorValue = 255;
 
     public static int score = 0;
+    public static int scoreTracker = 0;
     private int level = 1;
     public boolean isNewLevel = true;
 
@@ -15,15 +16,12 @@ public class HUD {
         greenHealthColorValue = health*2;
 
         // Make the level increase every 10 points
-        if(score > 5) {
-            level = 2;
+        if(scoreTracker >= 5) {
+            scoreTracker = 0;
+            score++;
+            level++;
+            isNewLevel = true;
         }
-
-//        // Make death happen when health is 0
-//        if(health <= 0) {
-//            g.setColor(Color.white);
-//            g.drawString("Game Over", 100, 100);
-//        }
     }
     public void render(Graphics g) {
         // Health Bar Background

@@ -5,7 +5,7 @@ import java.util.Random;
 public class BasicEnemy extends GameObject{
     private ObjectHandler oHandler;
     Random rand = new Random();
-    int choose = 0;
+    int directionChoice = 0;
     int hp = 100;
 
     private BufferedImage[] enemyImage = new BufferedImage[3];
@@ -29,7 +29,7 @@ public class BasicEnemy extends GameObject{
         x += velX;
         y += velY;
 
-        choose = rand.nextInt(10);
+        directionChoice = rand.nextInt(10);
 
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
@@ -41,7 +41,7 @@ public class BasicEnemy extends GameObject{
                     velX *= -1;
                     velY *= -1;
                 }
-                else if(choose == 0) {
+                else if(directionChoice == 0) {
                     velX = (rand.nextInt(4 - -4) + -4);
                     velY = (rand.nextInt(4 - -4) + -4);
                 }
@@ -56,9 +56,10 @@ public class BasicEnemy extends GameObject{
         if(hp <= 0) {
             oHandler.removeObject(this);
             HUD.score += 1;
+            HUD.scoreTracker += 1;
         }
 
-        if(choose == 0) {
+        if(directionChoice == 0) {
             velX = (rand.nextInt(4 - -4) + -4);
             velY = (rand.nextInt(4 - -4) + -4);
         }

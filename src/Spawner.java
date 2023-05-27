@@ -16,12 +16,7 @@ public class Spawner {
     }
 
     public void tick() {
-        // todo make it to where every level increase just respawns the enemies
-
-        if(hud.getLevel() == 2 && hud.isNewLevel == true) {
-            hud.setLevel(3);
-            System.out.println("Level 2");
-
+        if(hud.isNewLevel == true) {
             int w = levelImage.getWidth();
             int h = levelImage.getHeight();
 
@@ -32,27 +27,19 @@ public class Spawner {
                     int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
                     if(green == 255 && blue == 0) {
-                        oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
+//                        oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
+//                        oHandler.addObject(new FastEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
+                        oHandler.addObject(new TrackerEnemy(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));
+
                     }
 //                    else if(green == 255 && blue == 255) {
 //                        oHandler.addObject(new Crate(xx * 32, yy * 32, ID.Crate, iSheet));
 //                    }
-
                 }
             }
             hud.isNewLevel = false;
 
         }
-
-//        if(killTracker >= hud.getLevel()) {
-//            killTracker = 0;
-//            hud.setLevel(hud.getLevel() + 1);
-//            if(hud.getLevel() == 2) { // you can use this somehow
-//                oHandler.addObject(new BasicEnemy((int) (Math.random() * camera.getCameraX()), (int) (Math.random() * camera.getCameraY()), ID.BasicEnemy, oHandler, null ));
-//            }
-//            else if(hud.getLevel() == 3) { // you can use this somehow
-//                oHandler.addObject(new FastEnemy((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), ID.BasicEnemy, oHandler));
-//            }
     }
 }
 

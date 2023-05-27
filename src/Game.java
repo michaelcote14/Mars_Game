@@ -95,6 +95,7 @@ public class Game extends Canvas implements Runnable {
     }
     // loading the level
     private void loadLevel(BufferedImage levelImage) {
+        // todo move this all into spawner
         int w = levelImage.getWidth();
         int h = levelImage.getHeight();
 

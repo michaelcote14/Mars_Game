@@ -3,6 +3,9 @@ public enum ID{
     Player(),
     Block(),
     Crate(),
+    Trail(),
     Bullet(),
-    BasicEnemy();
+    BasicEnemy(),
+    FastEnemy(),
+    TrackerEnemy(),;
 }
