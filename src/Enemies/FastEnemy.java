@@ -1,10 +1,14 @@
-import java.awt.*;
+package Enemies;
 
-public class FastEnemy extends GameObject{
+import java.awt.*;
+import Utilities.*;
+import Main.Game;
+
+public class FastEnemy extends GameObject {
     private ObjectHandler oHandler;
 
     public FastEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super((int)x, (int)y, id, imageSheet);
+        super(x, y, id, imageSheet);
 
         this.oHandler = oHandler;
 

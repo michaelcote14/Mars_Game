@@ -1,3 +1,10 @@
+package Objects;
+
+import Utilities.GameObject;
+import Utilities.ID;
+import Utilities.ImageSheet;
+import Utilities.ObjectHandler;
+
 import java.awt.*;
 
 public class Bullet extends GameObject {
@@ -5,12 +12,12 @@ public class Bullet extends GameObject {
     private double direction;
     private int speed = 10;
 
-    public Bullet(int x, int y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageSheet imageSheet) {
+    public Bullet(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
 
-        int deltaX = mouseX - x;
-        int deltaY = mouseY - y;
+        float deltaX = mouseX - x;
+        float deltaY = mouseY - y;
         direction = Math.atan2(deltaY, deltaX); // equivalent to Math.atan(deltaY/deltaX) but with an extra div.by.0 check
     }
 
@@ -40,11 +47,11 @@ public class Bullet extends GameObject {
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.red);
-        g.fillOval(x, y, 8, 8);
+        g.setColor(Color.blue);
+        g.fillOval((int)x, (int)y, 8, 8);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 8, 8);
+        return new Rectangle((int)x, (int)y, 8, 8);
     }
 }

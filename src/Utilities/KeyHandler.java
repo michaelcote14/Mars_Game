@@ -1,3 +1,8 @@
+package Utilities;
+
+import Utilities.GameObject;
+import Utilities.ID;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 

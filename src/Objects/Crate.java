@@ -1,3 +1,9 @@
+package Objects;
+
+import Utilities.GameObject;
+import Utilities.ID;
+import Utilities.ImageSheet;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -5,7 +11,7 @@ public class Crate extends GameObject {
     private BufferedImage crateImage;
 
 
-    public Crate(int x, int y, ID id, ImageSheet imageSheet) {
+    public Crate(float x, float y, ID id, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
 
         crateImage = imageSheet.grabImage(6, 2, 32, 32);
@@ -17,10 +23,10 @@ public class Crate extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(crateImage, x, y, null);
+        g.drawImage(crateImage, (int)x, (int)y, null);
 
     }
 
     @Override
-    public Rectangle getBounds() {return new Rectangle(x, y, 32, 32);}
+    public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 32, 32);}
 }

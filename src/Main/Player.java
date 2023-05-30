@@ -1,24 +1,30 @@
+package Main;
+
+import Main.Game;
+import Main.HUD;
+import Utilities.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Wizard extends GameObject {
+public class Player extends GameObject {
     ObjectHandler oHandler;
-    private BufferedImage[] wizardImage = new BufferedImage[3];
+    private BufferedImage[] playerImage = new BufferedImage[3];
     Game game;
 
 
     Animation anim;
 
-    public Wizard(int x, int y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet) {
+    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
         this.game = game;
 
-        wizardImage[0] = imageSheet.grabImage(1, 1, 32, 48);
-        wizardImage[1] = imageSheet.grabImage(2, 1, 32, 48);
-        wizardImage[2] = imageSheet.grabImage(3, 1, 32, 48);
+        playerImage[0] = imageSheet.grabImage(1, 1, 32, 48);
+        playerImage[1] = imageSheet.grabImage(2, 1, 32, 48);
+        playerImage[2] = imageSheet.grabImage(3, 1, 32, 48);
 
-        anim = new Animation(3, wizardImage);
+        anim = new Animation(3, playerImage);
     }
 
 
@@ -27,7 +33,6 @@ public class Wizard extends GameObject {
 
         x += velX;
         y += velY;
-
 
         if(oHandler.isDownPressed()) velY = 5;
         else if(!oHandler.isUpPressed()) velY = 0;
@@ -49,10 +54,10 @@ public class Wizard extends GameObject {
             GameObject tempObject = oHandler.object.get(i);
 
             if (tempObject.getId() == ID.Block) {
-                if (!is_room_to_move((int) (x + velX), y, getBounds(), tempObject.getBounds())) {
+                if (!is_room_to_move((int) (x + velX), (int)y, getBounds(), tempObject.getBounds())) {
                     velX = 0;
                 }
-                else if (!is_room_to_move(x, (int) (y + velY), getBounds(), tempObject.getBounds())) {
+                else if (!is_room_to_move((int)x, (int) (y + velY), getBounds(), tempObject.getBounds())) {
                     velY = 0;
                 }
             }
@@ -72,13 +77,13 @@ public class Wizard extends GameObject {
 
     public void render(Graphics g) {
         if(velX == 0 && velY == 0)
-            g.drawImage(wizardImage[0], x, y, null);
+            g.drawImage(playerImage[0], (int)x, (int)y, null);
         else
             anim.drawAnimation(g, x, y, 0);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 32, 48); // 32, 48 is the size of the wizard
+        return new Rectangle((int)x, (int)y, 32, 48); // 32, 48 is the size of the wizard
     }
 
     public boolean is_room_to_move(int x, int y, Rectangle myRect, Rectangle otherRect) {

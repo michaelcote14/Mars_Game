@@ -1,11 +1,19 @@
+package Enemies;
+
+import Main.Game;
+import Utilities.GameObject;
+import Utilities.ID;
+import Utilities.ImageSheet;
+import Utilities.ObjectHandler;
+import Utilities.Trail;
 import java.awt.*;
 
-public class TrackerEnemy extends GameObject{
+public class TrackerEnemy extends GameObject {
     private ObjectHandler oHandler;
     private GameObject player;
 
     public TrackerEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super((int)x, (int)y, id, null);
+        super(x, y, id, null);
 
         this.oHandler = oHandler;
 
@@ -34,9 +42,7 @@ public class TrackerEnemy extends GameObject{
         if(y <= 0 || y >= Game.HEIGHT - 16) velY *= -1;
 
         oHandler.addObject(new Trail(x, y, ID.Trail, Color.green, 16, 16, 0.03f, oHandler));
-
     }
-
     @Override
     public void render(Graphics g) {
         g.setColor(Color.green);

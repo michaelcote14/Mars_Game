@@ -1,3 +1,5 @@
+package Utilities;
+
 public class Camera {
 
     private float cameraX, cameraY;

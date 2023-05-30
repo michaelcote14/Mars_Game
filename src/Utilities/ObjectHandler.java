@@ -1,9 +1,10 @@
+package Utilities;
+
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ObjectHandler {
-    ArrayList<GameObject> object = new ArrayList<GameObject>();
+    public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
     private boolean upPressed, downPressed, leftPressed, rightPressed = false;
 
@@ -18,6 +19,19 @@ public class ObjectHandler {
         for(int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
             tempObject.render(g);
+        }
+    }
+    public void clearEnemies() {
+        for(int i = 0; i < this.object.size(); i++){
+            System.out.println(this.object.size());
+            GameObject tempObject = this.object.get(i);
+
+            if(tempObject.getId() == ID.BasicEnemy || tempObject.getId() == ID.FastEnemy
+                    || tempObject.getId() == ID.TrackerEnemy) {
+                System.out.println("temp object: " + tempObject.getId() + " removed");
+                this.removeObject(tempObject);
+                i--;
+            }
         }
     }
     public void addObject(GameObject object) {

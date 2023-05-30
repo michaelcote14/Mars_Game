@@ -1,3 +1,9 @@
+package Utilities;
+
+import Utilities.GameObject;
+import Utilities.ID;
+import Utilities.ObjectHandler;
+
 import java.awt.*;
 
 public class Trail extends GameObject {
@@ -10,7 +16,7 @@ public class Trail extends GameObject {
     private int width, height;
 
     public Trail(float x, float y, ID id, Color color, int width, int height, float life, ObjectHandler oHandler) {
-        super((int)x, (int)y, id, null);
+        super(x, y, id, null);
         this.oHandler = oHandler;
         this.color = color;
         this.width = width;

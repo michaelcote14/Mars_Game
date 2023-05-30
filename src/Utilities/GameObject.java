@@ -1,12 +1,14 @@
+package Utilities;
+
 import java.awt.*;
 
 public abstract class GameObject {
-    protected int x, y;
+    protected float x, y;
     protected float velX, velY;
     protected ID id;
     protected ImageSheet imageSheet;
 
-    public GameObject(int x, int y, ID id, ImageSheet imageSheet) {
+    public GameObject(float x, float y, ID id, ImageSheet imageSheet) {
         this.x = x;
         this.y = y;
         this.id = id;
@@ -23,10 +25,10 @@ public abstract class GameObject {
     public void setY(int y) {
         this.y= y;
     }
-    public int getX() {
+    public float getX() {
         return x;
     }
-    public int getY() {
+    public float getY() {
         return y;
     }
     public void setId(ID id) {this.id = id;}

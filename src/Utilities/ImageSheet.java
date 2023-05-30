@@ -1,3 +1,5 @@
+package Utilities;
+
 import java.awt.image.BufferedImage;
 
 public class ImageSheet {

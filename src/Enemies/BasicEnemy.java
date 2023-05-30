@@ -1,8 +1,18 @@
+package Enemies;
+
+import Utilities.GameObject;
+import Utilities.ObjectHandler;
+import Utilities.ImageSheet;
+import Utilities.Animation;
+import Utilities.ID;
+
+import Main.HUD;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class BasicEnemy extends GameObject{
+public class BasicEnemy extends GameObject {
     private ObjectHandler oHandler;
     Random rand = new Random();
     int directionChoice = 0;
@@ -11,7 +21,7 @@ public class BasicEnemy extends GameObject{
     private BufferedImage[] enemyImage = new BufferedImage[3];
     Animation anim;
 
-    public BasicEnemy(int x, int y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
+    public BasicEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
 
@@ -34,6 +44,8 @@ public class BasicEnemy extends GameObject{
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
+
+            // This makes the enemy bounce off of the block boundaries
             if(tempObject.getId() == ID.Block) {
                 if(getBoundsBig().intersects(tempObject.getBounds())) {
                     x += (velX * 5) * -1;
@@ -72,8 +84,8 @@ public class BasicEnemy extends GameObject{
     }
 
     @Override
-    public Rectangle getBounds() {return new Rectangle(x, y, 32, 32);}
+    public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 32, 32);}
 
     // this makes sure the collision box is slightly bigger than the enemy
-    public Rectangle getBoundsBig() {return new Rectangle(x - 16, y - 16, 64, 64);}
+    public Rectangle getBoundsBig() {return new Rectangle((int)x - 16, (int)y - 16, 64, 64);}
 }

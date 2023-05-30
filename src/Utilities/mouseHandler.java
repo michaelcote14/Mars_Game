@@ -1,3 +1,9 @@
+package Utilities;
+
+import Main.Game;
+import Objects.Bullet;
+import Main.HUD;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
