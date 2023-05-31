@@ -63,7 +63,7 @@ public class Player extends GameObject {
             }
             else if(tempObject.getId() == ID.BasicEnemy) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    HUD.health -= 2;
+                    HUD.currentHealth -= 2;
                 }
             }
             else if(tempObject.getId() == ID.Crate) {

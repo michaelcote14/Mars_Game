@@ -1,10 +1,7 @@
 package Main;
 
-import Enemies.BasicEnemy;
 import Utilities.BufferedImageLoader;
-import Utilities.ID;
 import Utilities.ObjectHandler;
-
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -19,6 +16,7 @@ public class Menu extends MouseAdapter {
     private Random rand = new Random();
 
     private BufferedImage levelImage = null;
+    String deathComment = "";
 
     public Menu(Game game, ObjectHandler oHandler, HUD hud) {
         this.game = game;
@@ -32,14 +30,11 @@ public class Menu extends MouseAdapter {
         if(game.gameState == Game.STATE.Menu) {
             // Play Button
             if (isMouseOver(mouseX, mouseY, 210, 150, 200, 64)) {
-                System.out.println("play button");
                 game.gameState = Game.STATE.Game;
-
-
+                this.deathComment = getDeathComment();
             }
             // Help Button
             if (isMouseOver(mouseX, mouseY, 210, 250, 200, 64)) {
-                System.out.println("help button");
                 game.gameState = Game.STATE.Help;
             }
             // Quit Button
@@ -49,7 +44,6 @@ public class Menu extends MouseAdapter {
         }
         // Back button for help
         if (game.gameState == Game.STATE.Help && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
-            System.out.println("Back button");
             game.gameState = Game.STATE.Menu;
         }
 
@@ -59,11 +53,6 @@ public class Menu extends MouseAdapter {
             BufferedImageLoader imageLoader = new BufferedImageLoader();
             levelImage = imageLoader.loadImage("/wizard_level.png");
             game.loadLevel(levelImage);
-//            hud.setLevel(1);
-//            hud.setScore(0);
-//            oHandler.addObject(new Player(Game.WIDTH / 2 - 32, Game.HEIGHT / 2 - 32, ID.Player, oHandler));
-//            oHandler.clearEnemies();
-//            oHandler.addObject(new BasicEnemy(rand.nextInt(Game.WIDTH - 50), rand.nextInt(Game.HEIGHT - 50), ID.BasicEnemy, oHandler));
         }
 
     }
@@ -76,6 +65,9 @@ public class Menu extends MouseAdapter {
         }
         else {return false;}
     }
+    public void tick(){
+
+    }
     public void render(Graphics g) {
         if (game.gameState == Game.STATE.Menu) {
             Font fnt = new Font("arial", 1, 50);
@@ -83,49 +75,58 @@ public class Menu extends MouseAdapter {
 
             g.setFont(fnt);
             g.setColor(Color.white);
-            g.drawString("Menu", 240, 70);
+            g.drawString("Menu", 420, 70);
 
             g.setFont(fnt2);
-            g.drawRect(210, 150, 200, 64);
-            g.drawString("Play", 270, 190);
+            g.drawRect(390, 150, 200, 64);
+            g.drawString("Play", 450, 190);
 
-            g.drawRect(210, 250, 200, 64);
-            g.drawString("Help", 270, 290);
+            g.drawRect(390, 250, 200, 64);
+            g.drawString("Help", 450, 290);
 
-            g.drawRect(210, 350, 200, 64);
-            g.drawString("Quit", 270, 390);
-        } else if (game.gameState == Game.STATE.Help) {
+            g.drawRect(390, 350, 200, 64);
+            g.drawString("Quit", 450, 390);
+        }
+        else if (game.gameState == Game.STATE.Help) {
             Font fnt = new Font("arial", 1, 50);
             Font fnt2 = new Font("arial", 1, 30);
 
             g.setFont(fnt);
             g.setColor(Color.white);
-            g.drawString("Help", 240, 70);
+            g.drawString("Help", 40, 70);
 
             g.setFont(fnt2);
-            g.drawString("I don't fucking know how to help you.", 20, 200);
+            g.drawString("I don't fucking know how to help you.", 80, 200);
 
             g.setFont(fnt2);
-            g.drawRect(210, 350, 200, 64);
-            g.drawString("Back", 270, 390);
+            g.drawRect(390, 350, 200, 64);
+            g.drawString("Back", 450, 390);
         }
         else if (game.gameState == Game.STATE.Death) {
-            Font fnt = new Font("arial", 1, 50);
-            Font fnt2 = new Font("arial", 1, 30);
+            Font font = new Font("arial", 1, 30);
+            g.setColor(new Color(0, 0, 0, 250));
+            g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
-            g.setFont(fnt);
             g.setColor(Color.white);
-            g.drawString("Game Over", 180, 70);
-
-            g.setFont(fnt2);
-            g.drawString("You lost with a score of: " + hud.getScore(), 175, 200);
-
-            g.setFont(fnt2);
-            g.drawRect(210, 350, 200, 64);
-            g.drawString("Try Again", 245, 390);
+            g.setFont(font);
+            g.drawString(this.deathComment, 20, 200);
         }
     }
-    public void tick(){
+    public String getDeathComment() {
 
+        String[] deathComments = new String[] {
+                "Wow, you suck.",
+                "Were you even trying?",
+                "Maybe you should retire.",
+                "Does your mom know you're a loser?",
+                "Jesus is watching, and I bet he's disappointed.",
+                "You're a disgrace to your family.",
+                "I would try a different game if I were you.",
+                "Oh you bought this game just so you could die over and over? That's cool",
+                "I hope you're good in school, because obviously video games aren't gonna take you anywhere",
+                "No amount of YouTube tutorials are going to help you get better at this game, I can already tell",
+                "At this rate, this game might take you a whole year to beat"};
+        return deathComments[rand.nextInt(0, deathComments.length - 1)];
     }
+
 }

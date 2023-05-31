@@ -1,7 +1,6 @@
 package Main;
 
 import Enemies.BasicEnemy;
-import Enemies.FastEnemy;
 import Objects.Block;
 import Objects.Crate;
 import Utilities.*;
@@ -19,6 +18,7 @@ public class Game extends Canvas implements Runnable {
     private ObjectHandler oHandler;
     private HUD hud;
     private Menu menu;
+    private Shop shop;
     private Spawner spawner;
     private Camera camera;
     private ImageSheet iSheet;
@@ -31,15 +31,15 @@ public class Game extends Canvas implements Runnable {
     public enum STATE {
         Menu,
         Game,
+        Shop,
         Help,
-        Quit,
         Death,
     }
 
     public static STATE gameState = STATE.Menu; // this is the default starting state
 
     public Game(){
-        new Window(WIDTH, HEIGHT, "Wizard Game", this);
+        new Window(WIDTH, HEIGHT, "Mars Game", this);
         gameStart();
 
         // All of these statements below need to be handled carefully, as the timing of them is important
@@ -47,8 +47,9 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0, 0); // makes the camera start at 0,0
         hud = new HUD();
         menu = new Menu(this, oHandler, hud);
+        shop = new Shop(oHandler, hud, this);
 
-        this.addKeyListener(new KeyHandler(oHandler));
+        this.addKeyListener(new KeyHandler(oHandler, this));
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
         levelImage = imageLoader.loadImage("/wizard_level.png");
@@ -60,20 +61,17 @@ public class Game extends Canvas implements Runnable {
 
         floor = iSheet.grabImage(4, 2, 32, 32);
 
-        this.addMouseListener(new mouseHandler(oHandler, camera, iSheet, this));
+        this.addMouseListener(new MouseHandler(oHandler, camera, iSheet, this));
         this.addMouseListener(menu);
-
-//        if(gameState == STATE.Game) {
-//            loadLevel(levelImage);
-//        }
-
+        this.addMouseListener(shop);
     }
     public void tick() {
         // this gets updated 60 times per second, and is for updating
         if(gameState == STATE.Game) {
-//            if(!paused) {
+            if(!paused) {
                 oHandler.tick();
                 hud.tick();
+            }
             if(spawner != null) {
                 spawner.tick();
             }
@@ -82,26 +80,12 @@ public class Game extends Canvas implements Runnable {
                 if(oHandler.object.get(i).getId() == ID.Player) {
                     camera.tick(oHandler.object.get(i));
                 }
-//            }
             }
         }
         else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
             menu.tick();
             oHandler.tick();
         }
-        if(hud.health <= 0) {
-            HUD.health = 100;
-            oHandler.clearEnemies();
-            gameState = STATE.Death;
-        }
-
-//        oHandler.tick();
-//        hud.tick();
-//
-//        if(spawner != null) {
-//            spawner.tick();
-//        }
-
     }
     public void render() {
         // this gets updated 2000 times per second
@@ -123,17 +107,12 @@ public class Game extends Canvas implements Runnable {
             }
         }
 
-
-
-        // todo do i need this?
-//        g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
-
-//        if(paused) {
-//            g.setColor(Color.WHITE);
-//            g.drawString("PAUSED", Game.WIDTH/2, Game.HEIGHT/2);
-//        }
-
-        oHandler.render(g);
+        if(paused) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", 1, 40));
+            g.drawString("What's wrong baby? Need a break?", Game.WIDTH/2-300, Game.HEIGHT/2);
+            g.setFont(new Font("arial", 1, 30));
+        }
         if (gameState == STATE.Game){
 
             if(wasLevelLoaded == false) {
@@ -143,13 +122,20 @@ public class Game extends Canvas implements Runnable {
                 loadLevel(levelImage);
                 wasLevelLoaded = true;
             }
-
+            oHandler.render(g);
+            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
             hud.render(g);
         }
         else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, WIDTH, HEIGHT);
+            oHandler.render(g);
+            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
             menu.render(g);
+        }
+        else if (gameState == STATE.Shop) {
+            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
+            shop.render(g);
         }
 
         ////////////// and here
@@ -157,7 +143,6 @@ public class Game extends Canvas implements Runnable {
         g.dispose();
         bufferStrat.show();
     }
-    // loading the level
     public void loadLevel(BufferedImage levelImage) {
         // todo move this all into spawner
         int w = levelImage.getWidth();

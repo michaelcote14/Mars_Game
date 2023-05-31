@@ -7,13 +7,13 @@ import Main.HUD;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class mouseHandler extends MouseAdapter {
+public class MouseHandler extends MouseAdapter {
     private ObjectHandler oHandler;
     private Camera camera;
     private Game game;
     private ImageSheet imageSheet;
 
-    public mouseHandler(ObjectHandler oHandler, Camera camera, ImageSheet imageSheet, Game game) {
+    public MouseHandler(ObjectHandler oHandler, Camera camera, ImageSheet imageSheet, Game game) {
         this.oHandler = oHandler;
         this.camera = camera;
         this.game = game;

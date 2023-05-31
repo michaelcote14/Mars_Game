@@ -2,7 +2,7 @@
   <artifact type="jar" name="WizardGame:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/WizardGame_jar</output-path>
     <root id="archive" name="WizardGame.jar">
-      <element id="module-output" name="WizardGame" />
+      <element id="module-output" name="Mars_Game" />
     </root>
   </artifact>
 </component>

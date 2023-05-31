@@ -7,6 +7,7 @@ public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
     private boolean upPressed, downPressed, leftPressed, rightPressed = false;
+    public int speed = 5;
 
     public void tick() {
         for(int i = 0; i < object.size(); i++) {
@@ -65,6 +66,4 @@ public class ObjectHandler {
     public boolean isRightPressed() {
         return rightPressed;
     }
-
-
 }
