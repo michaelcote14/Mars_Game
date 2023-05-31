@@ -55,12 +55,9 @@ public class HUD {
         g.drawString("Level : " + level, 15, 55);
         // ammo bar
         g.setColor(Color.white);
-        g.drawString("Ammo: " + ammo, 5, 70);
+        g.drawString("Ammo: " + ammo, 15, 70);
 
-        // Score
-        g.drawString("Score: " + score, 15, 90);
-        g.drawString("Level : " + level, 15, 110);
-        g.drawString("Space for Shop", 15, 130);
+        g.drawString("Space for Shop", 15, 85);
     }
 
     public void setScore(int score) {this.score = score;}

@@ -2,7 +2,9 @@ package Main;
 
 import Main.Game;
 import Main.HUD;
+import Objects.Bullet;
 import Utilities.*;
+import Utilities.MouseHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,14 +13,17 @@ public class Player extends GameObject {
     ObjectHandler oHandler;
     private BufferedImage[] playerImage = new BufferedImage[3];
     Game game;
-
+    Camera camera;
+    MouseHandler mouseHandler;
 
     Animation anim;
 
-    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet) {
+    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
         this.game = game;
+        this.camera = camera;
+        this.mouseHandler = mouseHandler;
 
         playerImage[0] = imageSheet.grabImage(1, 1, 32, 48);
         playerImage[1] = imageSheet.grabImage(2, 1, 32, 48);
@@ -26,7 +31,6 @@ public class Player extends GameObject {
 
         anim = new Animation(3, playerImage);
     }
-
 
     public void tick() {
         collision();
@@ -46,6 +50,11 @@ public class Player extends GameObject {
         if(oHandler.isLeftPressed()) velX = -5;
         else if(!oHandler.isRightPressed()) velX = 0;
 
+        if(oHandler.isMouseClicked()) {
+            PointerInfo a = MouseInfo.getPointerInfo();
+            Point b = a.getLocation();
+            MouseHandler.shoot(b.x, b.y, oHandler, imageSheet, camera);
+        }
         anim.runAnimation();
     }
 

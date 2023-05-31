@@ -7,6 +7,7 @@ public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
     private boolean upPressed, downPressed, leftPressed, rightPressed = false;
+    private boolean mouseClicked = false;
     public int speed = 5;
 
     public void tick() {
@@ -66,4 +67,8 @@ public class ObjectHandler {
     public boolean isRightPressed() {
         return rightPressed;
     }
+
+    public boolean setMouseClicked(boolean mouseClicked) {return this.mouseClicked = mouseClicked;}
+    public boolean isMouseClicked() {return mouseClicked;}
+
 }

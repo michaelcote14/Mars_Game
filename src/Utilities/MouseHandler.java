@@ -15,23 +15,32 @@ public class MouseHandler extends MouseAdapter {
 
     public MouseHandler(ObjectHandler oHandler, Camera camera, ImageSheet imageSheet, Game game) {
         this.oHandler = oHandler;
-        this.camera = camera;
         this.game = game;
         this.imageSheet = imageSheet;
     }
 
-    public void mousePressed(MouseEvent e) {
-        int mx = (int) (e.getX() + camera.getCameraX());
-        int my = (int) (e.getY() + camera.getCameraY());
+    public void mousePressed(MouseEvent mouseEvent) {
+        oHandler.setMouseClicked(true);
+    }
+    public static void shoot(int mouseX, int mouseY, ObjectHandler oHandler, ImageSheet imageSheet, Camera camera) {
 
-        for(int i = 0; i < oHandler.object.size(); i++) {
+        System.out.println("\nmouse X/Y: " + mouseX + "/" + mouseY);
+        System.out.println("camera X/Y: " + camera.getPlayerX() + "/" + camera.getPlayerY());
+        int mouseX2 = mouseX;
+        int mouseY2 = mouseY;
+
+        for (int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
+            // todo grab all the array list players by name instead of this for loop
 
-            if(tempObject.getId() == ID.Player && HUD.ammo > 0) {
-                oHandler.addObject(new Bullet(tempObject.getX() + 16, tempObject.getY() + 24, ID.Bullet, oHandler, mx, my, imageSheet));
+            if (tempObject.getId() == ID.Player && HUD.ammo > 0) {
+                oHandler.addObject(new Bullet(tempObject.getX() + 16, tempObject.getY() + 24, ID.Bullet, oHandler, mouseX2, mouseY2, imageSheet));
                 HUD.ammo--;
             }
         }
+    }
+    public void mouseReleased(MouseEvent mouseEvent) {
+        oHandler.setMouseClicked(false);
     }
 
 }

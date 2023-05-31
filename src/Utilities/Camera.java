@@ -26,10 +26,10 @@ public class Camera {
     public void setCameraY(float cameraY) {
         this.cameraY = cameraY;
     }
-    public float getCameraX() {
+    public float getPlayerX() {
         return cameraX;
     }
-    public float getCameraY() {
+    public float getPlayerY() {
         return cameraY;
     }
 

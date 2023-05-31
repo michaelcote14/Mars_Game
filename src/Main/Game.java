@@ -98,7 +98,7 @@ public class Game extends Canvas implements Runnable {
         Graphics2D g2d = (Graphics2D) g; // this is for the camera
 
         ////////////// Put all graphics between here
-        g2d.translate(-camera.getCameraX(), -camera.getCameraY()); // this is for the camera
+        g2d.translate(-camera.getPlayerX(), -camera.getPlayerY()); // this is for the camera
 
         //  this is the background
         for(int xx=0;xx< 30*72;xx+=32) {
@@ -123,18 +123,18 @@ public class Game extends Canvas implements Runnable {
                 wasLevelLoaded = true;
             }
             oHandler.render(g);
-            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
+            g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             hud.render(g);
         }
         else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, WIDTH, HEIGHT);
             oHandler.render(g);
-            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
+            g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             menu.render(g);
         }
         else if (gameState == STATE.Shop) {
-            g2d.translate(camera.getCameraX(), camera.getCameraY()); // this is for the camera
+            g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             shop.render(g);
         }
 
@@ -159,7 +159,7 @@ public class Game extends Canvas implements Runnable {
                     oHandler.addObject(new Block(xx*32, yy*32, ID.Block, iSheet));
                 }
                 else if(blue == 255 && green == 0) {
-                    oHandler.addObject(new Player(xx*32, yy*32, ID.Player, oHandler, this, iSheet));
+                    oHandler.addObject(new Player(xx*32, yy*32, ID.Player, oHandler, this, iSheet, camera));
                 }
                 else if(green == 255 && blue == 0) {
                     oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
