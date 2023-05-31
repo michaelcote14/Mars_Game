@@ -1,7 +1,5 @@
 package Main;
 
-import Main.Game;
-
 import java.awt.*;
 import java.util.Random;
 
@@ -14,14 +12,9 @@ public class HUD {
     public static int scoreTracker = 0;
     private int level = 1;
     public boolean isNewLevel = true;
-    Font font = new Font("arial", 1, 50);
     private Random rand = new Random();
 
     public void tick() {
-//        health = Game.clamp(health, 0, 100 + (healthBounds/2));
-//        greenHealthColorValue = health * 2;
-//        Game.clamp(greenHealthColorValue, 0, 255);
-
         // Make the level increase every 10 points
         if (scoreTracker >= 5) {
             scoreTracker = 0;
@@ -30,11 +23,11 @@ public class HUD {
             isNewLevel = true;
         }
 
-        if (currentHealth <= 0) {
-//             todo death animation here
+        //             todo death animation here
 //             todo add a restart button
 //            todo Fade screen to black
 //             todo fix the alignment of the death comments
+        if (currentHealth <= 0) {
             Game.gameState = Game.STATE.Death;
         }
     }
@@ -43,7 +36,12 @@ public class HUD {
         g.setColor(Color.gray);
         g.fillRect(15, 15, (int)maxHealth, 10);
         // Health Bar
-        g.setColor(new Color(90, 255, 20));
+        if(currentHealth > maxHealth/2)
+            g.setColor(new Color(90, 255, 20));
+        else if(currentHealth > maxHealth/4)
+            g.setColor(new Color(255, 255, 20));
+        else
+            g.setColor(new Color(255, 20, 20));
         g.fillRect(15, 15, (int)currentHealth, 10);
         // Outline
         g.setColor(Color.white);
@@ -51,13 +49,9 @@ public class HUD {
 
         // Score
         g.setFont(new Font("arial", 1, 15));
-        g.drawString("Score: " + score, 15, 40);
-        g.drawString("Level : " + level, 15, 55);
-        // ammo bar
-        g.setColor(Color.white);
-        g.drawString("Ammo: " + ammo, 15, 70);
-
-        g.drawString("Space for Shop", 15, 85);
+        g.drawString("Score: " + this.score, 15, 40);
+        g.drawString("Level : " + this.level, 15, 55);
+        g.drawString("Space for Shop", 15, 70);
     }
 
     public void setScore(int score) {this.score = score;}

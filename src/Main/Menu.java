@@ -22,6 +22,7 @@ public class Menu extends MouseAdapter {
         this.game = game;
         this.oHandler = oHandler;
         this.hud = hud;
+
     }
     public void mousePressed(MouseEvent mEvent) {
         int mouseX = mEvent.getX();
@@ -47,12 +48,16 @@ public class Menu extends MouseAdapter {
             game.gameState = Game.STATE.Menu;
         }
 
-        // Try Again button for end
+        // Try Again button for death
         if (game.gameState == Game.STATE.Death && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
             game.gameState = Game.STATE.Game;
             BufferedImageLoader imageLoader = new BufferedImageLoader();
             levelImage = imageLoader.loadImage("/wizard_level.png");
-            game.loadLevel(levelImage);
+            oHandler.clearObjects();
+            game.wasLevelLoaded = false;
+            HUD.currentHealth = HUD.maxHealth;
+            hud.setScore(0);
+            hud.setLevel(1);
         }
 
     }
@@ -66,7 +71,6 @@ public class Menu extends MouseAdapter {
         else {return false;}
     }
     public void tick(){
-
     }
     public void render(Graphics g) {
         if (game.gameState == Game.STATE.Menu) {
@@ -96,20 +100,25 @@ public class Menu extends MouseAdapter {
             g.drawString("Help", 40, 70);
 
             g.setFont(fnt2);
-            g.drawString("I don't fucking know how to help you.", 80, 200);
+            g.drawString("Figure it out by your damn self.", 80, 200);
 
             g.setFont(fnt2);
             g.drawRect(390, 350, 200, 64);
             g.drawString("Back", 450, 390);
         }
         else if (game.gameState == Game.STATE.Death) {
-            Font font = new Font("arial", 1, 30);
+            Font font = new Font("arial", 1, 20);
             g.setColor(new Color(0, 0, 0, 250));
             g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
             g.setColor(Color.white);
             g.setFont(font);
             g.drawString(this.deathComment, 20, 200);
+
+            Font font2 = new Font("arial", 1, 30);
+            g.setFont(font2);
+            g.drawRect(Game.WIDTH/2 - 80, Game.HEIGHT/2 + 85, 200,50);
+            g.drawString("Play Again", Game.WIDTH/2 - 50, Game.HEIGHT/2 + 125);
         }
     }
     public String getDeathComment() {

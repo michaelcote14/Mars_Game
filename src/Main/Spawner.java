@@ -46,7 +46,6 @@ public class Spawner {
                 }
             }
             hud.isNewLevel = false;
-
         }
     }
 }

@@ -15,6 +15,7 @@ public class Game extends Canvas implements Runnable {
     private Thread thread;
     public static boolean paused = false;
 
+    public Player player;
     private ObjectHandler oHandler;
     private HUD hud;
     private Menu menu;
@@ -26,7 +27,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage levelImage = null;
     private BufferedImage imageSheet = null;
     private BufferedImage floor = null;
-    private boolean wasLevelLoaded = false;
+    public boolean wasLevelLoaded = false;
 
     public enum STATE {
         Menu,
@@ -38,7 +39,7 @@ public class Game extends Canvas implements Runnable {
 
     public static STATE gameState = STATE.Menu; // this is the default starting state
 
-    public Game(){
+    public Game() {
         new Window(WIDTH, HEIGHT, "Mars Game", this);
         gameStart();
 
@@ -61,36 +62,39 @@ public class Game extends Canvas implements Runnable {
 
         floor = iSheet.grabImage(4, 2, 32, 32);
 
+
+
         this.addMouseListener(new MouseHandler(oHandler, camera, iSheet, this));
         this.addMouseListener(menu);
         this.addMouseListener(shop);
     }
+
     public void tick() {
         // this gets updated 60 times per second, and is for updating
-        if(gameState == STATE.Game) {
-            if(!paused) {
+        if (gameState == STATE.Game) {
+            if (!paused) {
                 oHandler.tick();
                 hud.tick();
             }
-            if(spawner != null) {
+            if (spawner != null) {
                 spawner.tick();
             }
             // this makes the camera center on the player
-            for(int i = 0; i < oHandler.object.size(); i++) {
-                if(oHandler.object.get(i).getId() == ID.Player) {
+            for (int i = 0; i < oHandler.object.size(); i++) {
+                if (oHandler.object.get(i).getId() == ID.Player) {
                     camera.tick(oHandler.object.get(i));
                 }
             }
-        }
-        else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
+        } else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
             menu.tick();
             oHandler.tick();
         }
     }
+
     public void render() {
         // this gets updated 2000 times per second
         BufferStrategy bufferStrat = this.getBufferStrategy();
-        if(bufferStrat == null){
+        if (bufferStrat == null) {
             this.createBufferStrategy(3); // this creates 3 buffers, which is recommended
             return;
         }
@@ -101,22 +105,21 @@ public class Game extends Canvas implements Runnable {
         g2d.translate(-camera.getPlayerX(), -camera.getPlayerY()); // this is for the camera
 
         //  this is the background
-        for(int xx=0;xx< 30*72;xx+=32) {
+        for (int xx = 0; xx < 30 * 72; xx += 32) {
             for (int yy = 0; yy < 30 * 72; yy += 32) {
                 g.drawImage(floor, xx, yy, null);
             }
         }
 
-        if(paused) {
+        if (paused) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", 1, 40));
-            g.drawString("What's wrong baby? Need a break?", Game.WIDTH/2-300, Game.HEIGHT/2);
+            g.drawString("What's wrong baby? Need a break?", Game.WIDTH / 2 - 300, Game.HEIGHT / 2);
             g.setFont(new Font("arial", 1, 30));
         }
-        if (gameState == STATE.Game){
+        if (gameState == STATE.Game) {
 
-            if(wasLevelLoaded == false) {
-
+            if (wasLevelLoaded == false) {
                 BufferedImageLoader imageLoader = new BufferedImageLoader();
                 levelImage = imageLoader.loadImage("/wizard_level.png");
                 loadLevel(levelImage);
@@ -125,15 +128,13 @@ public class Game extends Canvas implements Runnable {
             oHandler.render(g);
             g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             hud.render(g);
-        }
-        else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
+        } else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, WIDTH, HEIGHT);
             oHandler.render(g);
             g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             menu.render(g);
-        }
-        else if (gameState == STATE.Shop) {
+        } else if (gameState == STATE.Shop) {
             g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             shop.render(g);
         }
@@ -143,46 +144,40 @@ public class Game extends Canvas implements Runnable {
         g.dispose();
         bufferStrat.show();
     }
+
     public void loadLevel(BufferedImage levelImage) {
-        // todo move this all into spawner
         int w = levelImage.getWidth();
         int h = levelImage.getHeight();
 
-        for(int xx = 0; xx < w; xx++) {
-            for(int yy = 0; yy < h; yy++) {
+        for (int xx = 0; xx < w; xx++) {
+            for (int yy = 0; yy < h; yy++) {
                 int pixel = levelImage.getRGB(xx, yy);
                 int red = (pixel >> 16) & 0xff; // shifting the bits over to get the red value
                 int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
                 int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
-                if(red == 255) {
-                    oHandler.addObject(new Block(xx*32, yy*32, ID.Block, iSheet));
-                }
-                else if(blue == 255 && green == 0) {
-                    oHandler.addObject(new Player(xx*32, yy*32, ID.Player, oHandler, this, iSheet, camera));
-                }
-                else if(green == 255 && blue == 0) {
-                    oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
-                }
-                else if(green == 255 && blue == 255) {
+                if (red == 255) {
+                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iSheet));
+                } else if (blue == 255 && green == 0) {
+                    if(!oHandler.object.contains(ID.Player)) {
+                        oHandler.addObject(new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera));
+                    }
+                    System.out.println(ID.Player);
+                } else if (green == 255 && blue == 0) {
+                    oHandler.addObject(new BasicEnemy(xx * 32, yy * 32, ID.BasicEnemy, oHandler, iSheet));
+                } else if (green == 255 && blue == 255) {
                     oHandler.addObject(new Crate(xx * 32, yy * 32, ID.Crate, iSheet));
                 }
             }
         }
     }
-    public static float clamp(float var, float min, float max) {
-        // this method keeps objects from going out of bounds
-        if(var >= max) return var = max;
-        else if(var <= min) return var = min;
-        else return var;
-    }
-
-    private void gameStart(){
+    private void gameStart() {
         gameRunning = true;
         thread = new Thread(this);
         thread.start();
     }
-    private void gameStop(){
+
+    private void gameStop() {
         gameRunning = false;
         try {
             thread.join();
@@ -221,5 +216,7 @@ public class Game extends Canvas implements Runnable {
         gameStop();
     }
 
-    public static void main(String[] args) {new Game();}
+    public static void main(String[] args) {
+        new Game();
+    }
 }

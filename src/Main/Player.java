@@ -1,8 +1,5 @@
 package Main;
 
-import Main.Game;
-import Main.HUD;
-import Objects.Bullet;
 import Utilities.*;
 import Utilities.MouseHandler;
 
@@ -18,6 +15,10 @@ public class Player extends GameObject {
 
     Animation anim;
 
+    public static int fireRate = 1;
+    int fireRateCounter = 0;
+    public static int speed = 4;
+
     public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
@@ -25,11 +26,20 @@ public class Player extends GameObject {
         this.camera = camera;
         this.mouseHandler = mouseHandler;
 
+        // Stats
+        this.fireRate = 5;
+        this.speed = 4;
+
         playerImage[0] = imageSheet.grabImage(1, 1, 32, 48);
         playerImage[1] = imageSheet.grabImage(2, 1, 32, 48);
         playerImage[2] = imageSheet.grabImage(3, 1, 32, 48);
 
         anim = new Animation(3, playerImage);
+    }
+    public void deathStatDecrease() {
+        this.fireRate -= 10;
+        this.speed -= 10;
+        HUD.maxHealth = HUD.maxHealth - 100; // you lose 10 max health when you die
     }
 
     public void tick() {
@@ -38,22 +48,25 @@ public class Player extends GameObject {
         x += velX;
         y += velY;
 
-        if(oHandler.isDownPressed()) velY = 5;
+        if(oHandler.isDownPressed()) velY = 3 + speed/10;
         else if(!oHandler.isUpPressed()) velY = 0;
 
-        if(oHandler.isUpPressed()) velY = -5;
+        if(oHandler.isUpPressed()) velY = -3 - speed/10;
         else if(!oHandler.isDownPressed()) velY = 0;
 
-        if(oHandler.isRightPressed()) velX = 5;
+        if(oHandler.isRightPressed()) velX = 3 + speed/10;
         else if(!oHandler.isLeftPressed()) velX = 0;
 
-        if(oHandler.isLeftPressed()) velX = -5;
+        if(oHandler.isLeftPressed()) velX = -3 - speed/10;
         else if(!oHandler.isRightPressed()) velX = 0;
 
         if(oHandler.isMouseClicked()) {
-            PointerInfo a = MouseInfo.getPointerInfo();
-            Point b = a.getLocation();
-            MouseHandler.shoot(b.x, b.y, oHandler, imageSheet, camera);
+            if(fireRateCounter % (10 - this.fireRate) == 0) {
+                PointerInfo a = MouseInfo.getPointerInfo();
+                Point b = a.getLocation();
+                MouseHandler.shoot(b.x, b.y, oHandler, imageSheet, camera);
+            }
+            fireRateCounter++;
         }
         anim.runAnimation();
     }

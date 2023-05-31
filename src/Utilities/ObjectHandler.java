@@ -8,14 +8,12 @@ public class ObjectHandler {
 
     private boolean upPressed, downPressed, leftPressed, rightPressed = false;
     private boolean mouseClicked = false;
-    public int speed = 5;
 
     public void tick() {
         for(int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
             tempObject.tick();
         }
-
     }
     public void render(Graphics g) {
         for(int i = 0; i < object.size(); i++) {
@@ -23,14 +21,16 @@ public class ObjectHandler {
             tempObject.render(g);
         }
     }
-    public void clearEnemies() {
+    public void clearObjects() {
         for(int i = 0; i < this.object.size(); i++){
-            System.out.println(this.object.size());
             GameObject tempObject = this.object.get(i);
 
+            if(tempObject.getId() == ID.Player) {
+                this.removeObject(tempObject);
+                i--;
+            }
             if(tempObject.getId() == ID.BasicEnemy || tempObject.getId() == ID.FastEnemy
                     || tempObject.getId() == ID.TrackerEnemy) {
-                System.out.println("temp object: " + tempObject.getId() + " removed");
                 this.removeObject(tempObject);
                 i--;
             }

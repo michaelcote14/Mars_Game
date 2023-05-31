@@ -18,8 +18,8 @@ public class Shop extends MouseAdapter {
         this.oHandler = oHandler;
         this.hud = hud;
         this.game = game;
-    }
 
+    }
     public void mousePressed(MouseEvent mouseEvent) {
         if(game.gameState != Game.STATE.Shop) return;
         int mouseX = mouseEvent.getX();
@@ -44,7 +44,7 @@ public class Shop extends MouseAdapter {
                 if(hud.getScore() >= B2) {
                     hud.setScore(hud.getScore() - B2);
                     B2 += 1; // makes the next upgrade cost more
-                    oHandler.speed++;
+                    Player.speed++;
                 }
             }
         }
