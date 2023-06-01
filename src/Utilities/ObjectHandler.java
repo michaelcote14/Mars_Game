@@ -10,8 +10,6 @@ import javax.imageio.ImageIO;
 public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
-    private boolean upPressed, downPressed, leftPressed, rightPressed = false;
-    private boolean mouseClicked = false;
 
     public void tick() {
         for(int i = 0; i < object.size(); i++) {
@@ -49,33 +47,9 @@ public class ObjectHandler {
 
 
     // todo put these somewhere else
-    public void setUpPressed(boolean upPressed) {
-        this.upPressed = upPressed;
-    }
-    public void setDownPressed(boolean downPressed) {
-        this.downPressed = downPressed;
-    }
-    public void setLeftPressed(boolean leftPressed) {
-        this.leftPressed = leftPressed;
-    }
-    public void setRightPressed(boolean rightPressed) {
-        this.rightPressed = rightPressed;
-    }
-    public boolean isUpPressed() {
-        return upPressed;
-    }
-    public boolean isDownPressed() {
-        return downPressed;
-    }
-    public boolean isLeftPressed() {
-        return leftPressed;
-    }
-    public boolean isRightPressed() {
-        return rightPressed;
-    }
 
-    public boolean setMouseClicked(boolean mouseClicked) {return this.mouseClicked = mouseClicked;}
-    public boolean isMouseClicked() {return mouseClicked;}
+
+
 
     public BufferedImage imageGrabber(String imagePath, int width, int height) {
         BufferedImage image = null;

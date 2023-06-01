@@ -12,6 +12,7 @@ public class Player extends GameObject {
     Game game;
     Camera camera;
     MouseHandler mouseHandler;
+    KeyHandler keyHandler;
 
     Animation anim;
 
@@ -24,12 +25,13 @@ public class Player extends GameObject {
 
     int fireRateCounter = 0;
 
-    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera) {
+    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(x, y, id, imageSheet);
         this.oHandler = oHandler;
         this.game = game;
         this.camera = camera;
         this.mouseHandler = mouseHandler;
+        this.keyHandler = keyHandler;
 
         playerImage[0] = imageSheet.grabImage(1, 1, 32, 48);
         playerImage[1] = imageSheet.grabImage(2, 1, 32, 48);
@@ -49,19 +51,19 @@ public class Player extends GameObject {
         x += velX;
         y += velY;
 
-        if(oHandler.isDownPressed()) velY = 3 + speed/10;
-        else if(!oHandler.isUpPressed()) velY = 0;
+        if(keyHandler.isDownPressed()) velY = 3 + speed/10;
+        else if(!keyHandler.isUpPressed()) velY = 0;
 
-        if(oHandler.isUpPressed()) velY = -3 - speed/10;
-        else if(!oHandler.isDownPressed()) velY = 0;
+        if(keyHandler.isUpPressed()) velY = -3 - speed/10;
+        else if(!keyHandler.isDownPressed()) velY = 0;
 
-        if(oHandler.isRightPressed()) velX = 3 + speed/10;
-        else if(!oHandler.isLeftPressed()) velX = 0;
+        if(keyHandler.isRightPressed()) velX = 3 + speed/10;
+        else if(!keyHandler.isLeftPressed()) velX = 0;
 
-        if(oHandler.isLeftPressed()) velX = -3 - speed/10;
-        else if(!oHandler.isRightPressed()) velX = 0;
+        if(keyHandler.isLeftPressed()) velX = -3 - speed/10;
+        else if(!keyHandler.isRightPressed()) velX = 0;
 
-        if(oHandler.isMouseClicked()) {
+        if(mouseHandler.isMouseClicked()) {
             if(fireRateCounter % ((10 - fireRate) + 1) == 0) {
                 PointerInfo a = MouseInfo.getPointerInfo();
                 Point b = a.getLocation();

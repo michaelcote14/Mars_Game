@@ -23,6 +23,8 @@ public class Game extends Canvas implements Runnable {
     private Spawner spawner;
     private Camera camera;
     private ImageSheet iSheet;
+    private KeyHandler keyHandler;
+    private MouseHandler mouseHandler;
 
     private BufferedImage levelImage = null;
     private BufferedImage imageSheet = null;
@@ -50,7 +52,8 @@ public class Game extends Canvas implements Runnable {
         menu = new Menu(this, oHandler, hud);
         shop = new Shop(oHandler, hud, this, player);
 
-        this.addKeyListener(new KeyHandler(oHandler, this));
+        this.keyHandler = new KeyHandler(oHandler, this);
+        this.addKeyListener(this.keyHandler);
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
         levelImage = imageLoader.loadImage("/wizard_level.png");
@@ -59,7 +62,8 @@ public class Game extends Canvas implements Runnable {
         spawner = new Spawner(oHandler, hud, camera, iSheet, levelImage);
         floor = iSheet.grabImage(4, 2, 32, 32);
 
-        this.addMouseListener(new MouseHandler(oHandler, camera, iSheet, this));
+        this.mouseHandler = new MouseHandler(oHandler, camera, iSheet, this);
+        this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
         this.addMouseListener(shop);
     }
@@ -157,7 +161,7 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iSheet));
                 } else if (blue == 255 && green == 0) {
-                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera);
+                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera, this.keyHandler, this.mouseHandler);
                     oHandler.addObject(player);
                     SaveOrLoad.load("Save1", player);
                 } else if (green == 255 && blue == 0) {

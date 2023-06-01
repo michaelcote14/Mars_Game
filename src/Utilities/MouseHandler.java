@@ -12,14 +12,16 @@ public class MouseHandler extends MouseAdapter {
     private Game game;
     private ImageSheet imageSheet;
 
+    private boolean mouseClicked = false;
+
+
     public MouseHandler(ObjectHandler oHandler, Camera camera, ImageSheet imageSheet, Game game) {
         this.oHandler = oHandler;
         this.game = game;
         this.imageSheet = imageSheet;
     }
 
-    public void mousePressed(MouseEvent mouseEvent) {
-        oHandler.setMouseClicked(true);
+    public void mousePressed(MouseEvent mouseEvent) {setMouseClicked(true);
     }
     public static void shoot(int mouseX, int mouseY, ObjectHandler oHandler, ImageSheet imageSheet, Camera camera) {
         int mouseX2 = (int)(mouseX + camera.getPlayerX() -(Game.WIDTH/2 - 30));
@@ -32,9 +34,9 @@ public class MouseHandler extends MouseAdapter {
             }
         }
     }
-    public void mouseReleased(MouseEvent mouseEvent) {
-        oHandler.setMouseClicked(false);
+    public void mouseReleased(MouseEvent mouseEvent) {setMouseClicked(false);
     }
-
+    public boolean setMouseClicked(boolean mouseClicked) {return this.mouseClicked = mouseClicked;}
+    public boolean isMouseClicked() {return mouseClicked;}
 }
 
