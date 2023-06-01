@@ -18,9 +18,13 @@ public class BasicEnemy extends GameObject {
     Random rand = new Random();
     int directionChoice = 0;
     int hp = 100;
+    boolean didBulletCollide = false;
+    int collisionCounter = 0;
+    int bulletCollisionX, bulletCollisionY;
 
     private BufferedImage[] enemyImage = new BufferedImage[3];
     Animation anim;
+    private BufferedImage bulletExplosionImage = null;
 
     public BasicEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
@@ -33,6 +37,8 @@ public class BasicEnemy extends GameObject {
 
             anim = new Animation(1, enemyImage);
         }
+        bulletExplosionImage = oHandler.imageGrabber("/bulletExplosion.png", 1, 1);
+
     }
 
     @Override
@@ -61,7 +67,10 @@ public class BasicEnemy extends GameObject {
             // Bullet collision
             else if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= 50;
+                    hp -= 5;
+                    didBulletCollide = true;
+                    bulletCollisionX = (int)x;
+                    bulletCollisionY = (int)y;
                     oHandler.removeObject(tempObject);
                 }
             }
@@ -83,7 +92,17 @@ public class BasicEnemy extends GameObject {
     public void render(Graphics g) {
         anim.runAnimation();
         anim.drawAnimation(g, x, y, 0);
+
+        if(didBulletCollide == true) {
+            g.drawImage(bulletExplosionImage, (int)x, (int)y, 20, 20,null);
+            collisionCounter ++;
+        }
+        if(collisionCounter > 200) {
+            didBulletCollide = false;
+            collisionCounter = 0;
+        }
     }
+
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
             oHandler.addObject(new Objects.Crate(x, y, ID.Crate, oHandler, imageSheet));

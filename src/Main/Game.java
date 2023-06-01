@@ -37,8 +37,6 @@ public class Game extends Canvas implements Runnable {
         Death,
     }
 
-    //todo put in bullet contact animation
-
     public static STATE gameState = STATE.Menu; // this is the default starting state
 
     public Game() {

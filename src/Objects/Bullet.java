@@ -4,6 +4,7 @@ import Utilities.GameObject;
 import Utilities.ID;
 import Utilities.ImageSheet;
 import Utilities.ObjectHandler;
+import java.awt.image.BufferStrategy;
 
 import java.awt.*;
 
@@ -19,6 +20,11 @@ public class Bullet extends GameObject {
         float deltaX = mouseX - x;
         float deltaY = mouseY - y;
         direction = Math.atan2(deltaY, deltaX); // equivalent to Math.atan(deltaY/deltaX) but with an extra div.by.0 check
+    }
+
+    public static void explosion(int posX, int posY) {
+        System.out.println("Explosion!");
+
     }
 
     public void tick() {
