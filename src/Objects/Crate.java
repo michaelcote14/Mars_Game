@@ -3,6 +3,7 @@ package Objects;
 import Utilities.GameObject;
 import Utilities.ID;
 import Utilities.ImageSheet;
+import Utilities.ObjectHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +12,7 @@ public class Crate extends GameObject {
     private BufferedImage crateImage;
 
 
-    public Crate(float x, float y, ID id, ImageSheet imageSheet) {
+    public Crate(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
 
         crateImage = imageSheet.grabImage(6, 2, 32, 32);

@@ -56,7 +56,7 @@ public class Menu extends MouseAdapter {
             oHandler.clearObjects();
             game.wasLevelLoaded = false;
             Player.currentHealth = Player.maxHealth;
-            Player.Money = 0;
+            Player.money = 0;
             hud.setLevel(1);
         }
 

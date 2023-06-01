@@ -31,7 +31,7 @@ public class BasicEnemy extends GameObject {
             enemyImage[1] = imageSheet.grabImage(5, 1, 32, 32);
             enemyImage[2] = imageSheet.grabImage(6, 1, 32, 32);
 
-            anim = new Animation(3, enemyImage);
+            anim = new Animation(1, enemyImage);
         }
     }
 
@@ -58,6 +58,7 @@ public class BasicEnemy extends GameObject {
                     velY = (rand.nextInt(4 - -4) + -4);
                 }
             }
+            // Bullet collision
             else if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
                     hp -= 50;
@@ -67,8 +68,9 @@ public class BasicEnemy extends GameObject {
         }
         if(hp <= 0) {
             oHandler.removeObject(this);
-            Player.Money += 1;
+            Player.money += 1;
             HUD.scoreTracker += 1;
+            dropLoot();
         }
 
         if(directionChoice == 0) {
@@ -82,10 +84,16 @@ public class BasicEnemy extends GameObject {
         anim.runAnimation();
         anim.drawAnimation(g, x, y, 0);
     }
+    public void dropLoot() {
+        if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
+            oHandler.addObject(new Objects.Crate(x, y, ID.Crate, oHandler, imageSheet));
+        }
+    }
 
     @Override
     public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 32, 32);}
 
     // this makes sure the collision box is slightly bigger than the enemy
     public Rectangle getBoundsBig() {return new Rectangle((int)x - 16, (int)y - 16, 64, 64);}
+
 }

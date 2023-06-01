@@ -39,13 +39,14 @@ public class Spawner {
                     int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
                     if(green == 255 && blue == 0) {
-                        oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));
+                        if((hud.getLevel() + 2) % 3 == 0) {oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
+
+                        else if(hud.getLevel() % 2 == 0) {oHandler.addObject(new Enemies.TrackerEnemy(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));}
 //                        oHandler.addObject(new Enemies.FastEnemy(xx*32, yy*32, Utilities.ID.BasicEnemy, oHandler, iSheet));
-//                        oHandler.addObject(new Enemies.TrackerEnemy(xx*32, yy*32, Utilities.ID.TrackerEnemy, oHandler, iSheet));
 
                     }
                     else if(green == 255 && blue == 255) {
-                        oHandler.addObject(new Objects.Crate(xx * 32, yy * 32, Utilities.ID.Crate, iSheet));
+                        oHandler.addObject(new Objects.Crate(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
                     }
                 }
             }

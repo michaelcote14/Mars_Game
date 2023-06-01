@@ -20,7 +20,7 @@ public class Player extends GameObject {
     public static float maxHealth = 100;
     public static int fireRate = 8;
     public static int speed = 4;
-    public static int Money = 0;
+    public static int money = 0;
 
     int fireRateCounter = 0;
 
@@ -85,6 +85,11 @@ public class Player extends GameObject {
                 }
             }
             else if(tempObject.getId() == ID.BasicEnemy) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    currentHealth -= 2;
+                }
+            }
+            else if(tempObject.getId() == ID.TrackerEnemy) {
                 if(getBounds().intersects(tempObject.getBounds())) {
                     currentHealth -= 2;
                 }

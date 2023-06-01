@@ -15,6 +15,7 @@ public class SaveOrLoad {
             data.maxHealth = (int) player.maxHealth;
             data.speed = player.speed;
             data.fireRate = player.fireRate;
+            data.money = player.money;
 
             // Write the DataStorage object to the file
             oos.writeObject(data);
@@ -33,15 +34,14 @@ public class SaveOrLoad {
             SaveDataStorage data = (SaveDataStorage)oos.readObject();
 
             Player.maxHealth = data.maxHealth;
+            Player.currentHealth = data.maxHealth;
             Player.speed = data.speed;
             Player.fireRate = data.fireRate;
-
+            Player.money = data.money;
         }
         catch (EOFException e) {}
         catch (Exception e) {
             System.out.println("Load Exception: " + e);
         }
-
-
     }
 }

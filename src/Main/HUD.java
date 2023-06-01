@@ -18,7 +18,7 @@ public class HUD {
         // Make the level increase every 10 points
         if (scoreTracker >= 5) {
             scoreTracker = 0;
-            Player.Money++;
+            Player.money++;
             level++;
             isNewLevel = true;
         }
@@ -49,7 +49,7 @@ public class HUD {
 
         // Score
         g.setFont(new Font("arial", 1, 15));
-        g.drawString("Money: " + Player.Money, 15, 40);
+        g.drawString("Money: " + Player.money, 15, 40);
         g.drawString("Level : " + this.level, 15, 55);
         g.drawString("Space for Shop", 15, 70);
     }

@@ -37,6 +37,8 @@ public class Game extends Canvas implements Runnable {
         Death,
     }
 
+    //todo put in bullet contact animation
+
     public static STATE gameState = STATE.Menu; // this is the default starting state
 
     public Game() {
@@ -163,7 +165,7 @@ public class Game extends Canvas implements Runnable {
                 } else if (green == 255 && blue == 0) {
                     oHandler.addObject(new BasicEnemy(xx * 32, yy * 32, ID.BasicEnemy, oHandler, iSheet));
                 } else if (green == 255 && blue == 255) {
-                    oHandler.addObject(new Crate(xx * 32, yy * 32, ID.Crate, iSheet));
+                    oHandler.addObject(new Crate(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
                 }
             }
         }

@@ -8,5 +8,6 @@ public class SaveDataStorage implements Serializable {
     int fireRate;
     int maxHealth;
     int speed;
+    int money;
 
 }

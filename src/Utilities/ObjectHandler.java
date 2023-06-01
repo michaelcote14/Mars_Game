@@ -1,7 +1,11 @@
 package Utilities;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
@@ -43,6 +47,8 @@ public class ObjectHandler {
         this.object.remove(object);
     }
 
+
+    // todo put these somewhere else
     public void setUpPressed(boolean upPressed) {
         this.upPressed = upPressed;
     }
@@ -70,5 +76,17 @@ public class ObjectHandler {
 
     public boolean setMouseClicked(boolean mouseClicked) {return this.mouseClicked = mouseClicked;}
     public boolean isMouseClicked() {return mouseClicked;}
+
+    public BufferedImage imageGrabber(String imagePath, int width, int height) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error loading the image: " + imagePath);
+        }
+        return image;
+    }
 
 }

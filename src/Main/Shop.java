@@ -31,8 +31,8 @@ public class Shop extends MouseAdapter {
         if(mouseX >= 100 && mouseX <= 200) {
             if(mouseY >= 100 && mouseY <= 180) {
                 // You've selected Box 1
-                if(Player.Money >= B1) {
-                    Player.Money -= B1;
+                if(Player.money >= B1) {
+                    Player.money -= B1;
                     B1 += 1; // makes the next upgrade cost more
                     player.maxHealth += 10;
                     player.currentHealth += 10;
@@ -43,8 +43,8 @@ public class Shop extends MouseAdapter {
         if(mouseX >= 250 && mouseX <= 350) {
             if(mouseY >= 100 && mouseY <= 180) {
                 // You've selected Box 2
-                if(Player.Money >= B2) {
-                    Player.Money = (Player.Money - B2);
+                if(Player.money >= B2) {
+                    Player.money = (Player.money - B2);
                     B2 += 1; // makes the next upgrade cost more
                     Player.speed++;
                 }
@@ -54,8 +54,8 @@ public class Shop extends MouseAdapter {
         if(mouseX >= 400 && mouseX <= 500) {
             if(mouseY >= 100 && mouseY <= 180) {
                 // You've selected Box 3
-                if(Player.Money >= B3) {
-                    Player.Money = (Player.Money - B3);
+                if(Player.money >= B3) {
+                    Player.money = (Player.money - B3);
                     B3 += 1; // makes the next upgrade cost more
                     player.currentHealth = player.maxHealth;
                 }
@@ -87,7 +87,7 @@ public class Shop extends MouseAdapter {
         g.drawRect(400, 100, 100, 80);
 
         // My Money
-        g.drawString("Money: " + Player.Money, Game.WIDTH/2 - 50, 300);
+        g.drawString("Money: " + Player.money, Game.WIDTH/2 - 50, 300);
         // Go back
         g.drawString("Press SPACE to go back", Game.WIDTH/2 - 50, 330);
     }
