@@ -14,6 +14,7 @@ public class Spawner {
     private Camera camera;
     private ImageSheet iSheet;
     private BufferedImage levelImage;
+    Player player;
 
     public Spawner(ObjectHandler oHandler, HUD hud, Camera camera, ImageSheet iSheet, BufferedImage levelImage) {
         this.oHandler = oHandler;
@@ -25,6 +26,9 @@ public class Spawner {
 
     public void tick() {
         if(hud.isNewLevel == true) {
+            // AutoSave
+            SaveOrLoad.save("Save1", player);
+
             int w = levelImage.getWidth();
             int h = levelImage.getHeight();
 
@@ -40,9 +44,9 @@ public class Spawner {
 //                        oHandler.addObject(new Enemies.TrackerEnemy(xx*32, yy*32, Utilities.ID.TrackerEnemy, oHandler, iSheet));
 
                     }
-//                    else if(green == 255 && blue == 255) {
-//                        oHandler.addObject(new Objects.Crate(xx * 32, yy * 32, Utilities.ID.Objects.Crate, iSheet));
-//                    }
+                    else if(green == 255 && blue == 255) {
+                        oHandler.addObject(new Objects.Crate(xx * 32, yy * 32, Utilities.ID.Crate, iSheet));
+                    }
                 }
             }
             hud.isNewLevel = false;

@@ -15,9 +15,14 @@ public class Player extends GameObject {
 
     Animation anim;
 
-    public static int fireRate = 1;
-    int fireRateCounter = 0;
+    // Stats
+    public static float currentHealth = 100;
+    public static float maxHealth = 100;
+    public static int fireRate = 8;
     public static int speed = 4;
+    public static int Money = 0;
+
+    int fireRateCounter = 0;
 
     public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera) {
         super(x, y, id, imageSheet);
@@ -26,10 +31,6 @@ public class Player extends GameObject {
         this.camera = camera;
         this.mouseHandler = mouseHandler;
 
-        // Stats
-        this.fireRate = 5;
-        this.speed = 4;
-
         playerImage[0] = imageSheet.grabImage(1, 1, 32, 48);
         playerImage[1] = imageSheet.grabImage(2, 1, 32, 48);
         playerImage[2] = imageSheet.grabImage(3, 1, 32, 48);
@@ -37,9 +38,9 @@ public class Player extends GameObject {
         anim = new Animation(3, playerImage);
     }
     public void deathStatDecrease() {
-        this.fireRate -= 10;
-        this.speed -= 10;
-        HUD.maxHealth = HUD.maxHealth - 100; // you lose 10 max health when you die
+        fireRate -= 10;
+        speed -= 10;
+        maxHealth = maxHealth - 100; // you lose 10 max health when you die
     }
 
     public void tick() {
@@ -61,7 +62,7 @@ public class Player extends GameObject {
         else if(!oHandler.isRightPressed()) velX = 0;
 
         if(oHandler.isMouseClicked()) {
-            if(fireRateCounter % (10 - this.fireRate) == 0) {
+            if(fireRateCounter % ((10 - fireRate) + 1) == 0) {
                 PointerInfo a = MouseInfo.getPointerInfo();
                 Point b = a.getLocation();
                 MouseHandler.shoot(b.x, b.y, oHandler, imageSheet, camera);
@@ -85,7 +86,7 @@ public class Player extends GameObject {
             }
             else if(tempObject.getId() == ID.BasicEnemy) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    HUD.currentHealth -= 2;
+                    currentHealth -= 2;
                 }
             }
             else if(tempObject.getId() == ID.Crate) {

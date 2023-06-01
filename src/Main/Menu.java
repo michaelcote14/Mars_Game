@@ -55,8 +55,8 @@ public class Menu extends MouseAdapter {
             levelImage = imageLoader.loadImage("/wizard_level.png");
             oHandler.clearObjects();
             game.wasLevelLoaded = false;
-            HUD.currentHealth = HUD.maxHealth;
-            hud.setScore(0);
+            Player.currentHealth = Player.maxHealth;
+            Player.Money = 0;
             hud.setLevel(1);
         }
 

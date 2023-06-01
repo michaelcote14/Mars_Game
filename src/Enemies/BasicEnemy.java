@@ -1,5 +1,6 @@
 package Enemies;
 
+import Main.Player;
 import Utilities.GameObject;
 import Utilities.ObjectHandler;
 import Utilities.ImageSheet;
@@ -44,7 +45,6 @@ public class BasicEnemy extends GameObject {
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
-
             // This makes the enemy bounce off of the block boundaries
             if(tempObject.getId() == ID.Block) {
                 if(getBoundsBig().intersects(tempObject.getBounds())) {
@@ -67,7 +67,7 @@ public class BasicEnemy extends GameObject {
         }
         if(hp <= 0) {
             oHandler.removeObject(this);
-            HUD.score += 1;
+            Player.Money += 1;
             HUD.scoreTracker += 1;
         }
 

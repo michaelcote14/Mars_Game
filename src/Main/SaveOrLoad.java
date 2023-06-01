@@ -2,18 +2,22 @@ package Main;
 
 import java.io.*;
 
-public class SaveOrLoad {
 
-    public void save(String saveName) {
+public class SaveOrLoad {
+    Player player;
+
+    public static void save(String saveName, Player player) {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(saveName)));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(saveName + ".dat")));
 
             SaveDataStorage data = new SaveDataStorage();
 
-            data.maxHealth = (int) HUD.maxHealth;
-            data.currentHealth = (int) HUD.currentHealth;
-            data.speed = Player.speed;
-            data.fireRate = Player.fireRate;
+            data.maxHealth = (int) player.maxHealth;
+            data.speed = player.speed;
+            data.fireRate = player.fireRate;
+
+            // Write the DataStorage object to the file
+            oos.writeObject(data);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -21,24 +25,21 @@ public class SaveOrLoad {
             throw new RuntimeException(e);
         }
     }
-    public void load(String saveName) {
+    public static void load(String saveName, Player player) {
         try {
-            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(new File(saveName)));
+            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(new File(saveName + ".dat")));
 
             // Read the DataStorage object from the file
-            SaveDataStorage data = (SaveDataStorage) oos.readObject();
+            SaveDataStorage data = (SaveDataStorage)oos.readObject();
 
-            HUD.maxHealth = data.maxHealth;
-            HUD.currentHealth = data.currentHealth;
+            Player.maxHealth = data.maxHealth;
             Player.speed = data.speed;
             Player.fireRate = data.fireRate;
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        }
+        catch (EOFException e) {}
+        catch (Exception e) {
+            System.out.println("Load Exception: " + e);
         }
 
 

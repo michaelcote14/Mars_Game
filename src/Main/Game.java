@@ -48,21 +48,16 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0, 0); // makes the camera start at 0,0
         hud = new HUD();
         menu = new Menu(this, oHandler, hud);
-        shop = new Shop(oHandler, hud, this);
+        shop = new Shop(oHandler, hud, this, player);
 
         this.addKeyListener(new KeyHandler(oHandler, this));
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
         levelImage = imageLoader.loadImage("/wizard_level.png");
         imageSheet = imageLoader.loadImage("/image_sheet.png");
-
         iSheet = new ImageSheet(imageSheet);
-
         spawner = new Spawner(oHandler, hud, camera, iSheet, levelImage);
-
         floor = iSheet.grabImage(4, 2, 32, 32);
-
-
 
         this.addMouseListener(new MouseHandler(oHandler, camera, iSheet, this));
         this.addMouseListener(menu);
@@ -112,12 +107,15 @@ public class Game extends Canvas implements Runnable {
         }
 
         if (paused) {
+            g.setColor(Color.BLACK);
+            g.fillRect((int)camera.getPlayerX(), (int)camera.getPlayerY(), Game.WIDTH, Game.HEIGHT);
+
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", 1, 40));
-            g.drawString("What's wrong baby? Need a break?", Game.WIDTH / 2 - 300, Game.HEIGHT / 2);
+            g.drawString("What's wrong baby? Need a break?", Game.WIDTH / 2 - 100, Game.HEIGHT / 2);
             g.setFont(new Font("arial", 1, 30));
         }
-        if (gameState == STATE.Game) {
+        else if (gameState == STATE.Game) {
 
             if (wasLevelLoaded == false) {
                 BufferedImageLoader imageLoader = new BufferedImageLoader();
@@ -159,10 +157,9 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iSheet));
                 } else if (blue == 255 && green == 0) {
-                    if(!oHandler.object.contains(ID.Player)) {
-                        oHandler.addObject(new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera));
-                    }
-                    System.out.println(ID.Player);
+                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera);
+                    oHandler.addObject(player);
+                    SaveOrLoad.load("Save1", player);
                 } else if (green == 255 && blue == 0) {
                     oHandler.addObject(new BasicEnemy(xx * 32, yy * 32, ID.BasicEnemy, oHandler, iSheet));
                 } else if (green == 255 && blue == 255) {
