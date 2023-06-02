@@ -1,6 +1,5 @@
 package Enemies;
 
-import Main.Game;
 import Main.HUD;
 import Main.Player;
 import Utilities.*;
@@ -60,12 +59,6 @@ public class TrackerEnemy extends GameObject {
             velX = 0;
             velY = 0;
         }
-
-        if(animationTimeCounter > 20) {
-            animationTimeCounter = 0;
-            this.randNum = rand.nextInt(4);
-        }
-        else animationTimeCounter++;
 
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);

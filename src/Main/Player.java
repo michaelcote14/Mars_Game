@@ -26,6 +26,7 @@ public class Player extends GameObject {
     private boolean hasDeathBeenHandled = false;
 
     int fireRateCounter = 0;
+    // todo change character to a human that can be the gambler or something else
 
     public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageSheet imageSheet, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(x, y, id, imageSheet);
@@ -131,7 +132,7 @@ public class Player extends GameObject {
         if(velX == 0 && velY == 0)
             g.drawImage(playerImage[0], (int)x, (int)y, null);
         else
-            anim.drawAnimation(g, x, y, 0);
+            anim.drawAnimation(g, x, y, 0, 32, 48);
     }
 
     public Rectangle getBounds() {

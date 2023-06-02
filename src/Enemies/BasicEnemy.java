@@ -94,7 +94,7 @@ public class BasicEnemy extends GameObject {
 //        g.fillRect(rect.x, rect.y, rect.width, rect.height);
 
         anim.runAnimation();
-        anim.drawAnimation(g, x, y, 0);
+        anim.drawAnimation(g, x, y, 0, 32, 32);
 
         if(didBulletCollide == true) {
             g.drawImage(oHandler.bulletExplosionImage, (int)x, (int)y, 30, 30,null);

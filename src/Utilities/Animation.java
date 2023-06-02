@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Animation {
 
-	private int speed;
+	private int slowness;
 	private int frames;
 	private int index = 0;
 	private int count = 0;
@@ -14,8 +14,8 @@ public class Animation {
 	private BufferedImage currentImg;
 
 	//14 frame animation
-	public Animation(int speed, BufferedImage[] img){
-		this.speed = speed;
+	public Animation(int slowness, BufferedImage[] img){
+		this.slowness = slowness;
 		for(int i = 0; i < img.length; i++) {
 			this.img[i] = img[i];
 		}
@@ -24,7 +24,7 @@ public class Animation {
 
 	public void runAnimation(){
 		index++;
-		if(index > speed){
+		if(index > slowness){
 			index = 0;
 			nextFrame();
 		}
@@ -46,8 +46,8 @@ public class Animation {
 		}
 	}
 
-	public void drawAnimation(Graphics g, double x, double y, int offset){
-		g.drawImage(currentImg, (int)x - offset, (int)y, null);
+	public void drawAnimation(Graphics g, double x, double y, int offset, int width, int height){
+		g.drawImage(currentImg, (int)x - offset, (int)y, width, height, null);
 	}
 
 	public void setCount(int count){
@@ -56,10 +56,10 @@ public class Animation {
 	public int getCount(){
 		return count;
 	}
-	public int getSpeed(){
-		return speed;
+	public int getSlowness(){
+		return slowness;
 	}
-	public void setSpeed(int speed){
-		this.speed = speed;
+	public void setSlowness(int slowness){
+		this.slowness = slowness;
 	}
 }

@@ -27,6 +27,7 @@ public class Spawner {
         this.iSheet = iSheet;
         this.levelImage = levelImage;
     }
+    // todo make enemies get better after each level
 
     public void tick() {
         if(hud.isNewLevel == true) {

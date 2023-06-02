@@ -19,7 +19,7 @@ public class EnemyBullet extends GameObject {
         super(enemyX, enemyY, id, imageSheet);
         this.velX = velX;
         this.velY = velY;
-        this.bulletDeleteTimer = 40; // this allows you to control the range
+        this.bulletDeleteTimer = 150; // this allows you to control the range
 
         this.oHandler = oHandler;
 
@@ -55,11 +55,10 @@ public class EnemyBullet extends GameObject {
         else bulletDeleteTimer--;
 
     }
-
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect((int)x, (int)y, 16, 16);
+        g.setColor(new Color(243, 237, 51));
+        g.fillOval((int)x, (int)y, 13, 13);
     }
 }
 
