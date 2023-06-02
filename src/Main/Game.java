@@ -2,7 +2,8 @@ package Main;
 
 import Enemies.BasicEnemy;
 import Objects.Block;
-import Objects.Crate;
+import Objects.BuzzSaw;
+import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
@@ -43,7 +44,6 @@ public class Game extends Canvas implements Runnable {
 
     public Game() {
         new Window(WIDTH, HEIGHT, "Mars Game", this);
-        gameStart();
 
         // All of these statements below need to be handled carefully, as the timing of them is important
         oHandler = new ObjectHandler();
@@ -56,7 +56,7 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(this.keyHandler);
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
-        levelImage = imageLoader.loadImage("/wizard_level.png");
+        levelImage = imageLoader.loadImage("/level1.png");
         imageSheet = imageLoader.loadImage("/image_sheet.png");
         iSheet = new ImageSheet(imageSheet);
         spawner = new Spawner(oHandler, hud, camera, iSheet, levelImage);
@@ -66,6 +66,8 @@ public class Game extends Canvas implements Runnable {
         this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
         this.addMouseListener(shop);
+
+        gameStart();
     }
 
     public void tick() {
@@ -123,7 +125,7 @@ public class Game extends Canvas implements Runnable {
 
             if (wasLevelLoaded == false) {
                 BufferedImageLoader imageLoader = new BufferedImageLoader();
-                levelImage = imageLoader.loadImage("/wizard_level.png");
+                levelImage = imageLoader.loadImage("/level1.png");
                 loadLevel(levelImage);
                 wasLevelLoaded = true;
             }
@@ -164,10 +166,12 @@ public class Game extends Canvas implements Runnable {
                     player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera, this.keyHandler, this.mouseHandler);
                     oHandler.addObject(player);
                     SaveOrLoad.load("Save1", player);
-                } else if (green == 255 && blue == 0) {
-                    oHandler.addObject(new BasicEnemy(xx * 32, yy * 32, ID.BasicEnemy, oHandler, iSheet));
-                } else if (green == 255 && blue == 255) {
-                    oHandler.addObject(new Crate(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
+                }
+//                } else if (green == 255 && blue == 255) {
+//                    oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
+//                }
+                else if(green == 100 && red == 100) {
+                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSaw, oHandler, iSheet));
                 }
             }
         }

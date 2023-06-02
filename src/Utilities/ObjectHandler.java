@@ -10,6 +10,9 @@ import javax.imageio.ImageIO;
 public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
+    public BufferedImage bulletExplosionImage = imageGrabber("/bulletExplosion.png", 1, 1);
+
+
 
     public void tick() {
         for(int i = 0; i < object.size(); i++) {
@@ -44,13 +47,6 @@ public class ObjectHandler {
     public void removeObject(GameObject object) {
         this.object.remove(object);
     }
-
-
-    // todo put these somewhere else
-
-
-
-
     public BufferedImage imageGrabber(String imagePath, int width, int height) {
         BufferedImage image = null;
         try {
@@ -62,5 +58,4 @@ public class ObjectHandler {
         }
         return image;
     }
-
 }

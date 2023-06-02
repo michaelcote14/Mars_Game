@@ -19,9 +19,11 @@ public class Player extends GameObject {
     // Stats
     public static float currentHealth = 100;
     public static float maxHealth = 100;
+    public static int basicAttackDamage = 1;
     public static int fireRate = 8;
     public static int speed = 4;
     public static int money = 0;
+    private boolean hasDeathBeenHandled = false;
 
     int fireRateCounter = 0;
 
@@ -40,11 +42,62 @@ public class Player extends GameObject {
         anim = new Animation(3, playerImage);
     }
     public void deathStatDecrease() {
-        fireRate -= 10;
-        speed -= 10;
-        maxHealth = maxHealth - 100; // you lose 10 max health when you die
+        if(fireRate > 1) fireRate -= 1;
+        if(speed > 1) speed -= 1;
+        if(maxHealth > 50) maxHealth = maxHealth - 10; // you lose 10 max health when you die
     }
+    private void collision() {
+        for (int i = 0; i < oHandler.object.size(); i++) {
+            GameObject tempObject = oHandler.object.get(i);
 
+            if (tempObject.getId() == ID.Block) {
+                if (!is_room_to_move((int) (x + velX), (int)y, getBounds(), tempObject.getBounds())) {
+                    velX = 0;
+                }
+                else if (!is_room_to_move((int)x, (int) (y + velY), getBounds(), tempObject.getBounds())) {
+                    velY = 0;
+                }
+            }
+            else if(tempObject.getId() == ID.BasicEnemy) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    currentHealth -= 2;
+                }
+            }
+            else if(tempObject.getId() == ID.TrackerEnemy) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    currentHealth -= 2;
+                }
+            }
+            else if(tempObject.getId() == ID.ShooterEnemy) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    currentHealth -= 2;
+                }
+            }
+//            else if(tempObject.getId() == ID.EnemyBullet) {
+//                if (getBounds().intersects(tempObject.getBounds())) {
+//                    currentHealth -= 2;
+//                }
+//            }
+            else if(tempObject.getId() == ID.BuzzSaw) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    currentHealth -= 2;
+                }
+            }
+            else if(tempObject.getId() == ID.HealthPack) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    Player.currentHealth = Player.maxHealth;
+                    oHandler.removeObject(tempObject);
+                }
+            }
+        }
+        if (Player.currentHealth <= 0 && hasDeathBeenHandled == false) {
+            Game.gameState = Game.STATE.Death;
+            deathStatDecrease();
+            // Save the game
+            SaveOrLoad.save("Save1", this);
+            hasDeathBeenHandled = true;
+        }
+    }
     public void tick() {
         collision();
 
@@ -72,37 +125,6 @@ public class Player extends GameObject {
             fireRateCounter++;
         }
         anim.runAnimation();
-    }
-
-    private void collision() {
-        for (int i = 0; i < oHandler.object.size(); i++) {
-            GameObject tempObject = oHandler.object.get(i);
-
-            if (tempObject.getId() == ID.Block) {
-                if (!is_room_to_move((int) (x + velX), (int)y, getBounds(), tempObject.getBounds())) {
-                    velX = 0;
-                }
-                else if (!is_room_to_move((int)x, (int) (y + velY), getBounds(), tempObject.getBounds())) {
-                    velY = 0;
-                }
-            }
-            else if(tempObject.getId() == ID.BasicEnemy) {
-                if(getBounds().intersects(tempObject.getBounds())) {
-                    currentHealth -= 2;
-                }
-            }
-            else if(tempObject.getId() == ID.TrackerEnemy) {
-                if(getBounds().intersects(tempObject.getBounds())) {
-                    currentHealth -= 2;
-                }
-            }
-            else if(tempObject.getId() == ID.Crate) {
-                if(getBounds().intersects(tempObject.getBounds())) {
-                    HUD.ammo += 10;
-                    oHandler.removeObject(tempObject);
-                }
-            }
-        }
     }
 
     public void render(Graphics g) {

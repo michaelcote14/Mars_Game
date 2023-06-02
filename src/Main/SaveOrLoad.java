@@ -34,7 +34,7 @@ public class SaveOrLoad {
             SaveDataStorage data = (SaveDataStorage)oos.readObject();
 
             Player.maxHealth = data.maxHealth;
-            Player.currentHealth = data.maxHealth;
+            Player.currentHealth = Player.maxHealth;
             Player.speed = data.speed;
             Player.fireRate = data.fireRate;
             Player.money = data.money;

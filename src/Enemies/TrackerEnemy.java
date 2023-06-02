@@ -12,13 +12,15 @@ import java.util.Random;
 public class TrackerEnemy extends GameObject {
     private ObjectHandler oHandler;
     private GameObject player;
-    private BufferedImage image1, image2, image3, image4;
-    private BufferedImage[] images = new BufferedImage[4];
+    private BufferedImage[] images;
     private int animationTimeCounter = 0;
     private int randNum;
-    int hp = 100;
+    int hp = 5;
     Random rand = new Random();
 
+    boolean didBulletCollide = false;
+    int collisionCounter = 0;
+    int bulletCollisionX, bulletCollisionY;
 
     public TrackerEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
         super(x, y, id, null);
@@ -33,13 +35,12 @@ public class TrackerEnemy extends GameObject {
     }
 
     public BufferedImage[] getImages() {
-        // todo re-crop the images
         // Put them all into an array
         BufferedImage[] images = new BufferedImage[4];
-        images[0] = oHandler.imageGrabber("/Enemies/ghost1.png", 32, 32);
-        images[1] = oHandler.imageGrabber("/Enemies/ghost2.png", 32, 32);
-        images[2] = oHandler.imageGrabber("/Enemies/ghost3.png", 32, 32);
-        images[3] = oHandler.imageGrabber("/Enemies/ghost4.png", 32, 32);
+        images[0] = oHandler.imageGrabber("/Enemies/ghost1.png", 15, 17);
+        images[1] = oHandler.imageGrabber("/Enemies/ghost2.png", 15, 17);
+        images[2] = oHandler.imageGrabber("/Enemies/ghost3.png", 15, 17);
+        images[3] = oHandler.imageGrabber("/Enemies/ghost4.png", 15, 17);
 
         return images;
     }
@@ -53,12 +54,12 @@ public class TrackerEnemy extends GameObject {
         float diffY = y - player.getY() - 16;
         float distance = (float)Math.sqrt((x- player.getX()) * (x - player.getX()) + (y - player.getY()) * (y - player.getY()));
 
-        velX = (float)((-1.0/distance) * diffX);
-        velY = (float)((-1.0/distance) * diffY);
-
-        if(x <= 0 || x >= Game.WIDTH - 32) velX *= -1;
-        if(y <= 0 || y >= Game.HEIGHT - 16) velY *= -1;
-
+        velX = (float) ((-1.0 / distance) * diffX);
+        velY = (float) ((-1.0 / distance) * diffY);
+        if(distance > 400) {
+            velX = 0;
+            velY = 0;
+        }
 
         if(animationTimeCounter > 20) {
             animationTimeCounter = 0;
@@ -71,7 +72,10 @@ public class TrackerEnemy extends GameObject {
             // Bullet collision
             if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= 50;
+                    hp -= Player.basicAttackDamage;
+                    didBulletCollide = true;
+                    bulletCollisionX = (int)x;
+                    bulletCollisionY = (int)y;
                     oHandler.removeObject(tempObject);
                 }
             }
@@ -85,12 +89,18 @@ public class TrackerEnemy extends GameObject {
     }
     @Override
     public void render(Graphics g) {
-        g.drawImage(this.images[this.randNum], (int) x, (int) y, 40, 40, null);
+        g.drawImage(this.images[this.randNum], (int) x, (int) y, 30, 30, null);
+        if(didBulletCollide == true) {
+            g.drawImage(oHandler.bulletExplosionImage, (int)x, (int)y, 30, 30,null);
+        }
+        if(collisionCounter > 200) { // the time of how long the explosion lasts
+            didBulletCollide = false;
+            collisionCounter = 0;
+        }
+        collisionCounter ++;
     }
 
-    // this makes sure the collision box is slightly bigger than the enemy
-    public Rectangle getBoundsBig() {return new Rectangle((int)x - 16, (int)y - 16, 64, 64);}
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 16, 16); // 16, 16 is the size of the enemy
+        return new Rectangle((int)x+8, (int)y+4, 23, 31);
     }
 }

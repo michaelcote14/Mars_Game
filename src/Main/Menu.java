@@ -52,11 +52,9 @@ public class Menu extends MouseAdapter {
         if (game.gameState == Game.STATE.Death && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
             game.gameState = Game.STATE.Game;
             BufferedImageLoader imageLoader = new BufferedImageLoader();
-            levelImage = imageLoader.loadImage("/wizard_level.png");
+            levelImage = imageLoader.loadImage("/level1.png");
             oHandler.clearObjects();
             game.wasLevelLoaded = false;
-            Player.currentHealth = Player.maxHealth;
-            Player.money = 0;
             hud.setLevel(1);
         }
 
@@ -114,7 +112,13 @@ public class Menu extends MouseAdapter {
             g.setColor(Color.white);
             g.setFont(font);
             g.drawString(this.deathComment, 20, 200);
+            g.setColor(Color.red);
 
+            g.setFont(new Font("arial", 1, 18));
+            g.drawString("Tip: Dying will decrease your stats each time.", 20, 260);
+            g.drawString("So, I would stop dying. Idiot.", 20, 285);
+
+            g.setColor(Color.white);
             Font font2 = new Font("arial", 1, 30);
             g.setFont(font2);
             g.drawRect(Game.WIDTH/2 - 80, Game.HEIGHT/2 + 85, 200,50);

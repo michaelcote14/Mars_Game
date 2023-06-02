@@ -1,12 +1,15 @@
 package Main;
 
 import Enemies.BasicEnemy;
+import Enemies.ShooterEnemy;
+import Objects.HealthPack;
 import Utilities.Camera;
 import Utilities.ID;
 import Utilities.ImageSheet;
 import Utilities.ObjectHandler;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Spawner {
     private ObjectHandler oHandler;
@@ -15,6 +18,7 @@ public class Spawner {
     private ImageSheet iSheet;
     private BufferedImage levelImage;
     Player player;
+    Random randNum = new Random();
 
     public Spawner(ObjectHandler oHandler, HUD hud, Camera camera, ImageSheet iSheet, BufferedImage levelImage) {
         this.oHandler = oHandler;
@@ -39,15 +43,17 @@ public class Spawner {
                     int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
                     if(green == 255 && blue == 0) {
-                        if((hud.getLevel() + 2) % 3 == 0) {oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
-
+                        if((hud.getLevel() + 2) % 3 == 0) {
+                            if(randNum.nextInt(2) == 0) {oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
+                            else {oHandler.addObject(new ShooterEnemy(xx * 32, yy * 32, ID.ShooterEnemy, oHandler, iSheet));}
+                        }
                         else if(hud.getLevel() % 2 == 0) {oHandler.addObject(new Enemies.TrackerEnemy(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));}
 //                        oHandler.addObject(new Enemies.FastEnemy(xx*32, yy*32, Utilities.ID.BasicEnemy, oHandler, iSheet));
 
                     }
-                    else if(green == 255 && blue == 255) {
-                        oHandler.addObject(new Objects.Crate(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
-                    }
+//                    else if(green == 255 && blue == 255) {
+//                        oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
+//                    }
                 }
             }
             hud.isNewLevel = false;

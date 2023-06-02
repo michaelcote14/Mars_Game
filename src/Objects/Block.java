@@ -3,6 +3,7 @@ package Objects;
 import Utilities.GameObject;
 import Utilities.ID;
 import Utilities.ImageSheet;
+import Utilities.ObjectHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

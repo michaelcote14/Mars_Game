@@ -1,6 +1,7 @@
 package Enemies;
 
 import Main.Player;
+import Objects.HealthPack;
 import Utilities.GameObject;
 import Utilities.ObjectHandler;
 import Utilities.ImageSheet;
@@ -17,14 +18,14 @@ public class BasicEnemy extends GameObject {
     private ObjectHandler oHandler;
     Random rand = new Random();
     int directionChoice = 0;
-    int hp = 100;
+    int hp = 3;
+
     boolean didBulletCollide = false;
     int collisionCounter = 0;
     int bulletCollisionX, bulletCollisionY;
 
     private BufferedImage[] enemyImage = new BufferedImage[3];
     Animation anim;
-    private BufferedImage bulletExplosionImage = null;
 
     public BasicEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
         super(x, y, id, imageSheet);
@@ -37,7 +38,6 @@ public class BasicEnemy extends GameObject {
 
             anim = new Animation(1, enemyImage);
         }
-        bulletExplosionImage = oHandler.imageGrabber("/bulletExplosion.png", 1, 1);
 
     }
 
@@ -67,7 +67,7 @@ public class BasicEnemy extends GameObject {
             // Bullet collision
             else if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= 5;
+                    hp -= Player.basicAttackDamage;
                     didBulletCollide = true;
                     bulletCollisionX = (int)x;
                     bulletCollisionY = (int)y;
@@ -90,27 +90,30 @@ public class BasicEnemy extends GameObject {
 
     @Override
     public void render(Graphics g) {
+//        Rectangle rect = getBounds(); // this is how to show the hit box
+//        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+
         anim.runAnimation();
         anim.drawAnimation(g, x, y, 0);
 
         if(didBulletCollide == true) {
-            g.drawImage(bulletExplosionImage, (int)x, (int)y, 20, 20,null);
-            collisionCounter ++;
+            g.drawImage(oHandler.bulletExplosionImage, (int)x, (int)y, 30, 30,null);
         }
         if(collisionCounter > 200) {
             didBulletCollide = false;
             collisionCounter = 0;
         }
+        collisionCounter ++;
     }
 
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new Objects.Crate(x, y, ID.Crate, oHandler, imageSheet));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageSheet));
         }
     }
 
     @Override
-    public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 32, 32);}
+    public Rectangle getBounds() {return new Rectangle((int)x, (int)y+2, 30, 28);} // this defines the hitbox
 
     // this makes sure the collision box is slightly bigger than the enemy
     public Rectangle getBoundsBig() {return new Rectangle((int)x - 16, (int)y - 16, 64, 64);}

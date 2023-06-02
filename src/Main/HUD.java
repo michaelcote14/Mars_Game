@@ -4,11 +4,8 @@ import java.awt.*;
 import java.util.Random;
 
 public class HUD {
-//    public static float currentHealth = 100;
-//    public static float maxHealth = 100;
     public static int ammo = 1000;
 
-//    public static int score = 0;
     public static int scoreTracker = 0;
     private int level = 1;
     public boolean isNewLevel = true;
@@ -16,9 +13,8 @@ public class HUD {
 
     public void tick() {
         // Make the level increase every 10 points
-        if (scoreTracker >= 5) {
+        if (scoreTracker >= 10) {
             scoreTracker = 0;
-            Player.money++;
             level++;
             isNewLevel = true;
         }
@@ -26,10 +22,6 @@ public class HUD {
         //             todo death animation here
 //             todo add a restart button
 //            todo Fade screen to black
-//             todo fix the alignment of the death comments
-        if (Player.currentHealth <= 0) {
-            Game.gameState = Game.STATE.Death;
-        }
     }
     public void render(Graphics g) {
         // Health Bar Background
