@@ -4,7 +4,7 @@ import Main.Player;
 import Objects.HealthPack;
 import Utilities.GameObject;
 import Utilities.ObjectHandler;
-import Utilities.ImageSheet;
+import Utilities.ImageHandler;
 import Utilities.Animation;
 import Utilities.ID;
 
@@ -14,31 +14,40 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class BasicEnemy extends GameObject {
+public class FlyingEye extends GameObject {
     private ObjectHandler oHandler;
+    private HUD hud;
+    private BufferedImage[] images;
+    Animation anim;
+
     Random rand = new Random();
     int directionChoice = 0;
-    int hp = 3;
+    int hp = 1;
 
     boolean didBulletCollide = false;
     int collisionCounter = 0;
     int bulletCollisionX, bulletCollisionY;
 
-    private BufferedImage[] enemyImage = new BufferedImage[3];
-    Animation anim;
-
-    public BasicEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super(x, y, id, imageSheet);
+    public FlyingEye(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
+        super(x, y, id, imageHandler);
         this.oHandler = oHandler;
+        this.images = getImages();
+        this.hp = hud.level;
+    }
+    public BufferedImage[] getImages() {
+        // Put them all into an array
+        BufferedImage[] images = new BufferedImage[6];
 
-        if(imageSheet != null) {
-            enemyImage[0] = imageSheet.grabImage(4, 1, 32, 32);
-            enemyImage[1] = imageSheet.grabImage(5, 1, 32, 32);
-            enemyImage[2] = imageSheet.grabImage(6, 1, 32, 32);
+        images[0] = ImageHandler.images.get("flyingEyeDown1");
+        images[1] = ImageHandler.images.get("flyingEyeDown2");
+        images[2] = ImageHandler.images.get("flyingEyeDown3");
+        images[3] = ImageHandler.images.get("flyingEyeDown4");
+        images[4] = ImageHandler.images.get("flyingEyeDown5");
+        images[5] = ImageHandler.images.get("flyingEyeDown6");
 
-            anim = new Animation(1, enemyImage);
-        }
+        anim = new Animation(100, images);
 
+        return images;
     }
 
     @Override
@@ -67,15 +76,22 @@ public class BasicEnemy extends GameObject {
             // Bullet collision
             else if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= Player.basicAttackDamage;
+                    this.hp -= Player.basicAttackDamage;
+                    Player.currentHealth += Player.lifeStealRate;
                     didBulletCollide = true;
                     bulletCollisionX = (int)x;
                     bulletCollisionY = (int)y;
                     oHandler.removeObject(tempObject);
                 }
             }
+            else if(tempObject.getId().toString().contains("Ability")) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    System.out.println("hit");
+                    this.hp -= Player.basicAttackDamage;
+                }
+            }
         }
-        if(hp <= 0) {
+        if(this.hp <= 0) {
             oHandler.removeObject(this);
             Player.money += 1;
             HUD.scoreTracker += 1;
@@ -92,7 +108,6 @@ public class BasicEnemy extends GameObject {
     public void render(Graphics g) {
 //        Rectangle rect = getBounds(); // this is how to show the hit box
 //        g.fillRect(rect.x, rect.y, rect.width, rect.height);
-
         anim.runAnimation();
         anim.drawAnimation(g, x, y, 0, 32, 32);
 
@@ -108,7 +123,7 @@ public class BasicEnemy extends GameObject {
 
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageSheet));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageHandler));
         }
     }
 

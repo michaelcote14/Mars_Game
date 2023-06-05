@@ -1,9 +1,8 @@
 package Objects;
 
-import Main.Game;
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageSheet;
+import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -11,13 +10,14 @@ import java.awt.image.BufferedImage;
 
 public class BuzzSaw extends GameObject {
     private ObjectHandler oHandler;
-    private BufferedImage buzzSawImage;
+    private BufferedImage image;
+    private int rotation = 15;
+    private int rotationCounter = 0;
 
-    // todo make this rotate
-    public BuzzSaw(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super(x, y, id, imageSheet);
+    public BuzzSaw(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
+        super(x, y, id, imageHandler);
         this.oHandler = oHandler;
-        this.buzzSawImage = oHandler.imageGrabber("/buzzSaw.png", 4, 4);
+        this.image = oHandler.imageGrabber("/Objects/buzzSaw.png", 4, 4);
 
         velX = 2;
 
@@ -48,15 +48,21 @@ public class BuzzSaw extends GameObject {
             }
         }
     }
-
     @Override
     public void render(Graphics g) {
-        // Make the saw spin
-//        Graphics2D g2d = (Graphics2D) g;
-//        g2d.rotate(Math.toRadians(45), x + 8, y + 8);
-//        g.fillRect((int)x, (int)y, 16, 16);
-        g.drawImage(this.buzzSawImage, (int)x, (int)y, 48, 48,null);
-//        g2d.rotate(Math.toRadians(-45), x + 8, y + 8);
+        // Rotate the image continuously
+        Graphics2D g2d = (Graphics2D) g.create();
+        int centerX = (int) x + 32;
+        int centerY = (int) y + 32;
+        g2d.translate(centerX, centerY);
+        g2d.rotate(Math.toRadians(rotation));
+        g2d.drawImage(image, -25, -25, 50, 50, null);
+        g2d.dispose();
+        if(rotationCounter > 3) {
+            rotation += 1;
+            rotationCounter = 0;
+        }
+        rotationCounter++;
     }
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 48, 48); // this is the size of the hit box

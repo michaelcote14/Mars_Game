@@ -6,13 +6,13 @@ public abstract class GameObject {
     protected float x, y;
     protected float velX, velY;
     protected ID id;
-    protected ImageSheet imageSheet;
+    protected ImageHandler imageHandler;
 
-    public GameObject(float x, float y, ID id, ImageSheet imageSheet) {
+    public GameObject(float x, float y, ID id, ImageHandler imageHandler) {
         this.x = x;
         this.y = y;
         this.id = id;
-        this.imageSheet = imageSheet;
+        this.imageHandler = imageHandler;
     }
 
     public abstract void tick();

@@ -10,9 +10,7 @@ import javax.imageio.ImageIO;
 public class ObjectHandler {
     public ArrayList<GameObject> object = new ArrayList<GameObject>();
 
-    public BufferedImage bulletExplosionImage = imageGrabber("/bulletExplosion.png", 1, 1);
-
-
+    public BufferedImage bulletExplosionImage = imageGrabber("/Objects/bulletExplosion.png", 1, 1);
 
     public void tick() {
         for(int i = 0; i < object.size(); i++) {
@@ -34,8 +32,7 @@ public class ObjectHandler {
                 this.removeObject(tempObject);
                 i--;
             }
-            if(tempObject.getId() == ID.BasicEnemy || tempObject.getId() == ID.FastEnemy
-                    || tempObject.getId() == ID.TrackerEnemy) {
+            if(tempObject.getId().toString().contains("Enemy")) {
                 this.removeObject(tempObject);
                 i--;
             }

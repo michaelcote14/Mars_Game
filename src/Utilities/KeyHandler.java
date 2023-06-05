@@ -11,7 +11,7 @@ public class KeyHandler extends KeyAdapter {
     ObjectHandler oHandler;
     Game game;
 
-    private boolean upPressed, downPressed, leftPressed, rightPressed = false;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, onePressed, twoPressed, threePressed = false;
 
     public KeyHandler(ObjectHandler oHandler, Game game) {
         this.oHandler = oHandler;
@@ -25,11 +25,33 @@ public class KeyHandler extends KeyAdapter {
             GameObject tempObject = oHandler.object.get(i);
 
             if(tempObject.getId() == ID.Player) {
-                // Key events for player 1
                 if(key == KeyEvent.VK_W) setUpPressed(true);
                 if(key == KeyEvent.VK_S) setDownPressed(true);
                 if(key == KeyEvent.VK_D) setRightPressed(true);
                 if(key == KeyEvent.VK_A) setLeftPressed(true);
+                if(key == KeyEvent.VK_1) {
+                    setOnePressed(true);
+                    setTwoPressed(false);
+                    setThreePressed(false);
+                }
+                if(key == KeyEvent.VK_2) {
+                    if(isTwoPressed() == true) {
+                        setTwoPressed(false);
+                    } else {
+                        setTwoPressed(true);
+                        setOnePressed(false);
+                        setThreePressed(false);
+                    }
+                }
+                if(key == KeyEvent.VK_3) {
+                    if(isThreePressed() == true) {
+                        setThreePressed(false);
+                    } else {
+                        setThreePressed(true);
+                        setOnePressed(false);
+                        setTwoPressed(false);
+                    }
+                }
 
                 if(key == KeyEvent.VK_ESCAPE) System.exit(1);
                 if(key == KeyEvent.VK_P) {
@@ -45,6 +67,7 @@ public class KeyHandler extends KeyAdapter {
             }
         }
     }
+
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode(); // this returns a key code for the key that was pressed
 
@@ -57,6 +80,7 @@ public class KeyHandler extends KeyAdapter {
                 if(key == KeyEvent.VK_S) setDownPressed(false);
                 if(key == KeyEvent.VK_D) setRightPressed(false);
                 if(key == KeyEvent.VK_A) setLeftPressed(false);
+                if(key == KeyEvent.VK_1) {setOnePressed(false);}
             }
         }
     }
@@ -70,9 +94,12 @@ public class KeyHandler extends KeyAdapter {
     public void setLeftPressed(boolean leftPressed) {
         this.leftPressed = leftPressed;
     }
-    public void setRightPressed(boolean rightPressed) {
-        this.rightPressed = rightPressed;
-    }
+    public void setRightPressed(boolean rightPressed) {this.rightPressed = rightPressed;}
+    public void setOnePressed(boolean onePressed) {this.onePressed = onePressed;}
+    public void setTwoPressed(boolean twoPressed) {this.twoPressed = twoPressed;}
+    public void setThreePressed(boolean threePressed) {this.threePressed = threePressed;}
+
+
     public boolean isUpPressed() {
         return upPressed;
     }
@@ -85,4 +112,9 @@ public class KeyHandler extends KeyAdapter {
     public boolean isRightPressed() {
         return rightPressed;
     }
+    public boolean isOnePressed() {return onePressed;}
+    public boolean isTwoPressed() {return twoPressed;}
+
+    public boolean isThreePressed() {return threePressed;}
+
 }

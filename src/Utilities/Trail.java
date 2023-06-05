@@ -29,7 +29,6 @@ public class Trail extends GameObject {
         if(alpha > life) {
             alpha -= (life - 0.0001f);
         } else oHandler.removeObject(this);
-
     }
 
     @Override

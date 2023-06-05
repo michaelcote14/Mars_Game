@@ -1,9 +1,8 @@
 package Main;
 
-import Enemies.BasicEnemy;
+import Abilities.Abilities;
 import Objects.Block;
 import Objects.BuzzSaw;
-import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
@@ -23,9 +22,10 @@ public class Game extends Canvas implements Runnable {
     private Shop shop;
     private Spawner spawner;
     private Camera camera;
-    private ImageSheet iSheet;
+    private ImageHandler iHandler;
     private KeyHandler keyHandler;
     private MouseHandler mouseHandler;
+    private Abilities abilities;
 
     private BufferedImage levelImage = null;
     private BufferedImage imageSheet = null;
@@ -47,22 +47,23 @@ public class Game extends Canvas implements Runnable {
 
         // All of these statements below need to be handled carefully, as the timing of them is important
         oHandler = new ObjectHandler();
+        iHandler = new ImageHandler();
         camera = new Camera(0, 0); // makes the camera start at 0,0
-        hud = new HUD();
+        this.keyHandler = new KeyHandler(oHandler, this);
+        hud = new HUD(iHandler, this.keyHandler);
         menu = new Menu(this, oHandler, hud);
         shop = new Shop(oHandler, hud, this, player);
+        abilities = new Abilities();
 
-        this.keyHandler = new KeyHandler(oHandler, this);
         this.addKeyListener(this.keyHandler);
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
-        levelImage = imageLoader.loadImage("/level1.png");
-        imageSheet = imageLoader.loadImage("/image_sheet.png");
-        iSheet = new ImageSheet(imageSheet);
-        spawner = new Spawner(oHandler, hud, camera, iSheet, levelImage);
-        floor = iSheet.grabImage(4, 2, 32, 32);
+        levelImage = imageLoader.loadImage("/Objects/level1.png");
+        imageSheet = imageLoader.loadImage("/Objects/imageSheet.png");
+        spawner = new Spawner(oHandler, hud, camera, iHandler, levelImage);
+        floor = ImageHandler.images.get("jailFloor");
 
-        this.mouseHandler = new MouseHandler(oHandler, camera, iSheet, this);
+        this.mouseHandler = new MouseHandler(oHandler, iHandler, this);
         this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
         this.addMouseListener(shop);
@@ -125,7 +126,7 @@ public class Game extends Canvas implements Runnable {
 
             if (wasLevelLoaded == false) {
                 BufferedImageLoader imageLoader = new BufferedImageLoader();
-                levelImage = imageLoader.loadImage("/level1.png");
+                levelImage = imageLoader.loadImage("/Objects/level1.png");
                 loadLevel(levelImage);
                 wasLevelLoaded = true;
             }
@@ -160,18 +161,19 @@ public class Game extends Canvas implements Runnable {
                 int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
                 int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
-                if (red == 255) {
-                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iSheet));
-                } else if (blue == 255 && green == 0) {
-                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iSheet, camera, this.keyHandler, this.mouseHandler);
+                if (red == 255 && green == 0 && blue == 0) {
+                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iHandler));
+                }
+                else if (red == 00 && green == 00 && blue == 255) {
+                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iHandler, camera, this.keyHandler, this.mouseHandler);
                     oHandler.addObject(player);
                     SaveOrLoad.load("Save1", player);
                 }
-//                } else if (green == 255 && blue == 255) {
+//              else if (green == 255 && blue == 255) {
 //                    oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
 //                }
-                else if(green == 100 && red == 100) {
-                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSaw, oHandler, iSheet));
+                else if(green == 100 && red == 100 && blue == 0) {
+                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSawTrap, oHandler, iHandler));
                 }
             }
         }

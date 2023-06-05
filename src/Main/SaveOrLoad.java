@@ -13,9 +13,13 @@ public class SaveOrLoad {
             SaveDataStorage data = new SaveDataStorage();
 
             data.maxHealth = (int) player.maxHealth;
-            data.speed = player.speed;
+            data.speed = player.walkSpeed;
             data.fireRate = player.fireRate;
             data.money = player.money;
+
+            data.ability1Name = player.ability1Name;
+            data.ability2Name = player.ability2Name;
+            data.ability3Name = player.ability3Name;
 
             // Write the DataStorage object to the file
             oos.writeObject(data);
@@ -35,9 +39,14 @@ public class SaveOrLoad {
 
             Player.maxHealth = data.maxHealth;
             Player.currentHealth = Player.maxHealth;
-            Player.speed = data.speed;
+            Player.walkSpeed = data.speed;
             Player.fireRate = data.fireRate;
-            Player.money = data.money;
+//            Player.money = data.money;
+            Player.money = 100000;
+
+            Player.ability1Name = data.ability1Name;
+            Player.ability2Name = data.ability2Name;
+            Player.ability3Name = data.ability3Name;
         }
         catch (EOFException e) {}
         catch (Exception e) {

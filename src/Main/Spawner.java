@@ -1,11 +1,9 @@
 package Main;
 
-import Enemies.BasicEnemy;
-import Enemies.ShooterEnemy;
-import Objects.HealthPack;
+import Enemies.Worm;
 import Utilities.Camera;
 import Utilities.ID;
-import Utilities.ImageSheet;
+import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.image.BufferedImage;
@@ -15,20 +13,18 @@ public class Spawner {
     private ObjectHandler oHandler;
     private HUD hud;
     private Camera camera;
-    private ImageSheet iSheet;
+    private ImageHandler iSheet;
     private BufferedImage levelImage;
     Player player;
     Random randNum = new Random();
 
-    public Spawner(ObjectHandler oHandler, HUD hud, Camera camera, ImageSheet iSheet, BufferedImage levelImage) {
+    public Spawner(ObjectHandler oHandler, HUD hud, Camera camera, ImageHandler iSheet, BufferedImage levelImage) {
         this.oHandler = oHandler;
         this.hud = hud;
         this.camera = camera;
         this.iSheet = iSheet;
         this.levelImage = levelImage;
     }
-    // todo make enemies get better after each level
-
     public void tick() {
         if(hud.isNewLevel == true) {
             // AutoSave
@@ -40,18 +36,27 @@ public class Spawner {
             for(int xx = 0; xx < w; xx++) {
                 for(int yy = 0; yy < h; yy++) {
                     int pixel = levelImage.getRGB(xx, yy);
+                    int red = (pixel >> 16) & 0xff; // shifting the bits over to get the red value
                     int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
                     int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
-                    if(green == 255 && blue == 0) {
-                        if((hud.getLevel() + 2) % 3 == 0) {
-                            if(randNum.nextInt(2) == 0) {oHandler.addObject(new BasicEnemy(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
-                            else {oHandler.addObject(new ShooterEnemy(xx * 32, yy * 32, ID.ShooterEnemy, oHandler, iSheet));}
-                        }
-                        else if(hud.getLevel() % 2 == 0) {oHandler.addObject(new Enemies.TrackerEnemy(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));}
+                    if(red == 00 && green == 255 && blue == 0) {
+                        oHandler.addObject(new Worm(xx*32, yy*32, ID.WormEnemy, oHandler, iSheet));
+
+//                        if((hud.getLevel() + 2) % 3 == 0) {
+//                            if(randNum.nextInt(2) == 0) {oHandler.addObject(new FlyingEye(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
+//                            else {oHandler.addObject(new worm(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));}
+//                        }
+//                        else if(hud.getLevel() % 2 == 0) {
+//                            oHandler.addObject(new arachnidMage(xx * 32, yy * 32, ID.ShooterEnemy, oHandler, iSheet));
+//                        }
 //                        oHandler.addObject(new Enemies.FastEnemy(xx*32, yy*32, Utilities.ID.BasicEnemy, oHandler, iSheet));
 
                     }
+                    else if(red == 255 && green == 0 && blue == 255) {
+                        oHandler.addObject(new Worm(xx*32, yy*32, ID.WormEnemy, oHandler, iSheet));
+                    }
+
 //                    else if(green == 255 && blue == 255) {
 //                        oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
 //                    }

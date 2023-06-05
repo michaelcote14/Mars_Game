@@ -52,7 +52,7 @@ public class Menu extends MouseAdapter {
         if (game.gameState == Game.STATE.Death && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
             game.gameState = Game.STATE.Game;
             BufferedImageLoader imageLoader = new BufferedImageLoader();
-            levelImage = imageLoader.loadImage("/level1.png");
+            levelImage = imageLoader.loadImage("/Objects/level1.png");
             oHandler.clearObjects();
             game.wasLevelLoaded = false;
             hud.setLevel(1);

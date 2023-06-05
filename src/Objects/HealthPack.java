@@ -2,7 +2,7 @@ package Objects;
 
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageSheet;
+import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -12,10 +12,10 @@ public class HealthPack extends GameObject {
     private ObjectHandler oHandler;
     private BufferedImage healthPackImage;
 
-    public HealthPack(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super(x, y, id, imageSheet);
+    public HealthPack(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
+        super(x, y, id, imageHandler);
         this.oHandler = oHandler;
-        this.healthPackImage = oHandler.imageGrabber("/health_pack.png", 4, 4);
+        this.healthPackImage = ImageHandler.images.get("healthPack");
 
     }
     @Override

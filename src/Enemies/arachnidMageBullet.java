@@ -1,26 +1,27 @@
 package Enemies;
 
-import Main.Game;
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageSheet;
+import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class EnemyBullet extends GameObject {
+public class arachnidMageBullet extends GameObject {
     private ObjectHandler oHandler;
+    BufferedImage image;
     Random rand = new Random();
     private int bulletDeleteTimer = 100;
 
 
-    public EnemyBullet(float enemyX, float enemyY, float velX, float velY, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super(enemyX, enemyY, id, imageSheet);
+    public arachnidMageBullet(float enemyX, float enemyY, float velX, float velY, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
+        super(enemyX, enemyY, id, imageHandler);
         this.velX = velX;
         this.velY = velY;
         this.bulletDeleteTimer = 150; // this allows you to control the range
-
+        this.image = imageHandler.images.get("alienBullet");
         this.oHandler = oHandler;
 
         // How to shoot randomly in a direction
@@ -29,7 +30,7 @@ public class EnemyBullet extends GameObject {
 
     }
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 16, 16); // 16, 16 is the size of the enemy
+        return new Rectangle((int)x, (int)y+2, 32, 32); // 16, 16 is the size of the enemy
     }
 
     @Override
@@ -57,8 +58,7 @@ public class EnemyBullet extends GameObject {
     }
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(243, 237, 51));
-        g.fillOval((int)x, (int)y, 13, 13);
+        g.drawImage(this.image, (int)x, (int)y, 16, 16,null);
     }
 }
 

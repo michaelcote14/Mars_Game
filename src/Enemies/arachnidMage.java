@@ -9,18 +9,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class ShooterEnemy extends GameObject {
+public class arachnidMage extends GameObject {
     private ObjectHandler oHandler;
+    private HUD hud;
     private GameObject player;
     private BufferedImage[] images;
     Animation anim;
     boolean isShooting = false;
 
-
     Random rand = new Random();
     private int randNum;
 
-    private int animationTimeCounter = 0;
     private int changeDirectionCounter = 1;
     int directionChoice = 0;
     int hp = 5;
@@ -31,11 +30,11 @@ public class ShooterEnemy extends GameObject {
     int collisionCounter = 0;
     int bulletCollisionX, bulletCollisionY;
 
-    public ShooterEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
+    public arachnidMage(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
         super(x, y, id, null);
         this.oHandler = oHandler;
         this.images = getImages();
-//        this.randNum = rand.nextInt(4);
+        this.hp = hud.level;
         velX = 1;
         velY = 1;
 
@@ -50,14 +49,15 @@ public class ShooterEnemy extends GameObject {
     public BufferedImage[] getImages() {
         // Put them all into an array
         BufferedImage[] images = new BufferedImage[8];
-        images[0] = oHandler.imageGrabber("/Enemies/alien1.png", 15, 17);
-        images[1] = oHandler.imageGrabber("/Enemies/alien2.png", 15, 17);
-        images[2] = oHandler.imageGrabber("/Enemies/alien3.png", 15, 17);
-        images[3] = oHandler.imageGrabber("/Enemies/alien4.png", 15, 17);
-        images[4] = oHandler.imageGrabber("/Enemies/alien5.png", 15, 17);
-        images[5] = oHandler.imageGrabber("/Enemies/alien6.png", 15, 17);
-        images[6] = oHandler.imageGrabber("/Enemies/alien7.png", 15, 17);
-        images[7] = oHandler.imageGrabber("/Enemies/alien8.png", 15, 17);
+
+        images[0] = ImageHandler.images.get("alien1");
+        images[1] = ImageHandler.images.get("alien2");
+        images[2] = ImageHandler.images.get("alien3");
+        images[3] = ImageHandler.images.get("alien4");
+        images[4] = ImageHandler.images.get("alien5");
+        images[5] = ImageHandler.images.get("alien6");
+        images[6] = ImageHandler.images.get("alien7");
+        images[7] = ImageHandler.images.get("alien8");
 
         anim = new Animation(400, images);
 
@@ -95,15 +95,22 @@ public class ShooterEnemy extends GameObject {
             // Bullet collision
             else if(tempObject.getId() == ID.Bullet) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= Player.basicAttackDamage;
+                    this.hp -= Player.basicAttackDamage;
+                    Player.currentHealth += Player.lifeStealRate;
                     didBulletCollide = true;
                     bulletCollisionX = (int)x;
                     bulletCollisionY = (int)y;
                     oHandler.removeObject(tempObject);
                 }
             }
+            else if(tempObject.getId().toString().contains("Ability")) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    System.out.println("hit");
+                    this.hp -= Player.basicAttackDamage;
+                }
+            }
         }
-        if(hp <= 0) {
+        if(this.hp <= 0) {
             oHandler.removeObject(this);
             Player.money += 1;
             HUD.scoreTracker += 1;
@@ -123,38 +130,17 @@ public class ShooterEnemy extends GameObject {
         bulletVelX = (float)((-1.0/distance) * diffX * 3); // 3 is the speed of the bullets
         bulletVelY = (float)((-1.0/distance) * diffY * 3);
 
-//        int spawnBullet = rand.nextInt(50);
         if(isShooting == true && distance < 450) { // range of the enemy
-            oHandler.addObject(new EnemyBullet((int)x + 8, (int)y + 8, bulletVelX, bulletVelY, ID.EnemyBullet, oHandler, null));
+            oHandler.addObject(new arachnidMageBullet((int)x + 8, (int)y + 8, bulletVelX, bulletVelY, ID.EnemyBullet, oHandler, null));
             isShooting = false;
         }
-
-        for(int i = 0; i < oHandler.object.size(); i++) {
-            GameObject tempObject = oHandler.object.get(i);
-            // Bullet collision
-            if(tempObject.getId() == ID.Bullet) {
-                if(getBounds().intersects(tempObject.getBounds())) {
-                    hp -= Player.basicAttackDamage;
-                    didBulletCollide = true;
-                    bulletCollisionX = (int)x;
-                    bulletCollisionY = (int)y;
-                    oHandler.removeObject(tempObject);
-                }
-            }
-        }
-        if(hp <= 0) {
-            oHandler.removeObject(this);
-            Player.money += 1;
-            HUD.scoreTracker += 1;
-            dropLoot();
-        }
     }
-    // todo make these guys shoot only one at a time
     @Override
     public void render(Graphics g) {
         if((anim.getCount() == 4 || anim.getCount() == 8) && isShooting == false) {
             isShooting = true;
         }
+        else {isShooting = false;}
         anim.runAnimation();
         anim.drawAnimation(g, (int)x, (int)y, 15, 50, 50);
 
@@ -174,7 +160,7 @@ public class ShooterEnemy extends GameObject {
     }
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageSheet));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageHandler));
         }
     }
     // this makes sure the collision box is slightly bigger than the enemy

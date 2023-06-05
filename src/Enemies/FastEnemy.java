@@ -7,8 +7,8 @@ import Main.Game;
 public class FastEnemy extends GameObject {
     private ObjectHandler oHandler;
 
-    public FastEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageSheet imageSheet) {
-        super(x, y, id, imageSheet);
+    public FastEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
+        super(x, y, id, imageHandler);
 
         this.oHandler = oHandler;
 

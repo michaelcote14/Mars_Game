@@ -10,4 +10,9 @@ public class SaveDataStorage implements Serializable {
     int speed;
     int money;
 
+    // Abilities
+     String ability1Name;
+     String ability2Name;
+     String ability3Name;
+
 }

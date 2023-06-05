@@ -2,8 +2,7 @@ package Objects;
 
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageSheet;
-import Utilities.ObjectHandler;
+import Utilities.ImageHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,17 +10,17 @@ import java.awt.image.BufferedImage;
 public class Block extends GameObject {
     private BufferedImage blockImage;
 
-    public Block(float x, float y, ID id, ImageSheet imageSheet) {
-        super(x, y, id, imageSheet);
-        blockImage = imageSheet.grabImage(5, 2, 32, 32);
+    public Block(float x, float y, ID id, ImageHandler imageHandler) {
+        super(x, y, id, imageHandler);
+        blockImage = ImageHandler.images.get("jailWall");
     }
 
     public void tick() {
-
     }
 
-    public void render(Graphics g) {
-        g.drawImage(blockImage, (int)x, (int)y, null);
+    public void render(Graphics g)
+    {
+        g.drawImage(blockImage, (int)x, (int)y, 32, 32, null);
     }
 
     public Rectangle getBounds() {
