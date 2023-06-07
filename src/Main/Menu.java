@@ -1,6 +1,5 @@
 package Main;
 
-import Utilities.BufferedImageLoader;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -51,13 +50,11 @@ public class Menu extends MouseAdapter {
         // Try Again button for death
         if (game.gameState == Game.STATE.Death && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
             game.gameState = Game.STATE.Game;
-            BufferedImageLoader imageLoader = new BufferedImageLoader();
-            levelImage = imageLoader.loadImage("/Objects/level1.png");
             oHandler.clearObjects();
             game.wasLevelLoaded = false;
-            hud.setLevel(1);
+            hud.isNewLevel = true;
+            hud.setWave(1);
         }
-
     }
     public void mouseReleased(MouseEvent mEvent) {}
 

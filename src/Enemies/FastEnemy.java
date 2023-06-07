@@ -1,6 +1,8 @@
 package Enemies;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+
 import Utilities.*;
 import Main.Game;
 
@@ -19,7 +21,6 @@ public class FastEnemy extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 16, 16); // 16, 16 is the size of the enemy
     }
-
     @Override
     public void tick() {
         x += velX;

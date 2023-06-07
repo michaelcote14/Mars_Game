@@ -6,6 +6,7 @@ import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -36,7 +37,7 @@ public class Worm extends GameObject {
         this.fightingAnim = getImages(6, "wormAttack");
 
         this.randNum = rand.nextInt(4);
-        this.hp = hud.level;
+        this.hp = hud.wave;
 
         this.hittingPlayer = false;
         this.inRange = false;
@@ -103,13 +104,22 @@ public class Worm extends GameObject {
             }
             else if(tempObject.getId().toString().contains("Ability")) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    this.hp -= Player.basicAttackDamage;
+                    if(tempObject.getId().toString().startsWith(Player.ability1Name)) {
+                        this.hp -= Player.ability1Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability2Name)) {
+                        this.hp -= Player.ability2Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability3Name)) {
+                        this.hp -= Player.ability3Damage;
+                    }
                 }
             }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
             Player.money += 1;
+            Player.currentXp += 20;
             HUD.scoreTracker += 1;
             dropLoot();
         }

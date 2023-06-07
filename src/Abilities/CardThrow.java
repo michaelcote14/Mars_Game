@@ -3,6 +3,7 @@ package Abilities;
 import Utilities.*;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class CardThrow extends AbilityObject {
@@ -12,7 +13,7 @@ public class CardThrow extends AbilityObject {
     private int speed = 10;
     int spellDuration = (60 * 5); // 5 seconds
 
-    public static float cooldown = 0;
+//    public static float cooldown = 0;
     public CardThrow(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageHandler imageHandler) {
         super(x, y, id, imageHandler);
         this.oHandler = oHandler;
@@ -52,6 +53,7 @@ public class CardThrow extends AbilityObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 40, 40);
     }
+
     public Rectangle getBoundsBig() {
         return new Rectangle((int)x - 16, (int)y - 16, 64, 64);
     }

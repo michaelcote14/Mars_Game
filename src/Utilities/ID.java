@@ -9,6 +9,8 @@ public enum ID{
     Block(),
     BuzzSawTrap(),
     HealthPack(),
+    ExplosiveBarrel(),
+    Explosion(),
     Trail(),
     Bullet(),
     EnemyBullet(),

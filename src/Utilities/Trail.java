@@ -5,6 +5,7 @@ import Utilities.ID;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public class Trail extends GameObject {
     private ObjectHandler oHandler;
@@ -38,8 +39,6 @@ public class Trail extends GameObject {
         g.setColor(color);
         g.fillRect((int)x, (int)y, width, height);
         g2d.setComposite(makeTransparent(1));
-
-
     }
     private AlphaComposite makeTransparent(float alpha) {
         int type = AlphaComposite.SRC_OVER;
@@ -50,4 +49,5 @@ public class Trail extends GameObject {
     public Rectangle getBounds() {
         return null;
     }
+
 }

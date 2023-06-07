@@ -31,7 +31,6 @@ public class ImageHandler {
         images.put("wormDive2", imageLoader("/Enemies/Martians/Worm/dive2.png"));
         images.put("wormDive3", imageLoader("/Enemies/Martians/Worm/dive3.png"));
 
-
         images.put("healthPack", imageLoader("/Objects/healthPack.png"));
 
         images.put("gamblerDown1", imageLoader("/Classes/Gambler/down1.png"));
@@ -49,6 +48,37 @@ public class ImageHandler {
         images.put("rouletteWheel", imageLoader("/Classes/Gambler/rouletteWheel.png"));
         images.put("casinoChip", imageLoader("/Classes/Gambler/casinoChip.png"));
         images.put("cardThrow", imageLoader("/Classes/Gambler/cardThrow.png"));
+
+        images.put("levelUp1", imageLoader("/Miscellaneous/level_up1.png"));
+        images.put("levelUp2", imageLoader("/Miscellaneous/level_up2.png"));
+        images.put("levelUp3", imageLoader("/Miscellaneous/level_up3.png"));
+        images.put("levelUp4", imageLoader("/Miscellaneous/level_up4.png"));
+        images.put("levelUp5", imageLoader("/Miscellaneous/level_up5.png"));
+        images.put("levelUp6", imageLoader("/Miscellaneous/level_up6.png"));
+        images.put("levelUp7", imageLoader("/Miscellaneous/level_up7.png"));
+        images.put("levelUp8", imageLoader("/Miscellaneous/level_up8.png"));
+
+        images.put("explosiveBarrel", imageLoader("/Objects/explosiveBarrel.png"));
+        images.put("fireExplosion1", imageLoader("/Miscellaneous/fireExplosion/fireExplosion1.png"));
+        images.put("fireExplosion2", imageLoader("/Miscellaneous/fireExplosion/fireExplosion2.png"));
+        images.put("fireExplosion3", imageLoader("/Miscellaneous/fireExplosion/fireExplosion3.png"));
+        images.put("fireExplosion4", imageLoader("/Miscellaneous/fireExplosion/fireExplosion4.png"));
+        images.put("fireExplosion5", imageLoader("/Miscellaneous/fireExplosion/fireExplosion5.png"));
+        images.put("fireExplosion6", imageLoader("/Miscellaneous/fireExplosion/fireExplosion6.png"));
+        images.put("fireExplosion7", imageLoader("/Miscellaneous/fireExplosion/fireExplosion7.png"));
+        images.put("fireExplosion8", imageLoader("/Miscellaneous/fireExplosion/fireExplosion8.png"));
+        images.put("fireExplosion9", imageLoader("/Miscellaneous/fireExplosion/fireExplosion9.png"));
+        images.put("fireExplosion10", imageLoader("/Miscellaneous/fireExplosion/fireExplosion10.png"));
+        images.put("fireExplosion11", imageLoader("/Miscellaneous/fireExplosion/fireExplosion11.png"));
+        images.put("fireExplosion12", imageLoader("/Miscellaneous/fireExplosion/fireExplosion12.png"));
+        images.put("fireExplosion13", imageLoader("/Miscellaneous/fireExplosion/fireExplosion13.png"));
+        images.put("fireExplosion14", imageLoader("/Miscellaneous/fireExplosion/fireExplosion14.png"));
+        images.put("fireExplosion15", imageLoader("/Miscellaneous/fireExplosion/fireExplosion15.png"));
+        images.put("fireExplosion16", imageLoader("/Miscellaneous/fireExplosion/fireExplosion16.png"));
+        images.put("fireExplosion17", imageLoader("/Miscellaneous/fireExplosion/fireExplosion17.png"));
+        images.put("fireExplosion18", imageLoader("/Miscellaneous/fireExplosion/fireExplosion18.png"));
+
+
 
 
     }

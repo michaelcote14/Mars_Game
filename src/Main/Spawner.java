@@ -1,6 +1,8 @@
 package Main;
 
+import Enemies.FlyingEye;
 import Enemies.Worm;
+import Enemies.arachnidMage;
 import Utilities.Camera;
 import Utilities.ID;
 import Utilities.ImageHandler;
@@ -43,15 +45,14 @@ public class Spawner {
                     if(red == 00 && green == 255 && blue == 0) {
                         oHandler.addObject(new Worm(xx*32, yy*32, ID.WormEnemy, oHandler, iSheet));
 
-//                        if((hud.getLevel() + 2) % 3 == 0) {
-//                            if(randNum.nextInt(2) == 0) {oHandler.addObject(new FlyingEye(xx*32, yy*32, ID.BasicEnemy, oHandler, iSheet));}
-//                            else {oHandler.addObject(new worm(xx*32, yy*32, ID.TrackerEnemy, oHandler, iSheet));}
-//                        }
-//                        else if(hud.getLevel() % 2 == 0) {
-//                            oHandler.addObject(new arachnidMage(xx * 32, yy * 32, ID.ShooterEnemy, oHandler, iSheet));
-//                        }
+                        if((hud.getWave() + 2) % 3 == 0) {
+                            if(randNum.nextInt(2) == 0) {oHandler.addObject(new FlyingEye(xx*32, yy*32, ID.FlyingEyeEnemy, oHandler, iSheet));}
+                            else {oHandler.addObject(new Worm(xx*32, yy*32, ID.WormEnemy, oHandler, iSheet));}
+                        }
+                        else if(hud.getWave() % 2 == 0) {
+                            oHandler.addObject(new arachnidMage(xx * 32, yy * 32, ID.ArachnidMageEnemy, oHandler, iSheet));
+                        }
 //                        oHandler.addObject(new Enemies.FastEnemy(xx*32, yy*32, Utilities.ID.BasicEnemy, oHandler, iSheet));
-
                     }
                     else if(red == 255 && green == 0 && blue == 255) {
                         oHandler.addObject(new Worm(xx*32, yy*32, ID.WormEnemy, oHandler, iSheet));

@@ -6,6 +6,7 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -32,7 +33,6 @@ public class arachnidMageBullet extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y+2, 32, 32); // 16, 16 is the size of the enemy
     }
-
     @Override
     public void tick() {
         x += this.velX;

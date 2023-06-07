@@ -3,6 +3,8 @@ package Main;
 import Abilities.Abilities;
 import Objects.Block;
 import Objects.BuzzSaw;
+import Objects.Explosion;
+import Objects.ExplosiveBarrel;
 import Utilities.*;
 
 import java.awt.*;
@@ -19,7 +21,7 @@ public class Game extends Canvas implements Runnable {
     private ObjectHandler oHandler;
     private HUD hud;
     private Menu menu;
-    private Shop shop;
+    private Upgrades upgrades;
     private Spawner spawner;
     private Camera camera;
     private ImageHandler iHandler;
@@ -52,7 +54,7 @@ public class Game extends Canvas implements Runnable {
         this.keyHandler = new KeyHandler(oHandler, this);
         hud = new HUD(iHandler, this.keyHandler);
         menu = new Menu(this, oHandler, hud);
-        shop = new Shop(oHandler, hud, this, player);
+        upgrades = new Upgrades(oHandler, hud, this, player, iHandler);
         abilities = new Abilities();
 
         this.addKeyListener(this.keyHandler);
@@ -66,7 +68,7 @@ public class Game extends Canvas implements Runnable {
         this.mouseHandler = new MouseHandler(oHandler, iHandler, this);
         this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
-        this.addMouseListener(shop);
+        this.addMouseListener(upgrades);
 
         gameStart();
     }
@@ -123,7 +125,6 @@ public class Game extends Canvas implements Runnable {
             g.setFont(new Font("arial", 1, 30));
         }
         else if (gameState == STATE.Game) {
-
             if (wasLevelLoaded == false) {
                 BufferedImageLoader imageLoader = new BufferedImageLoader();
                 levelImage = imageLoader.loadImage("/Objects/level1.png");
@@ -141,7 +142,7 @@ public class Game extends Canvas implements Runnable {
             menu.render(g);
         } else if (gameState == STATE.Shop) {
             g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
-            shop.render(g);
+            upgrades.render(g);
         }
 
         ////////////// and here
@@ -167,11 +168,15 @@ public class Game extends Canvas implements Runnable {
                 else if (red == 00 && green == 00 && blue == 255) {
                     player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iHandler, camera, this.keyHandler, this.mouseHandler);
                     oHandler.addObject(player);
-                    SaveOrLoad.load("Save1", player);
+//                    SaveOrLoad.load("Save1"); // todo sometimes you have to cancel this out
                 }
-//              else if (green == 255 && blue == 255) {
-//                    oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.Crate, oHandler, iSheet));
-//                }
+
+              else if (green == 255 && blue == 255) {
+//                    oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.HealthPack, oHandler, iHandler));
+                    oHandler.addObject(new ExplosiveBarrel(xx * 32, yy * 32, ID.ExplosiveBarrel, oHandler, iHandler));
+
+
+                }
                 else if(green == 100 && red == 100 && blue == 0) {
                     oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSawTrap, oHandler, iHandler));
                 }

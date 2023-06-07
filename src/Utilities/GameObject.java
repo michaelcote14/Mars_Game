@@ -1,6 +1,7 @@
 package Utilities;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public abstract class GameObject {
     protected float x, y;
@@ -18,7 +19,6 @@ public abstract class GameObject {
     public abstract void tick();
     public abstract void render(Graphics g);
     public abstract Rectangle getBounds();
-
     public void setX(int x) {
         this.x = x;
     }
@@ -33,5 +33,4 @@ public abstract class GameObject {
     }
     public void setId(ID id) {this.id = id;}
     public ID getId() {return id;}
-
 }

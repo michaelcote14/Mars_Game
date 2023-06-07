@@ -6,6 +6,7 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public class Bullet extends GameObject {
     private ObjectHandler oHandler;
@@ -43,4 +44,5 @@ public class Bullet extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 8, 8);
     }
+
 }

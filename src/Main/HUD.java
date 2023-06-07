@@ -1,7 +1,5 @@
 package Main;
 
-import Abilities.CasinoChip;
-import Abilities.RouletteWheel;
 import Utilities.ImageHandler;
 import Utilities.KeyHandler;
 
@@ -9,12 +7,13 @@ import java.awt.*;
 import java.util.Random;
 
 public class HUD {
-    public static int scoreTracker = 0;
-    public static int level = 1;
     private final KeyHandler keyHandler;
-    public boolean isNewLevel = true;
     private Random rand = new Random();
     private ImageHandler imageHandler;
+
+    public static int scoreTracker = 0;
+    public static int wave = 1;
+    public boolean isNewLevel = true;
 
     public HUD(ImageHandler imageHandler, KeyHandler keyHandler) {
         this.imageHandler = imageHandler;
@@ -25,7 +24,7 @@ public class HUD {
         // Make the level increase every 10 points
         if (scoreTracker >= 10) {
             scoreTracker = 0;
-            level++;
+            wave++;
             isNewLevel = true;
         }
         //             todo death animation here
@@ -46,6 +45,21 @@ public class HUD {
         // Outline
         g.setColor(Color.white);
         g.drawRect(15, 15, (int) Player.maxHealth, 10);
+
+        // XP Bar Background
+        g.setColor(Color.gray);
+        g.fillRect(15, 30, 100, 10);
+        // XP Bar
+        g.setColor(new Color(30, 140, 255));
+        g.fillRect(15, 30, (int) ((Player.currentXp/Player.maxXp) * 100), 10);
+        // Outline
+        g.setColor(Color.white);
+        g.drawRect(15, 30, 100, 10);
+        if(Player.level < 10)
+            g.drawString(String.valueOf(Player.level), 133, 46);
+        else
+            g.drawString(String.valueOf(Player.level), 128, 46);
+        g.drawOval(125, 30, 23, 23);
 
         // todo make the ability bar show the ability's cooldown
         // Spell Bar
@@ -91,7 +105,7 @@ public class HUD {
                 Game.WIDTH/2 + 25, 35, 30, 30, null);
 
         g.setColor(Color.white);
-        g.drawRect(Game.WIDTH/2 - 60, 30, 80, 40);
+        g.drawRect(Game.WIDTH/2 - 60, 30, 120, 40);
         g.drawLine(Game.WIDTH/2 - 20, 30, Game.WIDTH/2 - 20, 70);
         g.drawLine(Game.WIDTH/2 + 20, 30, Game.WIDTH/2 + 20, 70);
         g.setFont(new Font("arial", 1, 12));
@@ -102,9 +116,9 @@ public class HUD {
         // Score
         g.setFont(new Font("arial", 1, 15));
         g.drawString("Money: " + Player.money, 15, 55);
-        g.drawString("Level : " + this.level, 15, 70);
+        g.drawString("Wave : " + this.wave, 15, 70);
         g.drawString("Space for Shop", 15, 85);
     }
-    public void setLevel(int level) {this.level = level;}
-    public int getLevel() {return this.level;}
+    public void setWave(int wave) {this.wave = wave;}
+    public int getWave() {return this.wave;}
 }

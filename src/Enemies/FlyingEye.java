@@ -11,6 +11,7 @@ import Utilities.ID;
 import Main.HUD;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -32,7 +33,7 @@ public class FlyingEye extends GameObject {
         super(x, y, id, imageHandler);
         this.oHandler = oHandler;
         this.images = getImages();
-        this.hp = hud.level;
+        this.hp = hud.wave;
     }
     public BufferedImage[] getImages() {
         // Put them all into an array
@@ -86,14 +87,22 @@ public class FlyingEye extends GameObject {
             }
             else if(tempObject.getId().toString().contains("Ability")) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    System.out.println("hit");
-                    this.hp -= Player.basicAttackDamage;
+                    if(tempObject.getId().toString().startsWith(Player.ability1Name)) {
+                        this.hp -= Player.ability1Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability2Name)) {
+                        this.hp -= Player.ability2Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability3Name)) {
+                        this.hp -= Player.ability3Damage;
+                    }
                 }
             }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
             Player.money += 1;
+            Player.currentXp += 1;
             HUD.scoreTracker += 1;
             dropLoot();
         }
@@ -129,8 +138,6 @@ public class FlyingEye extends GameObject {
 
     @Override
     public Rectangle getBounds() {return new Rectangle((int)x, (int)y+2, 30, 28);} // this defines the hitbox
-
-    // this makes sure the collision box is slightly bigger than the enemy
     public Rectangle getBoundsBig() {return new Rectangle((int)x - 16, (int)y - 16, 64, 64);}
 
 }

@@ -6,6 +6,7 @@ import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -34,7 +35,7 @@ public class arachnidMage extends GameObject {
         super(x, y, id, null);
         this.oHandler = oHandler;
         this.images = getImages();
-        this.hp = hud.level;
+        this.hp = hud.wave;
         velX = 1;
         velY = 1;
 
@@ -78,7 +79,6 @@ public class arachnidMage extends GameObject {
 
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
-
             // This makes the enemy bounce off of the block boundaries
             if(tempObject.getId() == ID.Block) {
                 if(getBoundsBig().intersects(tempObject.getBounds())) {
@@ -105,14 +105,22 @@ public class arachnidMage extends GameObject {
             }
             else if(tempObject.getId().toString().contains("Ability")) {
                 if(getBounds().intersects(tempObject.getBounds())) {
-                    System.out.println("hit");
-                    this.hp -= Player.basicAttackDamage;
+                    if(tempObject.getId().toString().startsWith(Player.ability1Name)) {
+                        this.hp -= Player.ability1Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability2Name)) {
+                        this.hp -= Player.ability2Damage;
+                    }
+                    else if(tempObject.getId().toString().startsWith(Player.ability3Name)) {
+                        this.hp -= Player.ability3Damage;
+                    }
                 }
             }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
             Player.money += 1;
+            Player.currentXp += 20;
             HUD.scoreTracker += 1;
             dropLoot();
         }

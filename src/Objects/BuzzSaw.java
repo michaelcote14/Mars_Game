@@ -6,6 +6,7 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class BuzzSaw extends GameObject {
@@ -67,6 +68,7 @@ public class BuzzSaw extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 48, 48); // this is the size of the hit box
     }
+
     public Rectangle getBoundsBig() {
         return new Rectangle((int)x , (int)y, 48, 48); // 32, 32 is the size of the player
     }
