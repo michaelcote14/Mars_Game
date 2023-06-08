@@ -5,14 +5,13 @@ import Utilities.ID;
 import Utilities.ImageHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class Block extends GameObject {
     private BufferedImage blockImage;
 
-    public Block(float x, float y, ID id, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public Block(float x, float y, ID id) {
+        super(x, y, id);
         blockImage = ImageHandler.images.get("jailWall");
     }
 

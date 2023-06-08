@@ -1,6 +1,7 @@
 package Enemies;
 
 import Main.Player;
+import Objects.Chest;
 import Objects.HealthPack;
 import Utilities.GameObject;
 import Utilities.ObjectHandler;
@@ -11,7 +12,6 @@ import Utilities.ID;
 import Main.HUD;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -29,28 +29,13 @@ public class FlyingEye extends GameObject {
     int collisionCounter = 0;
     int bulletCollisionX, bulletCollisionY;
 
-    public FlyingEye(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public FlyingEye(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
-        this.images = getImages();
+        this.images = ImageHandler.createImageArray("flyingEye", 6);
+        anim = new Animation(100, images);
         this.hp = hud.wave;
     }
-    public BufferedImage[] getImages() {
-        // Put them all into an array
-        BufferedImage[] images = new BufferedImage[6];
-
-        images[0] = ImageHandler.images.get("flyingEyeDown1");
-        images[1] = ImageHandler.images.get("flyingEyeDown2");
-        images[2] = ImageHandler.images.get("flyingEyeDown3");
-        images[3] = ImageHandler.images.get("flyingEyeDown4");
-        images[4] = ImageHandler.images.get("flyingEyeDown5");
-        images[5] = ImageHandler.images.get("flyingEyeDown6");
-
-        anim = new Animation(100, images);
-
-        return images;
-    }
-
     @Override
     public void tick() {
         x += velX;
@@ -98,6 +83,11 @@ public class FlyingEye extends GameObject {
                     }
                 }
             }
+            else if(tempObject.getId() == ID.Explosion) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    this.hp -= 20;
+                }
+            }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
@@ -132,7 +122,7 @@ public class FlyingEye extends GameObject {
 
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageHandler));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler));
         }
     }
 

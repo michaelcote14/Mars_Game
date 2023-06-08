@@ -32,11 +32,9 @@ public class MouseHandler extends MouseAdapter {
         for (int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
             if (tempObject.getId() == ID.Player) {
-                if(abilityName.equals("Bullet")) {oHandler.addObject(new Bullet(tempObject.getX() + 16, tempObject.getY() + 24, ID.Bullet, oHandler, mouseX2, mouseY2, imageHandler));}
-                if(abilityName.equals("CasinoChip")) oHandler.addObject(new CasinoChip(tempObject.getX() + 16, tempObject.getY() + 24, ID.CasinoChipAbility, oHandler, mouseX2, mouseY2, imageHandler));
-                if(abilityName.equals("CardThrow")) oHandler.addObject(new CardThrow(tempObject.getX() + 16, tempObject.getY() + 24, ID.CardThrowAbility, oHandler, mouseX2, mouseY2, imageHandler));
-
-
+                if(abilityName.equals("Bullet")) {oHandler.addObject(new Bullet(tempObject.getX() + 16, tempObject.getY() + 24, ID.Bullet, oHandler, mouseX2, mouseY2));}
+                if(abilityName.equals("CasinoChip")) oHandler.addObject(new CasinoChip(tempObject.getX() + 16, tempObject.getY() + 24, ID.CasinoChipAbility, oHandler, mouseX2, mouseY2));
+                if(abilityName.equals("CardThrow")) oHandler.addObject(new CardThrow(tempObject.getX() + 16, tempObject.getY() + 24, ID.CardThrowAbility, oHandler, mouseX2, mouseY2));
             }
         }
     }

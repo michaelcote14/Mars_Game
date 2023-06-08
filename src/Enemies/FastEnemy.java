@@ -1,7 +1,6 @@
 package Enemies;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 import Utilities.*;
 import Main.Game;
@@ -9,8 +8,8 @@ import Main.Game;
 public class FastEnemy extends GameObject {
     private ObjectHandler oHandler;
 
-    public FastEnemy(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public FastEnemy(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
 
         this.oHandler = oHandler;
 

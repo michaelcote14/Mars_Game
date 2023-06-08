@@ -1,11 +1,6 @@
 package Utilities;
 
-import Utilities.GameObject;
-import Utilities.ID;
-import Utilities.ObjectHandler;
-
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 public class Trail extends GameObject {
     private ObjectHandler oHandler;
@@ -17,7 +12,7 @@ public class Trail extends GameObject {
     private int width, height;
 
     public Trail(float x, float y, ID id, Color color, int width, int height, float life, ObjectHandler oHandler) {
-        super(x, y, id, null);
+        super(x, y, id);
         this.oHandler = oHandler;
         this.color = color;
         this.width = width;
@@ -47,7 +42,7 @@ public class Trail extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)x, (int)y, width, height);
     }
 
 }

@@ -6,15 +6,14 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 public class Bullet extends GameObject {
     private ObjectHandler oHandler;
     private double direction;
     private int speed = 10;
 
-    public Bullet(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public Bullet(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY) {
+        super(x, y, id);
         this.oHandler = oHandler;
 
         float deltaX = mouseX - x;

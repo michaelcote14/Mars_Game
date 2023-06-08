@@ -6,7 +6,6 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class BuzzSaw extends GameObject {
@@ -15,8 +14,8 @@ public class BuzzSaw extends GameObject {
     private int rotation = 15;
     private int rotationCounter = 0;
 
-    public BuzzSaw(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public BuzzSaw(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.image = oHandler.imageGrabber("/Objects/buzzSaw.png", 4, 4);
 

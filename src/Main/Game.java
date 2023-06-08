@@ -1,15 +1,13 @@
 package Main;
 
 import Abilities.Abilities;
-import Objects.Block;
-import Objects.BuzzSaw;
-import Objects.Explosion;
-import Objects.ExplosiveBarrel;
+import Objects.*;
 import Utilities.*;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1000, HEIGHT = 563;
@@ -22,6 +20,7 @@ public class Game extends Canvas implements Runnable {
     private HUD hud;
     private Menu menu;
     private Upgrades upgrades;
+    private MapHandler mapHandler;
     private Spawner spawner;
     private Camera camera;
     private ImageHandler iHandler;
@@ -29,10 +28,11 @@ public class Game extends Canvas implements Runnable {
     private MouseHandler mouseHandler;
     private Abilities abilities;
 
-    private BufferedImage levelImage = null;
-    private BufferedImage imageSheet = null;
+    private BufferedImage mapImage = null;
     private BufferedImage floor = null;
-    public boolean wasLevelLoaded = false;
+    public boolean wasMapLoaded = false;
+    private int randNum = 0;
+    private String pauseComment = "";
 
     public enum STATE {
         Menu,
@@ -60,9 +60,9 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(this.keyHandler);
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
-        levelImage = imageLoader.loadImage("/Objects/level1.png");
-        imageSheet = imageLoader.loadImage("/Objects/imageSheet.png");
-        spawner = new Spawner(oHandler, hud, camera, iHandler, levelImage);
+        mapImage = imageLoader.loadImage("/Maps/Levels/map0.png");
+        mapHandler = new MapHandler();
+        spawner = new Spawner(oHandler, hud, camera, iHandler, mapImage);
         floor = ImageHandler.images.get("jailFloor");
 
         this.mouseHandler = new MouseHandler(oHandler, iHandler, this);
@@ -77,6 +77,10 @@ public class Game extends Canvas implements Runnable {
         // this gets updated 60 times per second, and is for updating
         if (gameState == STATE.Game) {
             if (!paused) {
+                if (wasMapLoaded == false) {
+                    loadMap(mapImage);
+                    wasMapLoaded = true;
+                }
                 oHandler.tick();
                 hud.tick();
             }
@@ -87,6 +91,7 @@ public class Game extends Canvas implements Runnable {
             for (int i = 0; i < oHandler.object.size(); i++) {
                 if (oHandler.object.get(i).getId() == ID.Player) {
                     camera.tick(oHandler.object.get(i));
+                    mapHandler.tick(oHandler.object.get(i), this);
                 }
             }
         } else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
@@ -120,17 +125,10 @@ public class Game extends Canvas implements Runnable {
             g.fillRect((int)camera.getPlayerX(), (int)camera.getPlayerY(), Game.WIDTH, Game.HEIGHT);
 
             g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", 1, 40));
-            g.drawString("What's wrong baby? Need a break?", Game.WIDTH / 2 - 100, Game.HEIGHT / 2);
             g.setFont(new Font("arial", 1, 30));
+            g.drawString(pauseComment, (int)camera.getPlayerX() + 20, (int)camera.getPlayerY() + 100);
         }
         else if (gameState == STATE.Game) {
-            if (wasLevelLoaded == false) {
-                BufferedImageLoader imageLoader = new BufferedImageLoader();
-                levelImage = imageLoader.loadImage("/Objects/level1.png");
-                loadLevel(levelImage);
-                wasLevelLoaded = true;
-            }
             oHandler.render(g);
             g2d.translate(camera.getPlayerX(), camera.getPlayerY()); // this is for the camera
             hud.render(g);
@@ -151,34 +149,40 @@ public class Game extends Canvas implements Runnable {
         bufferStrat.show();
     }
 
-    public void loadLevel(BufferedImage levelImage) {
-        int w = levelImage.getWidth();
-        int h = levelImage.getHeight();
+    public void loadMap(BufferedImage mapImage) {
+        pauseComment = getPauseComment();
+        int w = mapImage.getWidth();
+        int h = mapImage.getHeight();
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
-                int pixel = levelImage.getRGB(xx, yy);
+                int pixel = mapImage.getRGB(xx, yy);
                 int red = (pixel >> 16) & 0xff; // shifting the bits over to get the red value
                 int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
                 int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
 
                 if (red == 255 && green == 0 && blue == 0) {
-                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block, iHandler));
+                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block));
                 }
                 else if (red == 00 && green == 00 && blue == 255) {
-                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, iHandler, camera, this.keyHandler, this.mouseHandler);
+                    SaveOrLoad.load("Save1");
+                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, camera, this.keyHandler, this.mouseHandler);
                     oHandler.addObject(player);
-//                    SaveOrLoad.load("Save1"); // todo sometimes you have to cancel this out
                 }
-
-              else if (green == 255 && blue == 255) {
-//                    oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.HealthPack, oHandler, iHandler));
-                    oHandler.addObject(new ExplosiveBarrel(xx * 32, yy * 32, ID.ExplosiveBarrel, oHandler, iHandler));
-
-
+                else if (green == 255 && blue == 255) {
+                    randNum = new Random().nextInt(0,3);
+                    if(randNum == 0) {
+                        oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.HealthPack, oHandler));
+                    }
+                    else if(randNum == 1) {
+                        oHandler.addObject(new ExplosiveBarrel(xx * 32, yy * 32, ID.ExplosiveBarrel, oHandler));
+                    }
+                    else {
+                        oHandler.addObject(new Chest(xx * 32, yy * 32, ID.Chest, oHandler));
+                    }
                 }
                 else if(green == 100 && red == 100 && blue == 0) {
-                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSawTrap, oHandler, iHandler));
+                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSawTrap, oHandler));
                 }
             }
         }
@@ -230,5 +234,14 @@ public class Game extends Canvas implements Runnable {
 
     public static void main(String[] args) {
         new Game();
+    }
+    public String getPauseComment() {
+        String[] pauseComments = {
+                "What's wrong baby? Need a break?",
+                "Yeah sure because people in real wars get to pause too..",
+                "Let's be honest..this pause isn't going to help you",
+                "I would stretch your hands or something..",
+                "Fun Fact: Not everyone can be good at video games.. *cough cough"};
+        return pauseComments[new Random().nextInt(pauseComments.length)];
     }
 }

@@ -1,6 +1,7 @@
 package Main;
 
 import java.io.*;
+import Abilities.Abilities;
 
 
 public class SaveOrLoad {
@@ -18,14 +19,10 @@ public class SaveOrLoad {
             data.fireRate = player.fireRate;
             data.money = player.money;
 
-            data.ability1Name = player.ability1Name;
-            data.ability2Name = player.ability2Name;
-            data.ability3Name = player.ability3Name;
-
+            data.nameList = Abilities.nameList;
+            data.levelBook = Abilities.levelBook;
             data.unspentAbilityPoints = player.unspentAbilityPoints;
-            data.ability1Level = player.ability1Level;
-            data.ability2Level = player.ability2Level;
-            data.ability3Level = player.ability3Level;
+
 
             // Write the DataStorage object to the file
             oos.writeObject(data);
@@ -53,19 +50,10 @@ public class SaveOrLoad {
 //            Player.money = data.money;
             Player.money = 100000;
 
-            Player.ability1Name = data.ability1Name;
-            Player.ability2Name = data.ability2Name;
-            Player.ability3Name = data.ability3Name;
-
+            Abilities.nameList = data.nameList;
+            Abilities.levelBook = data.levelBook;
             Player.unspentAbilityPoints = data.unspentAbilityPoints;
-            Player.ability1Level = data.ability1Level;
-            Player.ability2Level = data.ability2Level;
-            Player.ability3Level = data.ability3Level;
 
-            // todo find a way to scale these so that they are not too overpowered
-            Player.ability1Damage = Player.basicAttackDamage * Player.ability1Level;
-            Player.ability2Damage = Player.basicAttackDamage * Player.ability2Level;
-            Player.ability3Damage = Player.basicAttackDamage * Player.ability3Level;
         }
         catch (EOFException e) {}
         catch (Exception e) {

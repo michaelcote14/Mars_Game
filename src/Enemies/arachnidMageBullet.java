@@ -6,7 +6,6 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -17,14 +16,15 @@ public class arachnidMageBullet extends GameObject {
     private int bulletDeleteTimer = 100;
 
 
-    public arachnidMageBullet(float enemyX, float enemyY, float velX, float velY, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(enemyX, enemyY, id, imageHandler);
+    public arachnidMageBullet(float enemyX, float enemyY, float velX, float velY, ID id, ObjectHandler oHandler) {
+        super(enemyX, enemyY, id);
         this.velX = velX;
         this.velY = velY;
         this.bulletDeleteTimer = 150; // this allows you to control the range
-        this.image = imageHandler.images.get("alienBullet");
+        this.image = imageHandler.images.get("arachnidMageBullet");
         this.oHandler = oHandler;
 
+        // todo turn this into something
         // How to shoot randomly in a direction
 //        velX = (rand.nextInt(5 - -5) + -5);
 //        velY = 5;

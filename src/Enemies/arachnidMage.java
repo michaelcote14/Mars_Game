@@ -6,7 +6,6 @@ import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -31,10 +30,11 @@ public class arachnidMage extends GameObject {
     int collisionCounter = 0;
     int bulletCollisionX, bulletCollisionY;
 
-    public arachnidMage(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, null);
+    public arachnidMage(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
-        this.images = getImages();
+        this.images = ImageHandler.createImageArray("arachnidMage", 8);
+        anim = new Animation(400, this.images);
         this.hp = hud.wave;
         velX = 1;
         velY = 1;
@@ -45,24 +45,6 @@ public class arachnidMage extends GameObject {
                 player = oHandler.object.get(i);
             }
         }
-    }
-
-    public BufferedImage[] getImages() {
-        // Put them all into an array
-        BufferedImage[] images = new BufferedImage[8];
-
-        images[0] = ImageHandler.images.get("alien1");
-        images[1] = ImageHandler.images.get("alien2");
-        images[2] = ImageHandler.images.get("alien3");
-        images[3] = ImageHandler.images.get("alien4");
-        images[4] = ImageHandler.images.get("alien5");
-        images[5] = ImageHandler.images.get("alien6");
-        images[6] = ImageHandler.images.get("alien7");
-        images[7] = ImageHandler.images.get("alien8");
-
-        anim = new Animation(400, images);
-
-        return images;
     }
     @Override
     public void tick() {
@@ -116,6 +98,11 @@ public class arachnidMage extends GameObject {
                     }
                 }
             }
+            else if(tempObject.getId() == ID.Explosion) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    this.hp -= 20;
+                }
+            }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
@@ -139,7 +126,7 @@ public class arachnidMage extends GameObject {
         bulletVelY = (float)((-1.0/distance) * diffY * 3);
 
         if(isShooting == true && distance < 450) { // range of the enemy
-            oHandler.addObject(new arachnidMageBullet((int)x + 8, (int)y + 8, bulletVelX, bulletVelY, ID.EnemyBullet, oHandler, null));
+            oHandler.addObject(new arachnidMageBullet((int)x + 8, (int)y + 8, bulletVelX, bulletVelY, ID.EnemyBullet, oHandler));
             isShooting = false;
         }
     }
@@ -168,7 +155,7 @@ public class arachnidMage extends GameObject {
     }
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageHandler));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler));
         }
     }
     // this makes sure the collision box is slightly bigger than the enemy

@@ -3,7 +3,6 @@ package Abilities;
 import Utilities.*;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class CardThrow extends AbilityObject {
@@ -14,8 +13,8 @@ public class CardThrow extends AbilityObject {
     int spellDuration = (60 * 5); // 5 seconds
 
 //    public static float cooldown = 0;
-    public CardThrow(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public CardThrow(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.image = ImageHandler.images.get("cardThrow");
 
@@ -42,19 +41,13 @@ public class CardThrow extends AbilityObject {
                 }
             }
         }
-//        Trail trail = new Trail(x, y, ID.Trail, imageHandler, 0.1f, 0.1f, 0.1f, 0.1f, 10, oHandler);
     }
-
     @Override
     public void render(Graphics g) {
-        g.drawImage(this.image, (int)x, (int)y, 40, 40, null);
+        g.drawImage(this.image, (int)x-10, (int)y-30, 40, 40, null);
     }
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 40, 40);
-    }
-
-    public Rectangle getBoundsBig() {
-        return new Rectangle((int)x - 16, (int)y - 16, 64, 64);
+        return new Rectangle((int)x-10, (int)y-30, 40, 40);
     }
 }

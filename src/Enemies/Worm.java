@@ -2,11 +2,11 @@ package Enemies;
 
 import Main.HUD;
 import Main.Player;
+import Objects.Chest;
 import Objects.HealthPack;
 import Utilities.*;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -29,8 +29,8 @@ public class Worm extends GameObject {
     private int hasSurfacedCounter;
     private int hasDivedCounter;
 
-    public Worm(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, null);
+    public Worm(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.divingAnim = getImages(3, "wormDive");
 //        this.surfacingAnim = getImages(3, "wormSurface");
@@ -115,6 +115,11 @@ public class Worm extends GameObject {
                     }
                 }
             }
+            else if(tempObject.getId() == ID.Explosion) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    this.hp -= 20;
+                }
+            }
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
@@ -147,10 +152,6 @@ public class Worm extends GameObject {
         else if(this.inRange == true && this.hittingPlayer == false && this.hasSurfacedCounter > 200) {
             g.drawImage(ImageHandler.images.get("wormAttack4"), (int)x, (int)y, 30, 30, null);
         }
-
-
-
-
         if(didBulletCollide == true) {
             g.drawImage(oHandler.bulletExplosionImage, (int)x, (int)y, 30, 30,null);
         }
@@ -162,7 +163,7 @@ public class Worm extends GameObject {
     }
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate
-            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler, imageHandler));
+            oHandler.addObject(new HealthPack(x, y, ID.HealthPack, oHandler));
         }
     }
 

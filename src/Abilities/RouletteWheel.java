@@ -5,7 +5,6 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class RouletteWheel extends AbilityObject {
@@ -17,14 +16,14 @@ public class RouletteWheel extends AbilityObject {
     int imageX;
     int imageY;
     public static float cooldown = 0;
-    public RouletteWheel(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public RouletteWheel(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.image = ImageHandler.images.get("rouletteWheel");
         this.cooldown = 0;
     }
     public RouletteWheel(ImageHandler imageHandler) {
-        super(0,0, ID.valueOf("RouletteWheelSpell"), imageHandler);
+        super(0,0, ID.valueOf("RouletteWheelSpell"));
         this.cooldown = 0;
 
     }

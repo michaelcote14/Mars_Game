@@ -10,16 +10,28 @@ public class ImageHandler {
 
     public ImageHandler()
     {
-        images.put("alienBullet", imageLoader("/Enemies/Martians/Arachnid_Mage/alienBullet.png"));
+        // Maps
+        images.put("map0", imageLoader("/Maps/Levels/map0.png"));
+        images.put("map1", imageLoader("/Maps/Levels/map1.png"));
 
-        images.put("alien1", imageLoader("/Enemies/Martians/Arachnid_Mage/alien1.png"));
-        images.put("alien2", imageLoader("/Enemies/Martians/Arachnid_Mage/alien2.png"));
-        images.put("alien3", imageLoader("/Enemies/Martians/Arachnid_Mage/alien3.png"));
-        images.put("alien4", imageLoader("/Enemies/Martians/Arachnid_Mage/alien4.png"));
-        images.put("alien5", imageLoader("/Enemies/Martians/Arachnid_Mage/alien5.png"));
-        images.put("alien6", imageLoader("/Enemies/Martians/Arachnid_Mage/alien6.png"));
-        images.put("alien7", imageLoader("/Enemies/Martians/Arachnid_Mage/alien7.png"));
-        images.put("alien8", imageLoader("/Enemies/Martians/Arachnid_Mage/alien8.png"));
+        // Structures
+        images.put("jailWall", imageLoader("/Maps/jailWall.png"));
+        images.put("jailFloor", imageLoader("/Maps/jailFloor.png"));
+
+        // Player
+        images.put("gamblerDown1", imageLoader("/Classes/Gambler/down1.png"));
+        images.put("rouletteWheel", imageLoader("/Classes/Gambler/rouletteWheel.png"));
+        images.put("casinoChip", imageLoader("/Classes/Gambler/casinoChip.png"));
+        images.put("cardThrow", imageLoader("/Classes/Gambler/cardThrow.png"));
+        images.put("diceRoll", imageLoader("/Classes/Gambler/diceRoll/diceRoll1.png"));
+        multipleImageLoader("diceRoll", "/Classes/Gambler/diceRoll/diceRoll", 6);
+        multipleImageLoader("diceRollNum", "/Classes/Gambler/diceRoll/diceRollNum",6);
+
+        // Enemies
+        images.put("arachnidMageBullet", imageLoader("/Enemies/Martians/Arachnid_Mage/arachnidMageBullet.png"));
+        multipleImageLoader("arachnidMage", "/Enemies/Martians/Arachnid_Mage/arachnidMage", 8);
+        multipleImageLoader("flyingEye", "/Enemies/Martians/Flying_Eye/flyingEye", 6);
+        multipleImageLoader("enemySpawnerPortal", "/Enemies/Martians/EnemySpawnerPortals/newPortal/portal", 24);
 
         images.put("wormAttack1", imageLoader("/Enemies/Martians/Worm/surface1.png"));
         images.put("wormAttack2", imageLoader("/Enemies/Martians/Worm/surface2.png"));
@@ -31,55 +43,14 @@ public class ImageHandler {
         images.put("wormDive2", imageLoader("/Enemies/Martians/Worm/dive2.png"));
         images.put("wormDive3", imageLoader("/Enemies/Martians/Worm/dive3.png"));
 
+        // Objects
         images.put("healthPack", imageLoader("/Objects/healthPack.png"));
-
-        images.put("gamblerDown1", imageLoader("/Classes/Gambler/down1.png"));
-
-        images.put("jailWall", imageLoader("/Map/jailWall.png"));
-        images.put("jailFloor", imageLoader("/Map/jailFloor.png"));
-
-        images.put("flyingEyeDown1", imageLoader("/Enemies/Martians/Flying_Eye/down1.png"));
-        images.put("flyingEyeDown2", imageLoader("/Enemies/Martians/Flying_Eye/down2.png"));
-        images.put("flyingEyeDown3", imageLoader("/Enemies/Martians/Flying_Eye/down3.png"));
-        images.put("flyingEyeDown4", imageLoader("/Enemies/Martians/Flying_Eye/down4.png"));
-        images.put("flyingEyeDown5", imageLoader("/Enemies/Martians/Flying_Eye/down5.png"));
-        images.put("flyingEyeDown6", imageLoader("/Enemies/Martians/Flying_Eye/down6.png"));
-
-        images.put("rouletteWheel", imageLoader("/Classes/Gambler/rouletteWheel.png"));
-        images.put("casinoChip", imageLoader("/Classes/Gambler/casinoChip.png"));
-        images.put("cardThrow", imageLoader("/Classes/Gambler/cardThrow.png"));
-
-        images.put("levelUp1", imageLoader("/Miscellaneous/level_up1.png"));
-        images.put("levelUp2", imageLoader("/Miscellaneous/level_up2.png"));
-        images.put("levelUp3", imageLoader("/Miscellaneous/level_up3.png"));
-        images.put("levelUp4", imageLoader("/Miscellaneous/level_up4.png"));
-        images.put("levelUp5", imageLoader("/Miscellaneous/level_up5.png"));
-        images.put("levelUp6", imageLoader("/Miscellaneous/level_up6.png"));
-        images.put("levelUp7", imageLoader("/Miscellaneous/level_up7.png"));
-        images.put("levelUp8", imageLoader("/Miscellaneous/level_up8.png"));
-
         images.put("explosiveBarrel", imageLoader("/Objects/explosiveBarrel.png"));
-        images.put("fireExplosion1", imageLoader("/Miscellaneous/fireExplosion/fireExplosion1.png"));
-        images.put("fireExplosion2", imageLoader("/Miscellaneous/fireExplosion/fireExplosion2.png"));
-        images.put("fireExplosion3", imageLoader("/Miscellaneous/fireExplosion/fireExplosion3.png"));
-        images.put("fireExplosion4", imageLoader("/Miscellaneous/fireExplosion/fireExplosion4.png"));
-        images.put("fireExplosion5", imageLoader("/Miscellaneous/fireExplosion/fireExplosion5.png"));
-        images.put("fireExplosion6", imageLoader("/Miscellaneous/fireExplosion/fireExplosion6.png"));
-        images.put("fireExplosion7", imageLoader("/Miscellaneous/fireExplosion/fireExplosion7.png"));
-        images.put("fireExplosion8", imageLoader("/Miscellaneous/fireExplosion/fireExplosion8.png"));
-        images.put("fireExplosion9", imageLoader("/Miscellaneous/fireExplosion/fireExplosion9.png"));
-        images.put("fireExplosion10", imageLoader("/Miscellaneous/fireExplosion/fireExplosion10.png"));
-        images.put("fireExplosion11", imageLoader("/Miscellaneous/fireExplosion/fireExplosion11.png"));
-        images.put("fireExplosion12", imageLoader("/Miscellaneous/fireExplosion/fireExplosion12.png"));
-        images.put("fireExplosion13", imageLoader("/Miscellaneous/fireExplosion/fireExplosion13.png"));
-        images.put("fireExplosion14", imageLoader("/Miscellaneous/fireExplosion/fireExplosion14.png"));
-        images.put("fireExplosion15", imageLoader("/Miscellaneous/fireExplosion/fireExplosion15.png"));
-        images.put("fireExplosion16", imageLoader("/Miscellaneous/fireExplosion/fireExplosion16.png"));
-        images.put("fireExplosion17", imageLoader("/Miscellaneous/fireExplosion/fireExplosion17.png"));
-        images.put("fireExplosion18", imageLoader("/Miscellaneous/fireExplosion/fireExplosion18.png"));
+        multipleImageLoader("fireExplosion", "/Miscellaneous/fireExplosion/fireExplosion", 18);
+        multipleImageLoader("chest", "/Objects/Chest/chest", 5);
 
-
-
+        // Other
+        multipleImageLoader("levelUp", "/Miscellaneous/levelUp/level_up", 8);
 
     }
     public BufferedImage imageLoader(String imagePath) {
@@ -92,5 +63,17 @@ public class ImageHandler {
             System.out.println("Error loading the image: " + imagePath);
         }
         return image;
+    }
+    private void multipleImageLoader(String imageName, String imagePath, int numberOfImages) {
+        for (int i = 1; i <= numberOfImages; i++) {
+            images.put(imageName + i, imageLoader(imagePath + i + ".png"));
+        }
+    }
+    public static BufferedImage[] createImageArray(String imageName, int numberOfImages) {
+        BufferedImage[] imageArray = new BufferedImage[numberOfImages];
+        for (int i = 0; i < numberOfImages; i++) {
+            imageArray[i] = images.get(imageName + (i + 1));
+        }
+        return imageArray;
     }
 }

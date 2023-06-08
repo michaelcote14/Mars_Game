@@ -6,7 +6,6 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class CasinoChip extends AbilityObject {
@@ -17,8 +16,8 @@ public class CasinoChip extends AbilityObject {
     int spellDuration = (60 * 5); // 5 seconds
 
     public static float cooldown = 0;
-    public CasinoChip(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public CasinoChip(float x, float y, ID id, ObjectHandler oHandler, int mouseX, int mouseY) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.image = ImageHandler.images.get("casinoChip");
 

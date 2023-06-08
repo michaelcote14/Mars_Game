@@ -1,19 +1,18 @@
 package Main;
 
 import Abilities.Abilities;
+import Abilities.DiceRoll;
 import Abilities.RouletteWheel;
 import Utilities.*;
 import Utilities.MouseHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
     ObjectHandler oHandler;
-    private BufferedImage playerImage, levelUpImage1, levelUpImage2, levelUpImage3, levelUpImage4,
-            levelUpImage5, levelUpImage6, levelUpImage7, levelUpImage8;
-    private BufferedImage[] levelUpImages = new BufferedImage[8];
+    private BufferedImage playerImage;
+    private BufferedImage[] levelUpImages;
     private Animation levelUpAnim;
     Game game;
     Camera camera;
@@ -41,46 +40,28 @@ public class Player extends GameObject {
     // Abilities
     public static String ability1Name, ability2Name, ability3Name;
     public static float ability1Cooldown, ability2Cooldown, ability3Cooldown;
-    public static int ability1Level = 1, ability2Level = 1, ability3Level = 1;
     public static float ability1Damage, ability2Damage, ability3Damage;
     public static int unspentAbilityPoints = 10;
 
-    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, ImageHandler imageHandler, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
-        super(x, y, id, imageHandler);
+    public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.game = game;
         this.camera = camera;
         this.mouseHandler = mouseHandler;
         this.keyHandler = keyHandler;
 
-        this.ability1Name = Abilities.abilityBook.get(0);
-        this.ability1Cooldown = Abilities.abilityCooldowns.get(this.ability1Name);
-        this.ability2Name = Abilities.abilityBook.get(1);
-        this.ability2Cooldown = Abilities.abilityCooldowns.get(this.ability2Name);
-        this.ability3Name = Abilities.abilityBook.get(2);
-        this.ability3Cooldown = Abilities.abilityCooldowns.get(this.ability3Name);
-        // todo ability levels are not being saved
+        ability1Name = Abilities.nameList.get(0);
+        ability1Cooldown = Abilities.cooldownBook.get(ability1Name);
+        ability2Name = Abilities.nameList.get(1);
+        ability2Cooldown = Abilities.cooldownBook.get(ability2Name);
+        ability3Name = Abilities.nameList.get(2);
+        ability3Cooldown = Abilities.cooldownBook.get(ability3Name);
 
         this.didLevelUp = false;
 
         this.playerImage = ImageHandler.images.get("gamblerDown1");
-        this.levelUpImage1 = ImageHandler.images.get("levelUp1");
-        this.levelUpImage2 = ImageHandler.images.get("levelUp2");
-        this.levelUpImage3 = ImageHandler.images.get("levelUp3");
-        this.levelUpImage4 = ImageHandler.images.get("levelUp4");
-        this.levelUpImage5 = ImageHandler.images.get("levelUp5");
-        this.levelUpImage6 = ImageHandler.images.get("levelUp6");
-        this.levelUpImage7 = ImageHandler.images.get("levelUp7");
-        this.levelUpImage8 = ImageHandler.images.get("levelUp8");
-        levelUpImages[0] = levelUpImage1;
-        levelUpImages[1] = levelUpImage2;
-        levelUpImages[2] = levelUpImage3;
-        levelUpImages[3] = levelUpImage4;
-        levelUpImages[4] = levelUpImage5;
-        levelUpImages[5] = levelUpImage6;
-        levelUpImages[6] = levelUpImage7;
-        levelUpImages[7] = levelUpImage8;
-
+        levelUpImages = ImageHandler.createImageArray("levelUp", 8);
         this.levelUpAnim = new Animation(180, levelUpImages);
     }
     public void deathStatDecrease() {
@@ -144,26 +125,22 @@ public class Player extends GameObject {
         else if(!keyHandler.isRightPressed()) velX = 0;
 
         if(keyHandler.isOnePressed() && this.ability1Cooldown <= 0) {
-            if(this.ability1Name.equals("RouletteWheel")) {
-                oHandler.addObject(new RouletteWheel(x, y, ID.valueOf("RouletteWheelAbility"), oHandler, imageHandler));
+            if(abilityActivator(ability1Name) == true) {
+                keyHandler.setOnePressed(false);
+                this.ability1Cooldown = 1; // 30 seconds //todo make this more accurate
             }
-            this.ability1Cooldown = 1; // 30 seconds //todo make this more accurate
         }
-
-        if(keyHandler.isTwoPressed() && mouseHandler.isMouseClicked() && this.ability2Cooldown <= 0) {
-            PointerInfo a = MouseInfo.getPointerInfo();
-            Point b = a.getLocation();
-            MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, this.ability2Name);
-            keyHandler.setTwoPressed(false);
-            this.ability2Cooldown = 1; // 30 seconds
+        else if(keyHandler.isTwoPressed() && this.ability2Cooldown <= 0) {
+            if(abilityActivator(ability2Name) == true) {
+                keyHandler.setTwoPressed(false);
+                this.ability2Cooldown = 1; // 30 seconds
+            }
         }
-        // todo spell 3 doesn't fire sometimes after a long run
-        else if (keyHandler.isThreePressed() && mouseHandler.isMouseClicked() && this.ability3Cooldown <= 0) {
-            PointerInfo a = MouseInfo.getPointerInfo();
-            Point b = a.getLocation();
-            MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, this.ability3Name);
-            keyHandler.setThreePressed(false);
-            this.ability3Cooldown = 1; // 30 seconds
+        else if (keyHandler.isThreePressed() && this.ability3Cooldown <= 0) {
+            if(abilityActivator(ability3Name) == true) {
+                keyHandler.setThreePressed(false);
+                this.ability3Cooldown = 1; // 30 seconds
+            }
         }
         // base attack
         else if(mouseHandler.isMouseClicked()) {
@@ -174,6 +151,7 @@ public class Player extends GameObject {
                 fireRateCounter = 0;
             }
         }
+
         if(this.ability1Cooldown > 0) {this.ability1Cooldown -= 0.01;}
         if(this.ability2Cooldown > 0) {this.ability2Cooldown-= 0.01;}
         if(this.ability3Cooldown > 0) {this.ability3Cooldown-= 0.01;}
@@ -207,9 +185,14 @@ public class Player extends GameObject {
 //        else
 //            anim.drawAnimation(g, x, y, 0, 32, 48);
     }
-
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 32, 42); // 32, 48 is the size of the wizard
+    }
+    public float getX() {
+        return (int)x;
+    }
+    public float getY() {
+        return (int)y;
     }
 
     public boolean is_room_to_move(int x, int y, Rectangle myRect, Rectangle otherRect) {
@@ -220,5 +203,30 @@ public class Player extends GameObject {
         }
         return true;
     }
+    private boolean abilityActivator(String abilityName) {
+        if(abilityName.equals("RouletteWheel")) {
+            oHandler.addObject(new RouletteWheel(x, y, ID.valueOf("RouletteWheelAbility"), oHandler));
+        }
+        else if(abilityName.equals("DiceRoll")) {
+            oHandler.addObject(new DiceRoll(x, y, ID.valueOf("DiceRollAbility"), oHandler));
+        }
+        else if(abilityName.equals("CardThrow")) {
+            if(mouseHandler.isMouseClicked()) {
+                PointerInfo a = MouseInfo.getPointerInfo();
+                Point b = a.getLocation();
+                MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, "CardThrow");
+            } else {return false;}
+        }
+        else if(abilityName.equals("CasinoChip")) {
+            if(mouseHandler.isMouseClicked()) {
+                PointerInfo a = MouseInfo.getPointerInfo();
+                Point b = a.getLocation();
+                MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, "CasinoChip");
+            } else {return false;}
+
+        }
+        return true;
+    }
+
 }
 

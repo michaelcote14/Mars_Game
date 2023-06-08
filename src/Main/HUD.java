@@ -31,6 +31,7 @@ public class HUD {
 //            todo Fade screen to black
     }
     public void render(Graphics g) {
+        if(Player.ability1Name == null) {return;}
         // Health Bar Background
         g.setColor(Color.gray);
         g.fillRect(15, 15, (int) Player.maxHealth, 10);
@@ -97,11 +98,11 @@ public class HUD {
 
         g.fillRect(Game.WIDTH/2 + 20, 30, 40, 40);
 
-        g.drawImage(ImageHandler.images.get(Player.ability1Name.replaceFirst(Player.ability1Name.substring(0,1), Player.ability1Name.toLowerCase().substring(0,1))),
+        g.drawImage(ImageHandler.images.get(Player.ability1Name.replaceFirst(Player.ability1Name.substring(0,1), Player.ability1Name.toLowerCase().substring(0,1)).replaceAll(" ", "")),
                 Game.WIDTH/2 - 55, 35, 30, 30, null);
-        g.drawImage(ImageHandler.images.get(Player.ability2Name.replaceFirst(Player.ability2Name.substring(0,1), Player.ability2Name.toLowerCase().substring(0,1))),
+        g.drawImage(ImageHandler.images.get(Player.ability2Name.replaceFirst(Player.ability2Name.substring(0,1), Player.ability2Name.toLowerCase().substring(0,1)).replaceAll(" ", "")),
                 Game.WIDTH/2 - 15, 35, 30, 30, null);
-        g.drawImage(ImageHandler.images.get(Player.ability3Name.replaceFirst(Player.ability3Name.substring(0,1), Player.ability3Name.toLowerCase().substring(0,1))),
+        g.drawImage(ImageHandler.images.get(Player.ability3Name.replaceFirst(Player.ability3Name.substring(0,1), Player.ability3Name.toLowerCase().substring(0,1)).replaceAll(" ", "")),
                 Game.WIDTH/2 + 25, 35, 30, 30, null);
 
         g.setColor(Color.white);

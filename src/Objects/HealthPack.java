@@ -6,15 +6,14 @@ import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class HealthPack extends GameObject {
     private ObjectHandler oHandler;
     private BufferedImage healthPackImage;
 
-    public HealthPack(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public HealthPack(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.healthPackImage = ImageHandler.images.get("healthPack");
 
@@ -27,5 +26,5 @@ public class HealthPack extends GameObject {
         g.drawImage(this.healthPackImage, (int)x, (int)y, 24, 24,null);
     }
     @Override
-    public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 32, 32);}
+    public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 24, 24);}
 }

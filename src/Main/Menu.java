@@ -51,9 +51,10 @@ public class Menu extends MouseAdapter {
         if (game.gameState == Game.STATE.Death && isMouseOver(mouseX, mouseY, 210, 350, 200, 64)) {
             game.gameState = Game.STATE.Game;
             oHandler.clearObjects();
-            game.wasLevelLoaded = false;
+            game.wasMapLoaded = false;
             hud.isNewLevel = true;
             hud.setWave(1);
+            deathComment = getDeathComment();
         }
     }
     public void mouseReleased(MouseEvent mEvent) {}
@@ -135,7 +136,11 @@ public class Menu extends MouseAdapter {
                 "Oh you bought this game just so you could die over and over? That's cool",
                 "I hope you're good in school, because obviously video games aren't gonna take you anywhere",
                 "No amount of YouTube tutorials are going to help you get better at this game, I can already tell",
-                "At this rate, this game might take you a whole year to beat"};
+                "At this rate, this game might take you a whole year to beat",
+                "I bet you're the type of person to get a participation trophy",
+                "You're obviously going to need a friend to help level you.",
+                "Don't leave a bad review just because you suck.",
+                "If you leave a bad review, we WILL find you.. and we WILL hurt you."};
         return deathComments[rand.nextInt(0, deathComments.length - 1)];
     }
 

@@ -3,7 +3,6 @@ package Objects;
 import Utilities.*;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class ExplosiveBarrel extends GameObject {
@@ -11,9 +10,8 @@ public class ExplosiveBarrel extends GameObject {
     private BufferedImage explosiveBarrelImage;
     private boolean destroyed = false;
 
-
-    public ExplosiveBarrel(float x, float y, ID id, ObjectHandler oHandler, ImageHandler imageHandler) {
-        super(x, y, id, imageHandler);
+    public ExplosiveBarrel(float x, float y, ID id, ObjectHandler oHandler) {
+        super(x, y, id);
         this.oHandler = oHandler;
         this.explosiveBarrelImage = ImageHandler.images.get("explosiveBarrel");
     }
@@ -33,7 +31,7 @@ public class ExplosiveBarrel extends GameObject {
     @Override
     public void render(Graphics g) {
         if(destroyed == true) {
-            oHandler.addObject(new Explosion(x, y, ID.Explosion, oHandler, imageHandler));
+            oHandler.addObject(new Explosion(x, y, 210, 210, ID.Explosion, oHandler));
             destroyed = false;
             oHandler.removeObject(this);
         }

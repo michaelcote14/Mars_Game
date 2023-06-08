@@ -1,6 +1,10 @@
 package Main;
 
+import Abilities.Abilities;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SaveDataStorage implements Serializable {
 
@@ -14,13 +18,11 @@ public class SaveDataStorage implements Serializable {
     int money;
 
     // Abilities
-     String ability1Name;
-     String ability2Name;
-     String ability3Name;
-
+    ArrayList<String> nameList = Abilities.nameList;
+    HashMap<String, Integer> levelBook = Abilities.levelBook;
      int unspentAbilityPoints;
-     int ability1Level;
-     int ability2Level;
-     int ability3Level;
+
+
+
 
 }
