@@ -2,7 +2,6 @@ package Objects;
 
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -27,7 +26,7 @@ public class Bullet extends GameObject {
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
-            if(tempObject.getId() == ID.Block) {
+            if(tempObject.getId() == ID.BlockObject) {
                 if(getBounds().intersects(tempObject.getBounds())) {
                     oHandler.removeObject(this);
                 }

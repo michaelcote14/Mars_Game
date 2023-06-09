@@ -15,12 +15,17 @@ public class SaveDataStorage implements Serializable {
     float maxXp;
     float currentXp;
     int speed;
-    int money;
 
     // Abilities
     ArrayList<String> nameList = Abilities.nameList;
     HashMap<String, Integer> levelBook = Abilities.levelBook;
-     int unspentAbilityPoints;
+    int abilityPoints;
+
+    // Characteristics
+    int characteristicPoints;
+    ArrayList<String> characteristicsList = Abilities.characteristicsList;
+    HashMap<String, Integer> characteristicPointsBook = Abilities.characteristicPointsBook;
+
 
 
 

@@ -62,7 +62,7 @@ public class arachnidMage extends GameObject {
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
             // This makes the enemy bounce off of the block boundaries
-            if(tempObject.getId() == ID.Block) {
+            if(tempObject.getId() == ID.BlockObject) {
                 if(getBoundsBig().intersects(tempObject.getBounds())) {
                     x += (velX * 1) * -1;
                     y += (velY * 1) * -1;
@@ -106,9 +106,8 @@ public class arachnidMage extends GameObject {
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
-            Player.money += 1;
             Player.currentXp += 20;
-            HUD.scoreTracker += 1;
+            HUD.killTracker += 1;
             dropLoot();
         }
 
@@ -151,7 +150,8 @@ public class arachnidMage extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x+8, (int)y+4, 23, 31);
+        return new Rectangle(
+                (int)x-15, (int)y, 48, 54);
     }
     public void dropLoot() {
         if(rand.nextInt(20) == 0) { // this means there is a 1 in 10 chance of dropping a crate

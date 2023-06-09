@@ -41,6 +41,8 @@ public class DiceRoll extends AbilityObject {
     }
     @Override
     public void render(Graphics g) {
+        Rectangle rect = getBounds(); // this is how to show the hit box
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         if(rollTimer < 120) {
             diceRollAnimation.runAnimation();
             diceRollAnimation.drawAnimation(g, (int) x+15, (int) y, 20, 40, 40);

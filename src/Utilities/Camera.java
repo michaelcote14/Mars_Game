@@ -15,16 +15,9 @@ public class Camera {
 
         // This stops the camera from going out of bounds
         if(cameraX <= 0) cameraX = 0;
-        if(cameraX >= 1032) cameraX = 1032;
+        if(cameraX >= 22500) cameraX = 22500; // this is the width of the map
         if(cameraY <= 0) cameraY = 0;
-        if(cameraY >= 563 + 48) cameraY = 563 + 48;
-    }
-
-    public void setCameraX(float cameraX) {
-        this.cameraX = cameraX;
-    }
-    public void setCameraY(float cameraY) {
-        this.cameraY = cameraY;
+        if(cameraY >= 22500) cameraY = 22500; // this is the height of the map
     }
     public float getPlayerX() {
         return cameraX;

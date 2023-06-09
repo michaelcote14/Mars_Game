@@ -2,7 +2,6 @@ package Objects;
 
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -19,7 +18,7 @@ public class BuzzSaw extends GameObject {
         this.oHandler = oHandler;
         this.image = oHandler.imageGrabber("/Objects/buzzSaw.png", 4, 4);
 
-        velX = 2;
+        velX = 3;
 
     }
     @Override
@@ -29,7 +28,7 @@ public class BuzzSaw extends GameObject {
 
         // Make the saw go left and right
         if(velX == 0) {
-            velX = 2;
+            velX = 3;
             if(velX > 0) velX += 0.005f;
             else if(velX < 0) velX -= 0.005f;
         }
@@ -38,7 +37,7 @@ public class BuzzSaw extends GameObject {
             GameObject tempObject = oHandler.object.get(i);
 
             // This makes the enemy bounce off of the block boundaries
-            if (tempObject.getId() == ID.Block) {
+            if (tempObject.getId() == ID.BlockObject) {
                 if (getBoundsBig().intersects(tempObject.getBounds())) {
                     x += (velX * 5) * -1;
                     y += (velY * 5) * -1;
@@ -65,7 +64,8 @@ public class BuzzSaw extends GameObject {
         rotationCounter++;
     }
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 48, 48); // this is the size of the hit box
+
+        return new Rectangle((int)x+4, (int)y+6, 52, 52); // this is the size of the hit box
     }
 
     public Rectangle getBoundsBig() {

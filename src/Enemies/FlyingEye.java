@@ -1,7 +1,6 @@
 package Enemies;
 
 import Main.Player;
-import Objects.Chest;
 import Objects.HealthPack;
 import Utilities.GameObject;
 import Utilities.ObjectHandler;
@@ -47,7 +46,7 @@ public class FlyingEye extends GameObject {
             GameObject tempObject = oHandler.object.get(i);
 
             // This makes the enemy bounce off of the block boundaries
-            if(tempObject.getId() == ID.Block) {
+            if(tempObject.getId() == ID.BlockObject) {
                 if(getBoundsBig().intersects(tempObject.getBounds())) {
                     x += (velX * 5) * -1;
                     y += (velY * 5) * -1;
@@ -91,9 +90,8 @@ public class FlyingEye extends GameObject {
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
-            Player.money += 1;
             Player.currentXp += 1;
-            HUD.scoreTracker += 1;
+            HUD.killTracker += 1;
             dropLoot();
         }
 
@@ -105,8 +103,6 @@ public class FlyingEye extends GameObject {
 
     @Override
     public void render(Graphics g) {
-//        Rectangle rect = getBounds(); // this is how to show the hit box
-//        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         anim.runAnimation();
         anim.drawAnimation(g, x, y, 0, 32, 32);
 

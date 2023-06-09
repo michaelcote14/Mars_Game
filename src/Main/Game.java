@@ -10,7 +10,8 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
-    public static final int WIDTH = 1000, HEIGHT = 563;
+    public static final int WIDTH = 1000, HEIGHT = 600;
+    //todo change the width and height of the game window
     private boolean gameRunning = false;
     private Thread thread;
     public static boolean paused = false;
@@ -54,22 +55,22 @@ public class Game extends Canvas implements Runnable {
         this.keyHandler = new KeyHandler(oHandler, this);
         hud = new HUD(iHandler, this.keyHandler);
         menu = new Menu(this, oHandler, hud);
-        upgrades = new Upgrades(oHandler, hud, this, player, iHandler);
+        upgrades = new Upgrades(oHandler, hud, this);
         abilities = new Abilities();
 
         this.addKeyListener(this.keyHandler);
-
-        BufferedImageLoader imageLoader = new BufferedImageLoader();
-        mapImage = imageLoader.loadImage("/Maps/Levels/map0.png");
-        mapHandler = new MapHandler();
-        spawner = new Spawner(oHandler, hud, camera, iHandler, mapImage);
-        floor = ImageHandler.images.get("jailFloor");
-
         this.mouseHandler = new MouseHandler(oHandler, iHandler, this);
         this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
         this.addMouseListener(upgrades);
 
+        BufferedImageLoader imageLoader = new BufferedImageLoader();
+        mapImage = imageLoader.loadImage("/Maps/Levels/map0.png");
+        mapHandler = new MapHandler(oHandler, this, camera, keyHandler, mouseHandler);
+        spawner = new Spawner(oHandler, hud, camera);
+        floor = ImageHandler.images.get("jailFloor");
+
+        pauseComment = getPauseComment();
         gameStart();
     }
 
@@ -78,7 +79,7 @@ public class Game extends Canvas implements Runnable {
         if (gameState == STATE.Game) {
             if (!paused) {
                 if (wasMapLoaded == false) {
-                    loadMap(mapImage);
+                    mapHandler.loadMap(mapImage);
                     wasMapLoaded = true;
                 }
                 oHandler.tick();
@@ -91,7 +92,7 @@ public class Game extends Canvas implements Runnable {
             for (int i = 0; i < oHandler.object.size(); i++) {
                 if (oHandler.object.get(i).getId() == ID.Player) {
                     camera.tick(oHandler.object.get(i));
-                    mapHandler.tick(oHandler.object.get(i), this);
+                    mapHandler.tick(oHandler.object.get(i));
                 }
             }
         } else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.Death) {
@@ -114,8 +115,8 @@ public class Game extends Canvas implements Runnable {
         g2d.translate(-camera.getPlayerX(), -camera.getPlayerY()); // this is for the camera
 
         //  this is the background
-        for (int xx = 0; xx < 30 * 72; xx += 32) {
-            for (int yy = 0; yy < 30 * 72; yy += 32) {
+        for (int xx = 0; xx < 50 * 72; xx += 32) {
+            for (int yy = 0; yy < 50 * 72; yy += 32) {
                 g.drawImage(floor, xx, yy, null);
             }
         }
@@ -149,44 +150,7 @@ public class Game extends Canvas implements Runnable {
         bufferStrat.show();
     }
 
-    public void loadMap(BufferedImage mapImage) {
-        pauseComment = getPauseComment();
-        int w = mapImage.getWidth();
-        int h = mapImage.getHeight();
 
-        for (int xx = 0; xx < w; xx++) {
-            for (int yy = 0; yy < h; yy++) {
-                int pixel = mapImage.getRGB(xx, yy);
-                int red = (pixel >> 16) & 0xff; // shifting the bits over to get the red value
-                int green = (pixel >> 8) & 0xff; // shifting the bits over to get the green value
-                int blue = (pixel) & 0xff; // shifting the bits over to get the blue value
-
-                if (red == 255 && green == 0 && blue == 0) {
-                    oHandler.addObject(new Block(xx * 32, yy * 32, ID.Block));
-                }
-                else if (red == 00 && green == 00 && blue == 255) {
-                    SaveOrLoad.load("Save1");
-                    player = new Player(xx * 32, yy * 32, ID.Player, oHandler, this, camera, this.keyHandler, this.mouseHandler);
-                    oHandler.addObject(player);
-                }
-                else if (green == 255 && blue == 255) {
-                    randNum = new Random().nextInt(0,3);
-                    if(randNum == 0) {
-                        oHandler.addObject(new HealthPack(xx * 32, yy * 32, ID.HealthPack, oHandler));
-                    }
-                    else if(randNum == 1) {
-                        oHandler.addObject(new ExplosiveBarrel(xx * 32, yy * 32, ID.ExplosiveBarrel, oHandler));
-                    }
-                    else {
-                        oHandler.addObject(new Chest(xx * 32, yy * 32, ID.Chest, oHandler));
-                    }
-                }
-                else if(green == 100 && red == 100 && blue == 0) {
-                    oHandler.addObject(new BuzzSaw(xx * 32, yy * 32, ID.BuzzSawTrap, oHandler));
-                }
-            }
-        }
-    }
     private void gameStart() {
         gameRunning = true;
         thread = new Thread(this);
@@ -225,7 +189,7 @@ public class Game extends Canvas implements Runnable {
             frames++;
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-//                System.out.println("FPS: " + frames); // prints out how many frames we are getting per second
+                System.out.println("FPS: " + frames); // prints out how many frames we are getting per second
                 frames = 0;
             }
         }

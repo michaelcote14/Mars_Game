@@ -14,6 +14,7 @@ public class ImageHandler {
         images.put("map0", imageLoader("/Maps/Levels/map0.png"));
         images.put("map1", imageLoader("/Maps/Levels/map1.png"));
 
+
         // Structures
         images.put("jailWall", imageLoader("/Maps/jailWall.png"));
         images.put("jailFloor", imageLoader("/Maps/jailFloor.png"));

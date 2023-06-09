@@ -16,23 +16,18 @@ public class Upgrades extends MouseAdapter {
     Game game;
     Player player;
 
-    private int R1 = 1;
-    private int R2 = 1;
-    private int R3 = 1;
-    private int R4 = 1;
-    private int R5 = 1;
     private String abilityName = "";
     private int abilityRowClicked = 0;
     private boolean isAbilityRowClicked = false;
     private boolean isKeyBindChangerClicked = false;
 
     int spacer = 20;
-    // todo put spaces between ability names that are displayed
 
-    public Upgrades(ObjectHandler oHandler, HUD hud, Game game, Player player, ImageHandler imageHandler) {
+    public Upgrades(ObjectHandler oHandler, HUD hud, Game game) {
         this.oHandler = oHandler;
         this.hud = hud;
         this.game = game;
+
     }
     public void mousePressed(MouseEvent mouseEvent) {
         if(game.gameState != Game.STATE.Shop) return;
@@ -40,15 +35,18 @@ public class Upgrades extends MouseAdapter {
         int mouseY = mouseEvent.getY();
 
         if(mouseX >= Game.WIDTH - (spacer*2)-10 && mouseX <= Game.WIDTH - (spacer*2)+10) {
-            // todo create a hashmap for this too
-            //todo put a y on this because low clicks will crash program
-            characteristicPointAdder(mouseY, 1, R1);
-            characteristicPointAdder(mouseY, 2, R2);
-            characteristicPointAdder(mouseY, 3, R3);
-            characteristicPointAdder(mouseY, 4, R4);
-
-            // Save the upgrades to the save file
-            SaveOrLoad.save("Save1", player);
+            for(int row = 1; row <= Abilities.characteristicsList.size(); row++) {
+                int rowSpace = row * 2 - 1;
+                if (mouseY >= Game.HEIGHT / 12 + (spacer * rowSpace) - 15 && mouseY <= Game.HEIGHT / 12 + (spacer * rowSpace) + 5) {
+                    if (Player.characteristicPoints >= 1 && !Abilities.immediateBlockedCharacteristics.contains(Abilities.characteristicsList.get(row - 1))
+                        && !Abilities.blockedCharacteristics.contains(Abilities.characteristicsList.get(row - 1))) {
+                        Player.characteristicPoints -= 1;
+                        int currentPoints = Abilities.characteristicPointsBook.get(Abilities.characteristicsList.get(row - 1));
+                        Abilities.characteristicPointsBook.put(Abilities.characteristicsList.get(row - 1), currentPoints + 1);
+                        Abilities.immediateBlockedCharacteristics.add(Abilities.characteristicsList.get(row - 1));
+                    }
+                }
+            }
         }
         else if(mouseX >= 5 && mouseX <= 284) {
             isAbilityRowClicked = true;
@@ -57,13 +55,11 @@ public class Upgrades extends MouseAdapter {
 
         if(isAbilityRowClicked == true) {
             if(mouseX >= 665 && mouseX <= 685 && mouseY >= 170 && mouseY <= 190) {
-                if(Player.unspentAbilityPoints > 0) {
-                    Player.unspentAbilityPoints--;
+                if(Player.abilityPoints > 0) {
+                    Player.abilityPoints--;
                     abilityName = Abilities.nameList.get(abilityRowClicked-1);
                     int currentLevel = Abilities.levelBook.get(abilityName);
                     Abilities.levelBook.replace(abilityName, currentLevel + 1);
-                    SaveOrLoad.save("Save1", player);
-                    SaveOrLoad.load("Save1");
                 }
             }
             else if(mouseX >= 565 && mouseX <= 565+125 && mouseY >= 145 && mouseY <= 145+20) {
@@ -73,7 +69,6 @@ public class Upgrades extends MouseAdapter {
                 String keyEntered = JOptionPane.showInputDialog("Enter a key to bind to this ability");
                 int num = Integer.parseInt(keyEntered);
                 abilityName = Abilities.nameList.get(abilityRowClicked-1);
-                String tempName = abilityName;
                 if(num == 1) {
                     Abilities.nameList.set(3, Player.ability1Name);
                     Abilities.nameList.set((num - 1), abilityName);
@@ -92,11 +87,11 @@ public class Upgrades extends MouseAdapter {
                     Player.ability3Name = abilityName;
                     Player.ability3Cooldown = Abilities.cooldownBook.get(Player.ability3Name);
                 }
-                SaveOrLoad.save("Save1", player);
-                SaveOrLoad.load("Save1");
                 isKeyBindChangerClicked = false;
             }
         }
+        SaveOrLoad.save("Save1", player);
+        SaveOrLoad.load("Save1");
     }
     public void render(Graphics g) {
         // todo change up the fonts and make them look better
@@ -117,12 +112,23 @@ public class Upgrades extends MouseAdapter {
         g.setFont(new Font("arial", 0, 16));
         g.setColor(Color.white);
 
-        characteristicsPainter("Health", (int) Player.maxHealth, 1, g);
-        characteristicsPainter("Walk Speed", Player.walkSpeed, 2, g);
-        characteristicsPainter("Fire Rate", Player.fireRate, 3, g);
-        characteristicsPainter("Life Steal", (int)Player.lifeStealRate, 4, g);
+        for(int i = 1; i < Abilities.characteristicsList.size()+1; i++) {
+            String characteristicName = Abilities.characteristicsList.get(i-1);
+            if(Abilities.blockedCharacteristics.contains(characteristicName) || Abilities.immediateBlockedCharacteristics.contains(characteristicName)) {
+                g.setColor(Color.gray);
+            }
+            else {
+                g.setColor(Color.white);
+            }
+            int j = i * 2 - 1;
+            g.drawString(characteristicName, Game.WIDTH - (spacer * 14) - 5, Game.HEIGHT / 12 + (spacer * j));
+            g.drawString(String.valueOf(Abilities.characteristicPointsBook.get(characteristicName)), Game.WIDTH - (spacer * 6), Game.HEIGHT / 12 + (spacer * j));
+            g.drawRect(Game.WIDTH - (spacer * 2) - 10, Game.HEIGHT / 12 + (spacer * j) - 15, spacer, spacer);
+            g.drawLine(Game.WIDTH - (spacer * 2) - 5, Game.HEIGHT / 12 + (spacer * j) - 5, Game.WIDTH - (spacer * 2) + 5, Game.HEIGHT / 12 + (spacer * j) - 5);
+            g.drawLine(Game.WIDTH - (spacer * 2), Game.HEIGHT / 12 + (spacer * j) - 10, Game.WIDTH - (spacer * 2), Game.HEIGHT / 12 + (spacer * j));
+        }
 
-
+        g.setColor(Color.white);
         for(int i = 0; i < Abilities.nameList.size(); i++) {
             abilityName = Abilities.nameList.get(i);
             g.drawString(abilityName, 15, 65 + (i * 45));
@@ -133,13 +139,13 @@ public class Upgrades extends MouseAdapter {
             g.drawLine(5, 85 + (i * 45), 284, 85 + (i * 45));
         }
 
-        g.drawString("Ability Points: " + Player.unspentAbilityPoints, 85, 510);
-        g.drawString("Money: " + Player.money, Game.WIDTH - (spacer*10)-5, 510);
+        g.drawString("Ability Points: " + Player.abilityPoints, 85, 510);
+        g.drawString("Characteristic Points: " + Player.characteristicPoints, Game.WIDTH - (spacer*11)-5, 510);
         g.drawString("Press SPACE to go back", Game.WIDTH/2 - 90, 450);
 
         // ability description box
         // todo make an "are you sure you want to buy this" section
-        if(isAbilityRowClicked) {
+        if(isAbilityRowClicked && abilityRowClicked <= Abilities.nameList.size()) {
             g.setColor(Color.black);
             g.fillRect(290, 10, 405, 190);
             g.setColor(Color.white);
@@ -154,7 +160,7 @@ public class Upgrades extends MouseAdapter {
             g.drawString("Change KeyBind", 568, 162);
             g.drawRect(565, 145, 125, 20);
 
-            abilityName = Abilities.nameList.get(abilityRowClicked-1);
+            abilityName = Abilities.nameList.get(abilityRowClicked - 1);
             g.drawString("Damage: " + Abilities.damageBook.get(abilityName), 300, 160);
             g.drawString("Duration: " + Abilities.durationBook.get(abilityName), 300, 190);
             g.drawString("Cooldown: " + Abilities.cooldownBook.get(abilityName), 430, 190);
@@ -162,40 +168,11 @@ public class Upgrades extends MouseAdapter {
     }
     private int abilityRowClickedFinder(int mouseY) {
         int i = 40;
-        for(int j = 0; j < 8; j += 1) {
+        for(int j = 0; j < 10; j += 1) {
             if (mouseY >= i + (j * (i + 5)) && mouseY <= 85 + (j * (i + 5))) {
                 return j + 1;
             }
         }
-        return 0;
-    }
-    private void characteristicsPainter(String characteristicName, int characteristicPoint, int rowNumber, Graphics g) {
-        rowNumber = rowNumber * 2 - 1;
-        g.drawString(characteristicName, Game.WIDTH - (spacer*14)-5, Game.HEIGHT/12 + (spacer*rowNumber));
-        g.drawString(String.valueOf(characteristicPoint), Game.WIDTH - (spacer*6), Game.HEIGHT/12 + (spacer*rowNumber));
-        g.drawRect(Game.WIDTH - (spacer*2)-10, Game.HEIGHT/12 + (spacer*rowNumber)-15, spacer, spacer);
-        g.drawLine(Game.WIDTH - (spacer*2)-5, Game.HEIGHT/12 + (spacer*rowNumber)-5, Game.WIDTH - (spacer*2)+5, Game.HEIGHT/12 + (spacer*rowNumber)-5);
-        g.drawLine(Game.WIDTH - (spacer*2), Game.HEIGHT/12 + (spacer*rowNumber)-10, Game.WIDTH - (spacer*2), Game.HEIGHT/12 +(spacer*rowNumber));
-    }
-    private void characteristicPointAdder(int mouseY, int rowNumber, int upgradeNumber) {
-        int rowSpace = rowNumber * 2 - 1;
-        if(mouseY >= Game.HEIGHT/12 + (spacer*rowSpace)-15 && mouseY <= Game.HEIGHT/12 + (spacer*rowSpace) + 5) {
-            if(Player.money >= upgradeNumber) {
-                Player.money -= upgradeNumber;
-                if(rowNumber == 1) {
-                    player.maxHealth += 10;
-                    player.currentHealth += 10;
-                }
-                else if(rowNumber == 2) {
-                    Player.walkSpeed++;
-                }
-                else if(rowNumber == 3) {
-                    Player.fireRate++;
-                }
-                else if(rowNumber == 4) {
-                    Player.lifeStealRate++;
-                }
-            }
-        }
+        return 20;
     }
 }

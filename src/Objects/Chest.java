@@ -18,7 +18,7 @@ public class Chest extends GameObject {
         this.oHandler = oHandler;
         this.chestImage1 = ImageHandler.images.get("chest1");
         this.chestImages = ImageHandler.createImageArray("chest", 5);
-        this.openChestAnimation = new Animation(800, this.chestImages);
+        this.openChestAnimation = new Animation(100, this.chestImages);
     }
     @Override
     public void tick() {
@@ -26,8 +26,13 @@ public class Chest extends GameObject {
             GameObject tempObject = oHandler.object.get(i);
 
             if (tempObject.getId() == ID.Player) {
-                if (getBounds().intersects(tempObject.getBounds())) {
+                if (getBoundsBig().intersects(tempObject.getBounds())) {
                     openChest = true;
+                }
+            }
+            else if (tempObject.getId() == ID.Explosion) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    oHandler.removeObject(this);
                 }
             }
         }
@@ -41,7 +46,7 @@ public class Chest extends GameObject {
             openChestAnimation.drawAnimation(g, (int)x+2, (int)y-2, 0, 44, 32);
             if(openChestAnimation.getCount() == 5) {
                 oHandler.addObject(new HealthPack(x+13, y, ID.HealthPack, oHandler));
-                if(openChestCounter > 4000) {
+                if(openChestCounter > 250) {
                     oHandler.removeObject(this);
                 }
             }
@@ -52,4 +57,6 @@ public class Chest extends GameObject {
     }
     @Override
     public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 44, 32);}
+    public Rectangle getBoundsBig() {return new Rectangle((int)x-10, (int)y-10, 64, 52);}
+
 }

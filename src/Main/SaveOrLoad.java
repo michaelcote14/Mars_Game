@@ -17,11 +17,13 @@ public class SaveOrLoad {
             data.currentXp = (int) player.currentXp;
             data.speed = player.walkSpeed;
             data.fireRate = player.fireRate;
-            data.money = player.money;
 
             data.nameList = Abilities.nameList;
             data.levelBook = Abilities.levelBook;
-            data.unspentAbilityPoints = player.unspentAbilityPoints;
+            data.abilityPoints = player.abilityPoints;
+            data.characteristicPoints = player.characteristicPoints;
+            data.characteristicsList = Abilities.characteristicsList;
+            data.characteristicPointsBook = Abilities.characteristicPointsBook;
 
 
             // Write the DataStorage object to the file
@@ -45,14 +47,16 @@ public class SaveOrLoad {
             Player.currentHealth = Player.maxHealth;
             Player.maxXp = data.maxXp;
             Player.currentXp = data.currentXp;
-            Player.walkSpeed = data.speed;
+//            Player.walkSpeed = data.speed;
+            Player.walkSpeed = 70;
             Player.fireRate = data.fireRate;
-//            Player.money = data.money;
-            Player.money = 100000;
 
             Abilities.nameList = data.nameList;
             Abilities.levelBook = data.levelBook;
-            Player.unspentAbilityPoints = data.unspentAbilityPoints;
+            Player.abilityPoints = data.abilityPoints;
+            Player.characteristicPoints = data.characteristicPoints;
+            Abilities.characteristicsList = data.characteristicsList;
+            Abilities.characteristicPointsBook = data.characteristicPointsBook;
 
         }
         catch (EOFException e) {}

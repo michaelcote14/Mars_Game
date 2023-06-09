@@ -11,7 +11,7 @@ public class HUD {
     private Random rand = new Random();
     private ImageHandler imageHandler;
 
-    public static int scoreTracker = 0;
+    public static int killTracker = 0;
     public static int wave = 1;
     public boolean isNewLevel = true;
 
@@ -21,14 +21,6 @@ public class HUD {
     }
 
     public void tick() {
-        // Make the level increase every 10 points
-        if (scoreTracker >= 10) {
-            scoreTracker = 0;
-            wave++;
-            isNewLevel = true;
-        }
-        //             todo death animation here
-//            todo Fade screen to black
     }
     public void render(Graphics g) {
         if(Player.ability1Name == null) {return;}
@@ -116,7 +108,6 @@ public class HUD {
 
         // Score
         g.setFont(new Font("arial", 1, 15));
-        g.drawString("Money: " + Player.money, 15, 55);
         g.drawString("Wave : " + this.wave, 15, 70);
         g.drawString("Space for Shop", 15, 85);
     }

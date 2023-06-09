@@ -30,9 +30,8 @@ public class Player extends GameObject {
     public static float basicAttackDamage = 1;
     public static int fireRate = 30;
     private int fireRateCounter = 0;
-    public static int walkSpeed = 4;
+    public static int walkSpeed = 25;
     public static int lifeStealRate = 1;
-    public static int money = 10000;
     private boolean didLevelUp;
     private int levelUpCounter = 0;
     private boolean hasDeathBeenHandled = false;
@@ -41,7 +40,8 @@ public class Player extends GameObject {
     public static String ability1Name, ability2Name, ability3Name;
     public static float ability1Cooldown, ability2Cooldown, ability3Cooldown;
     public static float ability1Damage, ability2Damage, ability3Damage;
-    public static int unspentAbilityPoints = 10;
+    public static int abilityPoints = 10;
+    public static int characteristicPoints = 10;
 
     public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(x, y, id);
@@ -73,7 +73,7 @@ public class Player extends GameObject {
         for (int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
-            if (tempObject.getId() == ID.Block) {
+            if (tempObject.getId().toString().contains("Object")) {
                 if (!is_room_to_move((int) (x + velX), (int)y, getBounds(), tempObject.getBounds())) {
                     velX = 0;
                 }
@@ -112,34 +112,34 @@ public class Player extends GameObject {
         x += velX;
         y += velY;
 
-        if(keyHandler.isDownPressed()) velY = 3 + walkSpeed /10;
+        if(keyHandler.isDownPressed()) velY = (float) (2.3 + (walkSpeed * 0.02)); // 2 is starting speed
         else if(!keyHandler.isUpPressed()) velY = 0;
 
-        if(keyHandler.isUpPressed()) velY = -3 - walkSpeed /10;
+        if(keyHandler.isUpPressed()) velY = (float) (-2.3 - (walkSpeed * 0.02));
         else if(!keyHandler.isDownPressed()) velY = 0;
 
-        if(keyHandler.isRightPressed()) velX = 3 + walkSpeed /10;
+        if(keyHandler.isRightPressed()) velX = (float) (2.3 + (walkSpeed * 0.02));
         else if(!keyHandler.isLeftPressed()) velX = 0;
 
-        if(keyHandler.isLeftPressed()) velX = -3 - walkSpeed /10;
+        if(keyHandler.isLeftPressed()) velX = (float) (-2.3 - (walkSpeed * 0.02));
         else if(!keyHandler.isRightPressed()) velX = 0;
 
-        if(keyHandler.isOnePressed() && this.ability1Cooldown <= 0) {
+        if(keyHandler.isOnePressed() && ability1Cooldown <= 0) {
             if(abilityActivator(ability1Name) == true) {
                 keyHandler.setOnePressed(false);
-                this.ability1Cooldown = 1; // 30 seconds //todo make this more accurate
+                ability1Cooldown = 1; // 30 seconds //todo make this more accurate
             }
         }
-        else if(keyHandler.isTwoPressed() && this.ability2Cooldown <= 0) {
+        else if(keyHandler.isTwoPressed() && ability2Cooldown <= 0) {
             if(abilityActivator(ability2Name) == true) {
                 keyHandler.setTwoPressed(false);
-                this.ability2Cooldown = 1; // 30 seconds
+                ability2Cooldown = 1; // 30 seconds
             }
         }
-        else if (keyHandler.isThreePressed() && this.ability3Cooldown <= 0) {
+        else if (keyHandler.isThreePressed() && ability3Cooldown <= 0) {
             if(abilityActivator(ability3Name) == true) {
                 keyHandler.setThreePressed(false);
-                this.ability3Cooldown = 1; // 30 seconds
+                ability3Cooldown = 1; // 30 seconds
             }
         }
         // base attack
@@ -162,7 +162,8 @@ public class Player extends GameObject {
             maxXp = (int) (maxXp * 1.5);
             currentHealth = maxHealth;
             this.didLevelUp = true;
-            unspentAbilityPoints++;
+            abilityPoints++;
+            characteristicPoints += 2;
         }
 
 //        anim.runAnimation();
@@ -226,6 +227,12 @@ public class Player extends GameObject {
 
         }
         return true;
+    }
+    public void setX(float x) {
+        this.x = x;
+    }
+    public void setY(float y) {
+        this.y = y;
     }
 
 }

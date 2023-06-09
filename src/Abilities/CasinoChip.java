@@ -38,7 +38,7 @@ public class CasinoChip extends AbilityObject {
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
-            if(tempObject.getId() == ID.Block) {
+            if(tempObject.getId() == ID.BlockObject) {
                 if(getBounds().intersects(tempObject.getBounds())) {
                     // Make the chip bounce off the block
                     x = (int)(x - (speed * Math.cos(direction)));
@@ -55,6 +55,8 @@ public class CasinoChip extends AbilityObject {
 
     @Override
     public void render(Graphics g) {
+        Rectangle rect = getBounds(); // this is how to show the hit box
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         g.drawImage(this.image, (int)x, (int)y, 40, 40, null);
     }
     @Override

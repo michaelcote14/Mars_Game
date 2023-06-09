@@ -26,6 +26,11 @@ public class ExplosiveBarrel extends GameObject {
                     destroyed = true;
                 }
             }
+            else if(tempObject.getId() == ID.Explosion) {
+                if (getBounds().intersects(tempObject.getBounds())) {
+                    destroyed = true;
+                }
+            }
         }
     }
     @Override

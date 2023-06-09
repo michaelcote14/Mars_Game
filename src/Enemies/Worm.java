@@ -2,7 +2,6 @@ package Enemies;
 
 import Main.HUD;
 import Main.Player;
-import Objects.Chest;
 import Objects.HealthPack;
 import Utilities.*;
 
@@ -123,9 +122,8 @@ public class Worm extends GameObject {
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
-            Player.money += 1;
             Player.currentXp += 20;
-            HUD.scoreTracker += 1;
+            HUD.killTracker += 1;
             dropLoot();
         }
         this.hasDivedCounter ++;

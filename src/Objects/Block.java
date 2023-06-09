@@ -20,6 +20,8 @@ public class Block extends GameObject {
 
     public void render(Graphics g)
     {
+        Rectangle rect = getBounds(); // this is how to show the hit box
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         g.drawImage(blockImage, (int)x, (int)y, 32, 32, null);
     }
 

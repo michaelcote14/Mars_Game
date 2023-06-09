@@ -35,7 +35,7 @@ public class CardThrow extends AbilityObject {
         for(int i = 0; i < oHandler.object.size(); i++) {
             GameObject tempObject = oHandler.object.get(i);
 
-            if(tempObject.getId() == ID.Block) {
+            if(tempObject.getId() == ID.BlockObject) {
                 if(getBounds().intersects(tempObject.getBounds())) {
                     oHandler.removeObject(this);
                 }
@@ -44,6 +44,8 @@ public class CardThrow extends AbilityObject {
     }
     @Override
     public void render(Graphics g) {
+        Rectangle rect = getBounds(); // this is how to show the hit box
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         g.drawImage(this.image, (int)x-10, (int)y-30, 40, 40, null);
     }
     @Override

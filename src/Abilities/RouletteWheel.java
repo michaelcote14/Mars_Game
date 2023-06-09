@@ -36,6 +36,8 @@ public class RouletteWheel extends AbilityObject {
     }
     @Override
     public void render(Graphics g) {
+        Rectangle rect = getBounds(); // this is how to show the hit box
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         // Rotate the image continuously
         Graphics2D g2d = (Graphics2D) g.create();
         int centerX = (int) x + 32;
@@ -56,6 +58,6 @@ public class RouletteWheel extends AbilityObject {
     }
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 100, 100);
+        return new Rectangle((int)x-13, (int)y-13, 90, 90);
     }
 }

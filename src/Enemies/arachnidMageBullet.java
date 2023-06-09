@@ -2,7 +2,6 @@ package Enemies;
 
 import Utilities.GameObject;
 import Utilities.ID;
-import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -30,9 +29,6 @@ public class arachnidMageBullet extends GameObject {
 //        velY = 5;
 
     }
-    public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y+2, 32, 32); // 16, 16 is the size of the enemy
-    }
     @Override
     public void tick() {
         x += this.velX;
@@ -42,7 +38,7 @@ public class arachnidMageBullet extends GameObject {
             GameObject tempObject = oHandler.object.get(i);
 
             // This makes the enemy bounce off of the block boundaries
-            if (tempObject.getId() == ID.Block) {
+            if (tempObject.getId() == ID.BlockObject) {
                 if (getBounds().intersects(tempObject.getBounds())) {
                     x += (velX * 1) * -1;
                     y += (velY * 1) * -1;
@@ -60,5 +56,9 @@ public class arachnidMageBullet extends GameObject {
     public void render(Graphics g) {
         g.drawImage(this.image, (int)x, (int)y, 16, 16,null);
     }
+    public Rectangle getBounds() {
+        return new Rectangle((int)x, (int)y, 16, 16); // 16, 16 is the size of the enemy
+    }
+
 }
 

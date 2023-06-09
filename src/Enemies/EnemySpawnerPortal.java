@@ -26,7 +26,7 @@ public class EnemySpawnerPortal extends GameObject {
     private boolean inRange;
 
     Random rand = new Random();
-    int hp = 100;
+    int hp = 10;
 
     boolean didBulletCollide = false;
     int collisionCounter = 0;
@@ -36,7 +36,7 @@ public class EnemySpawnerPortal extends GameObject {
         super(x, y, id);
         this.oHandler = oHandler;
         this.images = ImageHandler.createImageArray("enemySpawnerPortal", 24);
-        anim = new Animation(200, images);
+        anim = new Animation(60, images);
         this.hp = hud.wave * hp;
         velX = 0;
         velY = 0;
@@ -61,7 +61,7 @@ public class EnemySpawnerPortal extends GameObject {
         velX = (float) ((-1.0 / distance) * diffX);
         velY = (float) ((-1.0 / distance) * diffY);
 
-        if(distance > 600) {
+        if(distance > 400) {
             velX = 0;
             velY = 0;
             this.inRange = false;
@@ -101,9 +101,8 @@ public class EnemySpawnerPortal extends GameObject {
         }
         if(this.hp <= 0) {
             oHandler.removeObject(this);
-            Player.money += 1;
             Player.currentXp += 1;
-            HUD.scoreTracker += 1;
+            HUD.killTracker += 1;
             dropLoot();
         }
         if(enemySpawnTimer > 160 && inRange == true && enemiesSpawned < 30) {
@@ -115,9 +114,10 @@ public class EnemySpawnerPortal extends GameObject {
     }
     @Override
     public void render(Graphics g) {
-//        g.drawRect((int)x, (int)y, 90, 120);
-        anim.runAnimation();
-        anim.drawAnimation(g, x, y, 0, 90, 120);
+        if(this.inRange == true) {
+            anim.runAnimation();
+            anim.drawAnimation(g, x, y, 0, 90, 120);
+        }
 
         if(didBulletCollide == true) {
             g.drawImage(oHandler.bulletExplosionImage, (int)x+30, (int)y+50, 30, 30,null);
