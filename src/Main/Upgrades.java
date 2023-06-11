@@ -11,10 +11,11 @@ import Utilities.ObjectHandler;
 import javax.swing.*;
 
 public class Upgrades extends MouseAdapter {
-    ObjectHandler oHandler;
-    HUD hud;
-    Game game;
-    Player player;
+    private ObjectHandler oHandler;
+    private HUD hud;
+    private Game game;
+    private Player player;
+    private MapHandler mapHandler;
 
     private String abilityName = "";
     private int abilityRowClicked = 0;
@@ -23,11 +24,11 @@ public class Upgrades extends MouseAdapter {
 
     int spacer = 20;
 
-    public Upgrades(ObjectHandler oHandler, HUD hud, Game game) {
+    public Upgrades(ObjectHandler oHandler, HUD hud, Game game, MapHandler mapHandler) {
         this.oHandler = oHandler;
+        this.mapHandler = mapHandler;
         this.hud = hud;
         this.game = game;
-
     }
     public void mousePressed(MouseEvent mouseEvent) {
         if(game.gameState != Game.STATE.Shop) return;
@@ -47,6 +48,7 @@ public class Upgrades extends MouseAdapter {
                     }
                 }
             }
+            SaveOrLoad.save("Save1");
         }
         else if(mouseX >= 5 && mouseX <= 284) {
             isAbilityRowClicked = true;
@@ -60,9 +62,10 @@ public class Upgrades extends MouseAdapter {
                     abilityName = Abilities.nameList.get(abilityRowClicked-1);
                     int currentLevel = Abilities.levelBook.get(abilityName);
                     Abilities.levelBook.replace(abilityName, currentLevel + 1);
+                    SaveOrLoad.save("Save1");
                 }
             }
-            else if(mouseX >= 565 && mouseX <= 565+125 && mouseY >= 145 && mouseY <= 145+20) {
+            else if(mouseX >= 565 && mouseX <= 565+125 && mouseY >= 145 && mouseY <= 145+20 && mapHandler.getMapNumber() == 0) {
                 isKeyBindChangerClicked = true;
             }
             if(isKeyBindChangerClicked) {
@@ -88,10 +91,9 @@ public class Upgrades extends MouseAdapter {
                     Player.ability3Cooldown = Abilities.cooldownBook.get(Player.ability3Name);
                 }
                 isKeyBindChangerClicked = false;
+                SaveOrLoad.save("Save1");
             }
         }
-        SaveOrLoad.save("Save1", player);
-        SaveOrLoad.load("Save1");
     }
     public void render(Graphics g) {
         // todo change up the fonts and make them look better
@@ -157,13 +159,15 @@ public class Upgrades extends MouseAdapter {
             g.drawLine(670, 182, 680, 182);
             g.drawLine(675, 175, 675, 187);
 
-            g.drawString("Change KeyBind", 568, 162);
-            g.drawRect(565, 145, 125, 20);
-
             abilityName = Abilities.nameList.get(abilityRowClicked - 1);
             g.drawString("Damage: " + Abilities.damageBook.get(abilityName), 300, 160);
             g.drawString("Duration: " + Abilities.durationBook.get(abilityName), 300, 190);
             g.drawString("Cooldown: " + Abilities.cooldownBook.get(abilityName), 430, 190);
+
+            if(mapHandler.getMapNumber() == 0) {
+                g.drawString("Change KeyBind", 568, 162);
+                g.drawRect(565, 145, 125, 20);
+            }
         }
     }
     private int abilityRowClickedFinder(int mouseY) {

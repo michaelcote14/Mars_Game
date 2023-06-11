@@ -145,7 +145,7 @@ public class Worm extends GameObject {
         }
         if(this.inRange == true && (this.hittingPlayer == true)){
             this.fightingAnim.runAnimation();
-            this.fightingAnim.drawAnimation(g, (int)x, (int)y, 0, 30, 30);
+            this.fightingAnim.drawAnimation(g, (int)x, (int)y, 0);
         }
         else if(this.inRange == true && this.hittingPlayer == false && this.hasSurfacedCounter > 200) {
             g.drawImage(ImageHandler.images.get("wormAttack4"), (int)x, (int)y, 30, 30, null);

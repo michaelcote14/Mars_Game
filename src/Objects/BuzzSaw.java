@@ -2,6 +2,7 @@ package Objects;
 
 import Utilities.GameObject;
 import Utilities.ID;
+import Utilities.ImageHandler;
 import Utilities.ObjectHandler;
 
 import java.awt.*;
@@ -9,14 +10,13 @@ import java.awt.image.BufferedImage;
 
 public class BuzzSaw extends GameObject {
     private ObjectHandler oHandler;
-    private BufferedImage image;
+    private BufferedImage image = ImageHandler.images.get("buzzSaw");
     private int rotation = 15;
     private int rotationCounter = 0;
 
     public BuzzSaw(float x, float y, ID id, ObjectHandler oHandler) {
         super(x, y, id);
         this.oHandler = oHandler;
-        this.image = oHandler.imageGrabber("/Objects/buzzSaw.png", 4, 4);
 
         velX = 3;
 

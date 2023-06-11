@@ -46,7 +46,7 @@ public class CardThrow extends AbilityObject {
     public void render(Graphics g) {
         Rectangle rect = getBounds(); // this is how to show the hit box
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
-        g.drawImage(this.image, (int)x-10, (int)y-30, 40, 40, null);
+        g.drawImage(this.image, (int)x-10, (int)y-30,null);
     }
     @Override
     public Rectangle getBounds() {

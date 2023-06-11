@@ -25,9 +25,9 @@ public class SaveDataStorage implements Serializable {
     int characteristicPoints;
     ArrayList<String> characteristicsList = Abilities.characteristicsList;
     HashMap<String, Integer> characteristicPointsBook = Abilities.characteristicPointsBook;
+    ArrayList<String> blockedCharacteristics = Abilities.blockedCharacteristics;
 
-
-
-
+    // Other
+    HashMap<String, Integer> inventory = Player.inventory;
 
 }

@@ -46,8 +46,8 @@ public class Animation {
 		}
 	}
 
-	public void drawAnimation(Graphics g, double x, double y, int offset, int width, int height){
-		g.drawImage(currentImg, (int)x - offset, (int)y, width, height, null);
+	public void drawAnimation(Graphics g, double x, double y, int offset){
+		g.drawImage(currentImg, (int)x - offset, (int)y, null);
 	}
 
 	public void setCount(int count){

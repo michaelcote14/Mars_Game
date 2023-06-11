@@ -116,10 +116,11 @@ public class EnemySpawnerPortal extends GameObject {
     public void render(Graphics g) {
         if(this.inRange == true) {
             anim.runAnimation();
-            anim.drawAnimation(g, x, y, 0, 90, 120);
+            anim.drawAnimation(g, x, y, 0);
         }
 
         if(didBulletCollide == true) {
+            // scale this bullet explosion image somewhere it wont be continuously drawn
             g.drawImage(oHandler.bulletExplosionImage, (int)x+30, (int)y+50, 30, 30,null);
         }
         if(collisionCounter > 200) {

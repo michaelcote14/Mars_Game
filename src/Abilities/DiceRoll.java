@@ -1,6 +1,6 @@
 package Abilities;
 
-import Objects.Explosion;
+import Objects.FireExplosion;
 import Utilities.Animation;
 import Utilities.ID;
 import Utilities.ImageHandler;
@@ -35,23 +35,19 @@ public class DiceRoll extends AbilityObject {
         abilityDuration--;
         if(abilityDuration <= 0) {
             this.oHandler.removeObject(this);
-            oHandler.addObject(new Explosion(x-17, y-15, 20 * randNum, 20 * randNum, ID.Explosion, oHandler));
+            oHandler.addObject(new FireExplosion(x-17, y-15, 20 * randNum, 20 * randNum, ID.Explosion, oHandler));
         }
         rollTimer++;
     }
     @Override
     public void render(Graphics g) {
-        Rectangle rect = getBounds(); // this is how to show the hit box
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         if(rollTimer < 120) {
             diceRollAnimation.runAnimation();
-            diceRollAnimation.drawAnimation(g, (int) x+15, (int) y, 20, 40, 40);
+            diceRollAnimation.drawAnimation(g, (int) x+15, (int) y, 20);
         }
         else {
-            g.drawImage(diceRollNumImage, (int) x+3, (int) y+5, 30, 30, null);
+            g.drawImage(diceRollNumImage, (int) x+3, (int) y+5, null);
         }
-
-
     }
     @Override
     public Rectangle getBounds() {

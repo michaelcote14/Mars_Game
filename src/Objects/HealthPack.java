@@ -23,7 +23,7 @@ public class HealthPack extends GameObject {
     }
     @Override
     public void render(Graphics g) {
-        g.drawImage(this.healthPackImage, (int)x, (int)y, 24, 24,null);
+        g.drawImage(this.healthPackImage, (int)x, (int)y, null);
     }
     @Override
     public Rectangle getBounds() {return new Rectangle((int)x, (int)y, 24, 24);}

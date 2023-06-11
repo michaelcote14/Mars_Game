@@ -12,6 +12,7 @@ import java.util.Random;
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1000, HEIGHT = 600;
     //todo change the width and height of the game window
+    // todo make enemies flash when hit instead
     private boolean gameRunning = false;
     private Thread thread;
     public static boolean paused = false;
@@ -22,7 +23,6 @@ public class Game extends Canvas implements Runnable {
     private Menu menu;
     private Upgrades upgrades;
     private MapHandler mapHandler;
-    private Spawner spawner;
     private Camera camera;
     private ImageHandler iHandler;
     private KeyHandler keyHandler;
@@ -55,38 +55,32 @@ public class Game extends Canvas implements Runnable {
         this.keyHandler = new KeyHandler(oHandler, this);
         hud = new HUD(iHandler, this.keyHandler);
         menu = new Menu(this, oHandler, hud);
-        upgrades = new Upgrades(oHandler, hud, this);
         abilities = new Abilities();
 
         this.addKeyListener(this.keyHandler);
         this.mouseHandler = new MouseHandler(oHandler, iHandler, this);
         this.addMouseListener(this.mouseHandler);
         this.addMouseListener(menu);
-        this.addMouseListener(upgrades);
 
         BufferedImageLoader imageLoader = new BufferedImageLoader();
         mapImage = imageLoader.loadImage("/Maps/Levels/map0.png");
         mapHandler = new MapHandler(oHandler, this, camera, keyHandler, mouseHandler);
-        spawner = new Spawner(oHandler, hud, camera);
         floor = ImageHandler.images.get("jailFloor");
+
+        upgrades = new Upgrades(oHandler, hud, this, mapHandler);
+        this.addMouseListener(upgrades);
 
         pauseComment = getPauseComment();
         gameStart();
     }
 
     public void tick() {
+        // todo make the player show up in front of everything
         // this gets updated 60 times per second, and is for updating
         if (gameState == STATE.Game) {
             if (!paused) {
-                if (wasMapLoaded == false) {
-                    mapHandler.loadMap(mapImage);
-                    wasMapLoaded = true;
-                }
                 oHandler.tick();
                 hud.tick();
-            }
-            if (spawner != null) {
-                spawner.tick();
             }
             // this makes the camera center on the player
             for (int i = 0; i < oHandler.object.size(); i++) {
@@ -189,7 +183,7 @@ public class Game extends Canvas implements Runnable {
             frames++;
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: " + frames); // prints out how many frames we are getting per second
+//                System.out.println("FPS: " + frames); // prints out how many frames we are getting per second
                 frames = 0;
             }
         }

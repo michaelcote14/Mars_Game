@@ -5,26 +5,28 @@ import Abilities.Abilities;
 
 
 public class SaveOrLoad {
-    public static void save(String saveName, Player player) {
+    public static void save(String saveName) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(saveName + ".dat")));
 
             SaveDataStorage data = new SaveDataStorage();
 
-            data.level = player.level;
-            data.maxHealth = (int) player.maxHealth;
-            data.maxXp = (int) player.maxXp;
-            data.currentXp = (int) player.currentXp;
-            data.speed = player.walkSpeed;
-            data.fireRate = player.fireRate;
+            data.level = Player.level;
+            data.maxHealth = (int) Player.maxHealth;
+            data.maxXp = (int) Player.maxXp;
+            data.currentXp = (int) Player.currentXp;
+            data.speed = Player.walkSpeed;
+            data.fireRate = Player.fireRate;
 
             data.nameList = Abilities.nameList;
             data.levelBook = Abilities.levelBook;
-            data.abilityPoints = player.abilityPoints;
-            data.characteristicPoints = player.characteristicPoints;
+            data.abilityPoints = Player.abilityPoints;
+            data.characteristicPoints = Player.characteristicPoints;
             data.characteristicsList = Abilities.characteristicsList;
             data.characteristicPointsBook = Abilities.characteristicPointsBook;
+            data.blockedCharacteristics = Abilities.blockedCharacteristics;
 
+            data.inventory = Player.inventory;
 
             // Write the DataStorage object to the file
             oos.writeObject(data);
@@ -57,6 +59,9 @@ public class SaveOrLoad {
             Player.characteristicPoints = data.characteristicPoints;
             Abilities.characteristicsList = data.characteristicsList;
             Abilities.characteristicPointsBook = data.characteristicPointsBook;
+            Abilities.blockedCharacteristics = data.blockedCharacteristics;
+
+            Player.inventory = data.inventory;
 
         }
         catch (EOFException e) {}

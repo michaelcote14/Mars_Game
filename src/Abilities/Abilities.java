@@ -67,8 +67,16 @@ public class Abilities {
         characteristicPointsBook.put("Hunting", 1);
         characteristicPointsBook.put("Crafting", 1);
 
-        for(int i = 0; i < characteristicsList.size()/2; i++) {
-            blockedCharacteristics.add(characteristicsList.get(new Random().nextInt(characteristicsList.size())));
+    }
+    public static void randomizeBlockedAbilities() {
+        blockedCharacteristics.clear();
+        for(int i = 0; i < 5; i++) {
+            int random = new Random().nextInt(characteristicsList.size());
+            if(!blockedCharacteristics.contains(characteristicsList.get(random)))
+                blockedCharacteristics.add(characteristicsList.get(random));
+            else {
+                i--;
+            }
         }
     }
 

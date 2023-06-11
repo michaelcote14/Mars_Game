@@ -22,11 +22,6 @@ public class RouletteWheel extends AbilityObject {
         this.image = ImageHandler.images.get("rouletteWheel");
         this.cooldown = 0;
     }
-    public RouletteWheel(ImageHandler imageHandler) {
-        super(0,0, ID.valueOf("RouletteWheelSpell"));
-        this.cooldown = 0;
-
-    }
     @Override
     public void tick() {
         spellDuration--;
@@ -36,8 +31,6 @@ public class RouletteWheel extends AbilityObject {
     }
     @Override
     public void render(Graphics g) {
-        Rectangle rect = getBounds(); // this is how to show the hit box
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         // Rotate the image continuously
         Graphics2D g2d = (Graphics2D) g.create();
         int centerX = (int) x + 32;
@@ -47,7 +40,7 @@ public class RouletteWheel extends AbilityObject {
         imageX = -this.image.getWidth() / 10;
         imageY = -this.image.getHeight() / 10;
 
-        g2d.drawImage(this.image, imageX, imageY, 100, 100, null);
+        g2d.drawImage(this.image, imageX, imageY,null);
 
         g2d.dispose();
         if(rotationCounter > 3) {

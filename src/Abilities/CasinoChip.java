@@ -55,9 +55,7 @@ public class CasinoChip extends AbilityObject {
 
     @Override
     public void render(Graphics g) {
-        Rectangle rect = getBounds(); // this is how to show the hit box
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
-        g.drawImage(this.image, (int)x, (int)y, 40, 40, null);
+        g.drawImage(this.image, (int)x, (int)y,null);
     }
     @Override
     public Rectangle getBounds() {

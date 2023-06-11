@@ -43,7 +43,7 @@ public class Chest extends GameObject {
             g.drawImage(this.chestImage1, (int) x+2, (int) y-2, 44, 32, null);
             openChestCounter++;
             openChestAnimation.runAnimation();
-            openChestAnimation.drawAnimation(g, (int)x+2, (int)y-2, 0, 44, 32);
+            openChestAnimation.drawAnimation(g, (int)x+2, (int)y-2, 0);
             if(openChestAnimation.getCount() == 5) {
                 oHandler.addObject(new HealthPack(x+13, y, ID.HealthPack, oHandler));
                 if(openChestCounter > 250) {
@@ -52,7 +52,7 @@ public class Chest extends GameObject {
             }
         }
         else {
-            g.drawImage(this.chestImage1, (int) x+2, (int) y-2, 44, 32, null);
+            g.drawImage(this.chestImage1, (int) x+2, (int) y-2,null);
         }
     }
     @Override

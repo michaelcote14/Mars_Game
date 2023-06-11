@@ -36,12 +36,12 @@ public class ExplosiveBarrel extends GameObject {
     @Override
     public void render(Graphics g) {
         if(destroyed == true) {
-            oHandler.addObject(new Explosion(x, y, 210, 210, ID.Explosion, oHandler));
+            oHandler.addObject(new FireExplosion(x, y, 210, 210, ID.Explosion, oHandler));
             destroyed = false;
             oHandler.removeObject(this);
         }
         else {
-            g.drawImage(this.explosiveBarrelImage, (int) x, (int) y, 48, 48, null);
+            g.drawImage(this.explosiveBarrelImage, (int) x, (int) y,null);
         }
     }
 

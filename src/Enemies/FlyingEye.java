@@ -103,8 +103,11 @@ public class FlyingEye extends GameObject {
 
     @Override
     public void render(Graphics g) {
+//        Rectangle rect = getBounds(); // this is how to show the hit box
+//        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+
         anim.runAnimation();
-        anim.drawAnimation(g, x, y, 0, 32, 32);
+        anim.drawAnimation(g, x, y, 0);
 
         if(didBulletCollide == true) {
             g.drawImage(oHandler.bulletExplosionImage, (int)x, (int)y, 30, 30,null);

@@ -8,6 +8,7 @@ import Utilities.MouseHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 public class Player extends GameObject {
     ObjectHandler oHandler;
@@ -35,6 +36,7 @@ public class Player extends GameObject {
     private boolean didLevelUp;
     private int levelUpCounter = 0;
     private boolean hasDeathBeenHandled = false;
+    public static boolean isInteracting = false;
 
     // Abilities
     public static String ability1Name, ability2Name, ability3Name;
@@ -42,6 +44,8 @@ public class Player extends GameObject {
     public static float ability1Damage, ability2Damage, ability3Damage;
     public static int abilityPoints = 10;
     public static int characteristicPoints = 10;
+
+    public static HashMap<String, Integer> inventory = new HashMap<String, Integer>();
 
     public Player(float x, float y, ID id, ObjectHandler oHandler, Game game, Camera camera, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(x, y, id);
@@ -97,12 +101,22 @@ public class Player extends GameObject {
                     oHandler.removeObject(tempObject);
                 }
             }
+            else if(tempObject.getId() == ID.DroppedItems) {
+                if(getBounds().intersects(tempObject.getBounds())) {
+                    if(inventory.containsKey(tempObject.getId().toString())) {
+                        inventory.put(tempObject.getId().toString(), inventory.get(tempObject.getId().toString()) + 1);
+                    }
+                    else {
+                        inventory.put(tempObject.getId().toString(), 1);
+                    }
+                }
+            }
         }
         if (Player.currentHealth <= 0 && hasDeathBeenHandled == false) {
             Game.gameState = Game.STATE.Death;
             deathStatDecrease();
             // Save the game
-            SaveOrLoad.save("Save1", this);
+            SaveOrLoad.save("Save1");
             hasDeathBeenHandled = true;
         }
     }
@@ -112,43 +126,43 @@ public class Player extends GameObject {
         x += velX;
         y += velY;
 
-        if(keyHandler.isDownPressed()) velY = (float) (2.3 + (walkSpeed * 0.02)); // 2 is starting speed
-        else if(!keyHandler.isUpPressed()) velY = 0;
+        if(isInteracting == false) {
+            if (keyHandler.isDownPressed()) velY = (float) (2.3 + (walkSpeed * 0.02)); // 2 is starting speed
+            else if (!keyHandler.isUpPressed()) velY = 0;
 
-        if(keyHandler.isUpPressed()) velY = (float) (-2.3 - (walkSpeed * 0.02));
-        else if(!keyHandler.isDownPressed()) velY = 0;
+            if (keyHandler.isUpPressed()) velY = (float) (-2.3 - (walkSpeed * 0.02));
+            else if (!keyHandler.isDownPressed()) velY = 0;
 
-        if(keyHandler.isRightPressed()) velX = (float) (2.3 + (walkSpeed * 0.02));
-        else if(!keyHandler.isLeftPressed()) velX = 0;
+            if (keyHandler.isRightPressed()) velX = (float) (2.3 + (walkSpeed * 0.02));
+            else if (!keyHandler.isLeftPressed()) velX = 0;
 
-        if(keyHandler.isLeftPressed()) velX = (float) (-2.3 - (walkSpeed * 0.02));
-        else if(!keyHandler.isRightPressed()) velX = 0;
+            if (keyHandler.isLeftPressed()) velX = (float) (-2.3 - (walkSpeed * 0.02));
+            else if (!keyHandler.isRightPressed()) velX = 0;
 
-        if(keyHandler.isOnePressed() && ability1Cooldown <= 0) {
-            if(abilityActivator(ability1Name) == true) {
-                keyHandler.setOnePressed(false);
-                ability1Cooldown = 1; // 30 seconds //todo make this more accurate
+            if (keyHandler.isOnePressed() && ability1Cooldown <= 0) {
+                if (abilityActivator(ability1Name) == true) {
+                    keyHandler.setOnePressed(false);
+                    ability1Cooldown = 1; // 30 seconds //todo make this more accurate
+                }
+            } else if (keyHandler.isTwoPressed() && ability2Cooldown <= 0) {
+                if (abilityActivator(ability2Name) == true) {
+                    keyHandler.setTwoPressed(false);
+                    ability2Cooldown = 1; // 30 seconds
+                }
+            } else if (keyHandler.isThreePressed() && ability3Cooldown <= 0) {
+                if (abilityActivator(ability3Name) == true) {
+                    keyHandler.setThreePressed(false);
+                    ability3Cooldown = 1; // 30 seconds
+                }
             }
-        }
-        else if(keyHandler.isTwoPressed() && ability2Cooldown <= 0) {
-            if(abilityActivator(ability2Name) == true) {
-                keyHandler.setTwoPressed(false);
-                ability2Cooldown = 1; // 30 seconds
-            }
-        }
-        else if (keyHandler.isThreePressed() && ability3Cooldown <= 0) {
-            if(abilityActivator(ability3Name) == true) {
-                keyHandler.setThreePressed(false);
-                ability3Cooldown = 1; // 30 seconds
-            }
-        }
-        // base attack
-        else if(mouseHandler.isMouseClicked()) {
-            if(fireRateCounter > 100 / ((fireRate / 3) + 1)) {
-                PointerInfo a = MouseInfo.getPointerInfo();
-                Point b = a.getLocation();
-                MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, "Bullet");
-                fireRateCounter = 0;
+            // base attack
+            else if (mouseHandler.isMouseClicked()) {
+                if (fireRateCounter > 100 / ((fireRate / 3) + 1)) {
+                    PointerInfo a = MouseInfo.getPointerInfo();
+                    Point b = a.getLocation();
+                    MouseHandler.shoot(b.x, b.y, oHandler, imageHandler, camera, "Bullet");
+                    fireRateCounter = 0;
+                }
             }
         }
 
@@ -164,6 +178,7 @@ public class Player extends GameObject {
             this.didLevelUp = true;
             abilityPoints++;
             characteristicPoints += 2;
+            Abilities.randomizeBlockedAbilities();
         }
 
 //        anim.runAnimation();
@@ -171,10 +186,10 @@ public class Player extends GameObject {
     }
 
     public void render(Graphics g) {
-        g.drawImage(this.playerImage, (int)x, (int)y, 32, 42, null);
+        g.drawImage(this.playerImage, (int)x, (int)y, null);
         if(this.didLevelUp == true) {
             this.levelUpAnim.runAnimation();
-            this.levelUpAnim.drawAnimation(g, (int)x-34, (int)y-52, 20, 150, 150);
+            this.levelUpAnim.drawAnimation(g, (int)x-34, (int)y-52, 20);
             if(this.levelUpAnim.getCount() == 7 && levelUpCounter > 2300) {
                 this.levelUpAnim.setCount(0);
                 this.didLevelUp = false;
